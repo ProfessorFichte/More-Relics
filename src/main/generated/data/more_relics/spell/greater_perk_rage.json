@@ -1,0 +1,56 @@
+{
+  "school": "spell_power:physical_melee",
+  "range": 0.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "type": "PASSIVE",
+  "passive": {
+    "triggers": [
+      {
+        "type": "MELEE_IMPACT",
+        "chance": 0.15
+      }
+    ]
+  },
+  "release": {
+    "particles": [
+      {
+        "particle_id": "spell_engine:smoke_medium",
+        "origin": "GROUND",
+        "shape": "CIRCLE",
+        "rotation": "LOOK",
+        "count": 0.4,
+        "min_speed": 1.0,
+        "extent": 2.0,
+        "color_rgba": 3208659199
+      }
+    ]
+  },
+  "target": {
+    "type": "FROM_TRIGGER"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:greater_rage_power"
+        }
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 45.0
+    }
+  }
+}

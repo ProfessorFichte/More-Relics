@@ -1,0 +1,32 @@
+{
+  "values": [
+    {
+      "id": "more_relics:jewel_figurine_air",
+      "required": false
+    },
+    {
+      "id": "more_relics:jewel_figurine_water",
+      "required": false
+    },
+    {
+      "id": "more_relics:jewel_figurine_rage",
+      "required": false
+    },
+    {
+      "id": "more_relics:lesser_proc_air_lightning",
+      "required": false
+    },
+    {
+      "id": "more_relics:jewel_figurine_earth",
+      "required": false
+    },
+    {
+      "id": "more_relics:lesser_proc_water_frost",
+      "required": false
+    },
+    {
+      "id": "more_relics:lesser_proc_earth_fire",
+      "required": false
+    }
+  ]
+}

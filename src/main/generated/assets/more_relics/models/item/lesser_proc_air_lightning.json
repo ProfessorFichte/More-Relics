@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "more_relics:item/lesser_proc_air_lightning"
+  }
+}

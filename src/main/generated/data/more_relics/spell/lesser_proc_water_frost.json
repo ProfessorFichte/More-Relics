@@ -1,0 +1,67 @@
+{
+  "school": "spell_power:water",
+  "range": 0.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "type": "PASSIVE",
+  "passive": {
+    "triggers": [
+      {
+        "type": "SPELL_IMPACT_ANY",
+        "chance": 0.05,
+        "spell": {
+          "archetype": "MAGIC"
+        }
+      }
+    ]
+  },
+  "release": {
+    "animation": "spell_engine:one_handed_healing_release",
+    "particles": [
+      {
+        "particle_id": "more_rpg_classes:big_splash",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 12.0,
+        "min_speed": 0.14,
+        "max_speed": 0.15
+      },
+      {
+        "particle_id": "spell_engine:magic_frost_spark_decelerate",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 12.0,
+        "min_speed": 0.14,
+        "max_speed": 0.15
+      }
+    ],
+    "sound": {
+      "id": "relics_rpgs:intellect_buff"
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:lesser_water_frost",
+          "duration": 6.0
+        }
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 45.0
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "school": "spell_power:physical_melee",
+  "range": 0.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "type": "PASSIVE",
+  "passive": {
+    "triggers": [
+      {
+        "target_override": "CASTER",
+        "type": "DAMAGE_TAKEN",
+        "caster_conditions": [
+          {
+            "health_percent_below": 0.25
+          }
+        ]
+      }
+    ]
+  },
+  "release": {
+    "particles": [
+      {
+        "particle_id": "spell_engine:smoke_medium",
+        "origin": "GROUND",
+        "shape": "CIRCLE",
+        "count": 50.0,
+        "min_speed": 1.0,
+        "max_speed": 1.8,
+        "color_rgba": 3208659199
+      },
+      {
+        "particle_id": "MagicParticleFamily[name=rage, color=Color[red=0.7490196, green=0.2509804, blue=0.2509804, alpha=1.0]]",
+        "origin": "FEET",
+        "shape": "CIRCLE",
+        "rotation": "LOOK",
+        "count": 20.0,
+        "min_speed": 1.0,
+        "extent": 2.5,
+        "color_rgba": 3208659199
+      }
+    ]
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:superior_rage_power",
+          "duration": 5.0
+        }
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 90.0
+    }
+  }
+}

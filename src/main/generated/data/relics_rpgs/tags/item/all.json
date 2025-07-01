@@ -1,0 +1,56 @@
+{
+  "values": [
+    {
+      "id": "more_relics:jewel_figurine_earth",
+      "required": false
+    },
+    {
+      "id": "more_relics:jewel_figurine_air",
+      "required": false
+    },
+    {
+      "id": "more_relics:jewel_figurine_water",
+      "required": false
+    },
+    {
+      "id": "more_relics:jewel_figurine_rage",
+      "required": false
+    },
+    {
+      "id": "more_relics:lesser_proc_air_lightning",
+      "required": false
+    },
+    {
+      "id": "more_relics:lesser_proc_earth_fire",
+      "required": false
+    },
+    {
+      "id": "more_relics:lesser_proc_water_frost",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_air_power",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_earth_power",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_water_power",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_rage",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_perk_rage",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_proc_rage",
+      "required": false
+    }
+  ]
+}

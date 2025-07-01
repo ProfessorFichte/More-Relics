@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "jewelry"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": {
+      "item": "minecraft:gold_ingot"
+    },
+    "G": {
+      "item": "jewelry:ruby"
+    }
+  },
+  "pattern": [
+    "GMG",
+    " G "
+  ],
+  "result": {
+    "id": "more_relics:jewel_figurine_rage"
+  }
+}

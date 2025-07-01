@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "more_relics:medium_use_water_power",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_air_power",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_earth_power",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_rage",
+      "required": false
+    }
+  ]
+}
