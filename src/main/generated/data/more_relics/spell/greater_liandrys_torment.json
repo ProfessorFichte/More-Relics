@@ -1,0 +1,50 @@
+{
+  "school": "spell_power:arcane",
+  "range": 0.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "type": "PASSIVE",
+  "passive": {
+    "triggers": [
+      {
+        "type": "SPELL_IMPACT_ANY",
+        "chance": 0.15
+      }
+    ]
+  },
+  "target": {
+    "type": "FROM_TRIGGER"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:greater_liandrys_tornment",
+          "duration": 4.0,
+          "amplifier": 1,
+          "amplifier_cap": 4,
+          "refresh_duration": false,
+          "apply_mode": "ADD"
+        }
+      },
+      "sound": {
+        "id": "more_relics:liandrys_torment_proc"
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 5.0
+    }
+  }
+}

@@ -3,6 +3,7 @@ package more_relics;
 import more_relics.item.Group;
 import more_relics.item.MoreRelicsItems;
 import more_relics.spell.MoreRelicEffects;
+import more_relics.spell.MoreRelicSounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.registry.Registries;
@@ -36,6 +37,7 @@ public class MoreRelics implements ModInitializer {
 	public void onInitialize() {
 		itemConfig.refresh();
 		effectConfig.refresh();
+		MoreRelicSounds.register();
 		Group.GROUP = FabricItemGroup.builder()
 				.icon(Group.ICON)
 				.displayName(Text.translatable(Group.translationKey))

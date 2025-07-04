@@ -12,45 +12,48 @@
       "color": "dark_green"
     }
   },
-  "type": "PASSIVE",
-  "passive": {
-    "triggers": [
-      {
-        "type": "MELEE_IMPACT",
-        "chance": 0.15
-      }
-    ]
-  },
+  "active": {},
   "release": {
+    "animation": "spell_engine:dual_handed_ground_release",
     "particles": [
       {
         "particle_id": "spell_engine:smoke_medium",
-        "origin": "GROUND",
-        "shape": "CIRCLE",
+        "origin": "CENTER",
+        "shape": "SPHERE",
+        "count": 25.0,
+        "min_speed": 0.1,
+        "max_speed": 0.1,
+        "color_rgba": 3208659199
+      },
+      {
+        "particle_id": "spell_engine:smoke_medium",
+        "origin": "CENTER",
+        "shape": "SPHERE",
         "rotation": "LOOK",
-        "count": 0.4,
-        "min_speed": 1.0,
+        "count": 25.0,
+        "min_speed": 0.1,
+        "max_speed": 0.5,
         "extent": 2.0,
         "color_rgba": 3208659199
       }
-    ]
-  },
-  "target": {
-    "type": "FROM_TRIGGER"
+    ],
+    "sound": {
+      "id": "more_relics:rage_powder"
+    }
   },
   "impacts": [
     {
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "more_relics:greater_rage_power"
+          "effect_id": "more_relics:lesser_rage_power"
         }
       }
     }
   ],
   "cost": {
     "cooldown": {
-      "duration": 45.0
+      "duration": 60.0
     }
   }
 }

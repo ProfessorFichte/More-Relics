@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "more_relics:item/medium_use_rage"
+    "layer0": "more_relics:item/superior_zhonyas_hourglass"
   }
 }

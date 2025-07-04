@@ -14,29 +14,20 @@
   },
   "active": {},
   "release": {
-    "animation": "spell_engine:one_handed_area_release",
+    "animation": "spell_engine:dual_handed_weapon_charge",
     "particles": [
       {
-        "particle_id": "spell_engine:smoke_medium",
+        "particle_id": "spell_engine:magic_holy_impact_decelerate",
         "origin": "CENTER",
         "shape": "SPHERE",
-        "count": 25.0,
+        "count": 20.0,
         "min_speed": 0.1,
-        "max_speed": 0.1,
-        "color_rgba": 3208659199
-      },
-      {
-        "particle_id": "spell_engine:smoke_medium",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 25.0,
-        "min_speed": 0.12,
-        "max_speed": 0.12,
-        "color_rgba": 3208659199
+        "max_speed": 0.4
       }
     ],
     "sound": {
-      "id": "relics_rpgs:intellect_buff"
+      "id": "more_relics:zhonyas_hourglass",
+      "volume": 0.75
     }
   },
   "impacts": [
@@ -44,14 +35,15 @@
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "more_relics:medium_rage_power"
+          "effect_id": "more_relics:superior_zhonyas_hourglass",
+          "duration": 3.0
         }
       }
     }
   ],
   "cost": {
     "cooldown": {
-      "duration": 60.0
+      "duration": 90.0
     }
   }
 }

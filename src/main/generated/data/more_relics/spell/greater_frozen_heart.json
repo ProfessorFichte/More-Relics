@@ -1,0 +1,66 @@
+{
+  "school": "spell_power:physical_melee",
+  "range": 0.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "type": "PASSIVE",
+  "passive": {
+    "triggers": [
+      {
+        "type": "DAMAGE_TAKEN",
+        "chance": 0.3
+      }
+    ]
+  },
+  "release": {
+    "sound": {
+      "id": "more_rpg_classes:frost_crackle"
+    }
+  },
+  "target": {
+    "type": "FROM_TRIGGER"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:greater_frozen_heart",
+          "duration": 6.0
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:frost_shard",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 25.0,
+          "min_speed": 0.55,
+          "max_speed": 0.8
+        },
+        {
+          "particle_id": "spell_engine:snowflake",
+          "origin": "FEET",
+          "shape": "WIDE_PIPE",
+          "count": 15.0,
+          "min_speed": 0.2,
+          "max_speed": 0.2
+        }
+      ]
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 5.0
+    }
+  }
+}

@@ -17,6 +17,10 @@
       "required": false
     },
     {
+      "id": "more_relics:lesser_use_rage",
+      "required": false
+    },
+    {
       "id": "more_relics:jewel_figurine_earth",
       "required": false
     },

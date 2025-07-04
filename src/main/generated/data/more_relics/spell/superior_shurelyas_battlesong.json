@@ -1,0 +1,66 @@
+{
+  "school": "spell_power:healing",
+  "range": 10.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "active": {},
+  "release": {
+    "sound": {
+      "id": "more_relics:shurelyas_battlesong_activate"
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "include_caster": true
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:superior_shurelyas_battlesong",
+          "duration": 7.5
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "COOLDOWN",
+        "cooldown": {
+          "actives": {
+            "duration_multiplier": 0.8
+          }
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:sign_hourglass",
+          "origin": "CENTER",
+          "shape": "LINE_VERTICAL",
+          "count": 1.0,
+          "min_speed": 0.75,
+          "max_speed": 0.75,
+          "color_rgba": 4294954239,
+          "scale": 1.2,
+          "follow_entity": true
+        }
+      ]
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 90.0
+    }
+  }
+}

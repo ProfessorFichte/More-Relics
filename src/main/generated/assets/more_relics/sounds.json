@@ -1,0 +1,42 @@
+{
+  "kircheis_shard_impact": {
+    "sounds": [
+      "more_relics:kircheis_shard_impact"
+    ]
+  },
+  "kircheis_shard_proc": {
+    "sounds": [
+      "more_relics:kircheis_shard_proc"
+    ]
+  },
+  "liandrys_torment_proc": {
+    "sounds": [
+      "more_relics:liandrys_torment_proc"
+    ]
+  },
+  "madreds_bloodrazor_impact": {
+    "sounds": [
+      "more_relics:madreds_bloodrazor_impact"
+    ]
+  },
+  "rage_powder": {
+    "sounds": [
+      "more_relics:rage_powder"
+    ]
+  },
+  "shurelyas_battlesong_activate": {
+    "sounds": [
+      "more_relics:shurelyas_battlesong_activate"
+    ]
+  },
+  "upcut_stone": {
+    "sounds": [
+      "more_relics:upcut_stone"
+    ]
+  },
+  "zhonyas_hourglass": {
+    "sounds": [
+      "more_relics:zhonyas_hourglass"
+    ]
+  }
+}

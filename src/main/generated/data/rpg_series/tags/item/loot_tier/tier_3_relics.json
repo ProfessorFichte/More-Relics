@@ -1,7 +1,23 @@
 {
   "values": [
     {
-      "id": "more_relics:greater_perk_rage",
+      "id": "more_relics:greater_madreds_bloodrazor",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_frozen_heart",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_liandrys_torment",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_proc_rage",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_kircheis_shard",
       "required": false
     }
   ]

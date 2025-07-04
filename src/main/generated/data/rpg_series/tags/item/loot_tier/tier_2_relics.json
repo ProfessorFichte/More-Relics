@@ -13,7 +13,11 @@
       "required": false
     },
     {
-      "id": "more_relics:medium_use_rage",
+      "id": "more_relics:medium_proc_lifesteal",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_proc_rage",
       "required": false
     }
   ]

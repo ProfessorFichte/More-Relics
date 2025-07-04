@@ -180,6 +180,8 @@ public class MoreRelicsItems {
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_earth_fire.id()));
     public static final Entry LESSER_PROC_WATER_FROST = add(new Entry(1, "lesser_proc_water_frost", "Crystallized Tear"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_water_frost.id()));
+    public static final Entry LESSER_USE_RAGE = add(new Entry(1, "lesser_use_rage", "Rage Powder"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_use_rage_power.id()));
 
     public static final Entry MEDIUM_USE_AIR_POWER = add(new Entry(2, "medium_use_air_power", "Air Orb"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_air_power.id()));
@@ -187,14 +189,29 @@ public class MoreRelicsItems {
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_earth_power.id()));
     public static final Entry MEDIUM_USE_WATER_POWER = add(new Entry(2, "medium_use_water_power", "Water Orb"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_water_power.id()));
-    public static final Entry MEDIUM_USE_RAGE = add(new Entry(2, "medium_use_rage", "Rage Powder"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_rage_power.id()));
+    public static final Entry MEDIUM_PROC_RAGE = add(new Entry(2, "medium_proc_rage", "Mardroeme Mushroom"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_perk_rage.id()));
+    public static final Entry MEDIUM_PROC_LIFESTEAL = add(new Entry(2, "medium_proc_lifesteal", "Vampiric Scepter"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_proc_lifesteal.id()));
 
-    public static final Entry GREATER_PERK_RAGE = add(new Entry(3, "greater_perk_rage", "Mardroeme Mushroom"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_perk_rage.id()));
 
-    public static final Entry SUPERIOR_PROC_RAGE = add(new Entry(4, "superior_proc_rage", "Svablod's Totem"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_proc_rage.id()));
+    public static final Entry GREATER_FROZEN_HEART = add(new Entry(3, "greater_frozen_heart", "Frozen Heart"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_frozen_heart.id()));
+    public static final Entry GREATER_PROC_RAGE = add(new Entry(3, "greater_proc_rage", "Svablod's Totem"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_proc_rage.id()));
+    public static final Entry GREATER_KIRCHEIS_SHARD = add(new Entry(3, "greater_kircheis_shard", "Kircheis Shard"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_kircheis_shard.id()));
+    public static final Entry GREATER_MADREDS_BLOODRAZOR = add(new Entry(3, "greater_madreds_bloodrazor", "Madred's Bloodrazor"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_madreds_bloodrazor.id()));
+    public static final Entry GREATER_LIANDRYS_TORMENT = add(new Entry(3, "greater_liandrys_torment", "Liandry's Torment"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_liandrys_torment.id()));
+
+    public static final Entry SUPERIOR_MEJAIS_SOULSTEALER = add(new Entry(4, "superior_mejais_soulstealer", "Mejai's Soulstealer"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_mejais_soulstealer.id()));
+    public static final Entry SUPERIOR_ZHONYAS_HOURGLASS = add(new Entry(4, "superior_zhonyas_hourglass", "Zhonya's Hourglass"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_zhonyas_hourglass.id()));
+    public static final Entry SUPERIOR_SHURELYAS_BATTLESONG = add(new Entry(4, "superior_shurelyas_battlesong", "Shurelya's Battlesong"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_shurelyas_battlesong.id()));
 
     public static void register(Map<String, ItemConfig.Entry> config) {
         for (var entry : entries) {

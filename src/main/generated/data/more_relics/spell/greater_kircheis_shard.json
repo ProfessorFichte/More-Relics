@@ -1,0 +1,85 @@
+{
+  "school": "spell_power:physical_ranged",
+  "range": 0.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "type": "PASSIVE",
+  "passive": {
+    "triggers": [
+      {
+        "type": "ARROW_IMPACT",
+        "chance": 0.15
+      }
+    ]
+  },
+  "release": {
+    "sound": {
+      "id": "more_relics:kircheis_shard_proc"
+    }
+  },
+  "target": {
+    "type": "FROM_TRIGGER"
+  },
+  "deliver": {
+    "type": "CLOUD",
+    "delay": 5,
+    "clouds": [
+      {
+        "volume": {
+          "radius": 3.0,
+          "area": {
+            "vertical_range_multiplier": 0.5
+          }
+        },
+        "time_to_live_seconds": 12.0,
+        "impact_tick_interval": 15,
+        "client_data": {
+          "particles": [
+            {
+              "particle_id": "spell_engine:electric_arc_a",
+              "origin": "FEET",
+              "shape": "PILLAR",
+              "count": 5.0,
+              "max_speed": 0.0
+            },
+            {
+              "particle_id": "spell_engine:electric_arc_b",
+              "origin": "FEET",
+              "shape": "PILLAR",
+              "count": 5.0,
+              "max_speed": 0.0
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.35
+        }
+      },
+      "sound": {
+        "id": "more_relics:kircheis_shard_impact",
+        "volume": 0.5
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 30.0
+    }
+  }
+}

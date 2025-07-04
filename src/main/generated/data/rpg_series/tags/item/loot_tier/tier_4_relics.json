@@ -1,7 +1,15 @@
 {
   "values": [
     {
-      "id": "more_relics:superior_proc_rage",
+      "id": "more_relics:superior_zhonyas_hourglass",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_mejais_soulstealer",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_shurelyas_battlesong",
       "required": false
     }
   ]

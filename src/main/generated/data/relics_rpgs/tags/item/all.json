@@ -29,6 +29,10 @@
       "required": false
     },
     {
+      "id": "more_relics:lesser_use_rage",
+      "required": false
+    },
+    {
       "id": "more_relics:medium_use_air_power",
       "required": false
     },
@@ -41,15 +45,43 @@
       "required": false
     },
     {
-      "id": "more_relics:medium_use_rage",
+      "id": "more_relics:medium_proc_rage",
       "required": false
     },
     {
-      "id": "more_relics:greater_perk_rage",
+      "id": "more_relics:medium_proc_lifesteal",
       "required": false
     },
     {
-      "id": "more_relics:superior_proc_rage",
+      "id": "more_relics:greater_frozen_heart",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_proc_rage",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_kircheis_shard",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_madreds_bloodrazor",
+      "required": false
+    },
+    {
+      "id": "more_relics:greater_liandrys_torment",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_mejais_soulstealer",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_zhonyas_hourglass",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_shurelyas_battlesong",
       "required": false
     }
   ]

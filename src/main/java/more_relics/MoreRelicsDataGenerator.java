@@ -3,6 +3,7 @@ package more_relics;
 import more_relics.item.Group;
 import more_relics.item.MoreRelicsItems;
 import more_relics.spell.MoreRelicEffects;
+import more_relics.spell.MoreRelicSounds;
 import more_relics.spell.MoreRelicSpells;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -15,12 +16,15 @@ import net.minecraft.data.client.Models;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.relics_rpgs.item.RelicItemTags;
+import net.spell_engine.api.datagen.SimpleSoundGenerator;
 import net.spell_engine.api.datagen.SpellGenerator;
 import net.spell_engine.api.item.Equipment;
 import net.spell_engine.rpg_series.datagen.RPGSeriesDataGen;
 
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+
+import static more_relics.MoreRelics.MOD_ID;
 
 public class MoreRelicsDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -30,6 +34,7 @@ public class MoreRelicsDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(LangGenerator::new);
 		pack.addProvider(ModelProvider::new);
 		pack.addProvider(MoreRelicsSpellGen::new);
+		pack.addProvider(SoundGen::new);
 	}
 	public static class ItemTagGenerator extends RPGSeriesDataGen.ItemTagGenerator {
 
@@ -103,6 +108,18 @@ public class MoreRelicsDataGenerator implements DataGeneratorEntrypoint {
 			for (var entry: MoreRelicSpells.entries) {
 				builder.add(entry.id(), entry.spell());
 			}
+		}
+	}
+
+	public static class SoundGen extends SimpleSoundGenerator {
+		public SoundGen(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+			super(dataOutput, registryLookup);
+		}
+
+		@Override
+		public void generateSounds(Builder builder) {
+			builder.entries.add(new Entry(MOD_ID,
+					MoreRelicSounds.entries.stream().map( MoreRelicSounds.Entry::name).toList()));
 		}
 	}
 }
