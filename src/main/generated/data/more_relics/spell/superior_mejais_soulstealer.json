@@ -29,13 +29,34 @@
       }
     ]
   },
+  "deliver": {
+    "type": "STASH_EFFECT",
+    "stash_effect": {
+      "id": "more_relics:superior_mejais_soulstealer",
+      "triggers": [
+        {
+          "target_override": "CASTER",
+          "type": "SPELL_IMPACT_ANY",
+          "target_conditions": [
+            {
+              "health_percent_below": 0.0
+            }
+          ],
+          "impact": {
+            "impact_type": "DAMAGE"
+          }
+        }
+      ],
+      "consume": 0
+    }
+  },
   "impacts": [
     {
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "more_relics:superior_mejais_soulstealer",
-          "duration": 60.0,
+          "duration": 20.0,
           "amplifier": 1,
           "amplifier_cap": 9,
           "refresh_duration": false,
@@ -46,7 +67,7 @@
   ],
   "cost": {
     "cooldown": {
-      "duration": 3.0
+      "duration": 60.0
     }
   }
 }

@@ -22,7 +22,7 @@ public class LivingEntityMixin {
                 || entity.getWorld().isClient()) {
             return;
         }
-        if (entity.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.entry)) {
+        if (entity.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.entry) || entity.hasStatusEffect(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.entry)) {
             cir.cancel();
         }
     }

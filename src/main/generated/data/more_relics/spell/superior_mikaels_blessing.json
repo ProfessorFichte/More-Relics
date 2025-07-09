@@ -1,0 +1,75 @@
+{
+  "school": "spell_power:healing",
+  "range": 16.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "active": {},
+  "release": {
+    "animation": "spell_engine:one_handed_healing_release",
+    "sound": {
+      "id": "more_relics:mikaels_blesssing_active"
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {
+      "use_caster_as_fallback": true
+    }
+  },
+  "impacts": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "action": {
+        "type": "HEAL",
+        "heal": {
+          "spell_power_coefficient": 0.15
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:magic_nature_impact_ascend",
+          "origin": "FEET",
+          "shape": "PILLAR",
+          "count": 20.0,
+          "min_speed": 0.02,
+          "max_speed": 0.15
+        },
+        {
+          "particle_id": "spell_engine:magic_spark_decelerate",
+          "origin": "CENTER",
+          "shape": "SPHERE",
+          "count": 40.0,
+          "min_speed": 0.3,
+          "max_speed": 0.3,
+          "color_rgba": 4294954239
+        }
+      ],
+      "sound": {
+        "id": "spell_engine:generic_healing_impact_1"
+      }
+    },
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:superior_mikaels_blessing",
+          "duration": 1.0
+        }
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 90.0
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "school": "spell_power:physical_melee",
-  "range": 0.0,
+  "range": 5.0,
   "tier": 7,
   "tooltip": {
     "show_header": false,
@@ -27,15 +27,15 @@
     }
   },
   "target": {
-    "type": "FROM_TRIGGER"
+    "type": "AREA",
+    "area": {}
   },
   "impacts": [
     {
       "action": {
         "type": "STATUS_EFFECT",
         "status_effect": {
-          "effect_id": "more_relics:greater_frozen_heart",
-          "duration": 6.0
+          "effect_id": "more_relics:greater_frozen_heart"
         }
       },
       "particles": [
@@ -60,7 +60,7 @@
   ],
   "cost": {
     "cooldown": {
-      "duration": 5.0
+      "duration": 30.0
     }
   }
 }

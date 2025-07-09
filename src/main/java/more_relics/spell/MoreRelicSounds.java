@@ -29,6 +29,8 @@ public class MoreRelicSounds {
     public static final Entry SHURELYAS_BATTLESONG_ACTIVATE = add(new Entry("shurelyas_battlesong_activate"));
     public static final Entry MADREDS_BLOODRAZOR_IMPACT = add(new Entry("madreds_bloodrazor_impact"));
     public static final Entry LIANDRYS_TORMENT_PROC = add(new Entry("liandrys_torment_proc"));
+    public static final Entry MIKAELS_BLESSING_ACTIVATE = add(new Entry("mikaels_blesssing_active"));
+    public static final Entry GUARDIAN_ANGEL_ACTIVATE = add(new Entry("guardian_angel_active"));
 
     public static void register() {
         for (var entry: entries) {

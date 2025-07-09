@@ -19,6 +19,10 @@
     {
       "id": "more_relics:greater_kircheis_shard",
       "required": false
+    },
+    {
+      "id": "more_relics:greater_sunfire_cape",
+      "required": false
     }
   ]
 }

@@ -1,11 +1,11 @@
 package more_relics;
 
+import more_relics.client.effect.GuardianAngelParticleSpawner;
 import more_relics.spell.MoreRelicEffects;
 import more_relics.spell.MoreRelicSpells;
 import net.fabricmc.api.ClientModInitializer;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.BuffParticleSpawner;
-import net.spell_engine.api.spell.fx.ParticleBatch;
 import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
@@ -21,6 +21,8 @@ public class MoreRelicsClient implements ClientModInitializer {
 				SpellTooltip.addDescriptionMutator(entry.id(), entry.mutator());
 			}
 		}
+		final Color ORANGE = new Color(255.0F, 165.0F, 0.0F);
+		final Color PURPLE = new Color(104.0F, 12.0F, 104.0F);
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_POWER_AIR_LIGHTNING.effect,
@@ -64,14 +66,29 @@ public class MoreRelicsClient implements ClientModInitializer {
 				MoreRelicEffects.GREATER_FROZEN_HEART.effect,
 				new BuffParticleSpawner("spell_engine:snowflake", 5.0F)
 		);
-
 		CustomParticleStatusEffect.register(
-				MoreRelicEffects.GREATER_LIANDRYS_TORNMENT.effect,
+				MoreRelicEffects.GREATER_LIANDRYS_TORMENT.effect,
 				new BuffParticleSpawner("spell_engine:flame_medium_b", 0.5F)
 						.withGroundEffect(
 								SpellEngineParticles.area_effect_480.id().toString(),
-								Color.RED,
+								Color.RAGE,
 								SpellEngineParticles.area_effect_480.texture().frames())
+		);
+		CustomParticleStatusEffect.register(
+				MoreRelicEffects.GREATER_MADREDS_BLOODRAZOR.effect,
+				new BuffParticleSpawner("spell_engine:magic_rage_stripe_float", 5.0F)
+		);
+		CustomParticleStatusEffect.register(
+				MoreRelicEffects.SUPERIOR_MEJAIS_SOULSTEALER.effect,
+				new BuffParticleSpawner("spell_engine:magic_arcane_spell_ascend", 1.0F)
+		);
+		CustomParticleStatusEffect.register(
+				MoreRelicEffects.GREATER_SUNFIRE_CAPE.effect,
+				new BuffParticleSpawner("spell_engine:flame_medium_b", 0.5F)
+						.withGroundEffect(
+								SpellEngineParticles.area_effect_293.id().toString(),
+								ORANGE,
+								SpellEngineParticles.area_effect_293.texture().frames())
 		);
 
 		CustomParticleStatusEffect.register(
@@ -82,5 +99,14 @@ public class MoreRelicsClient implements ClientModInitializer {
 								Color.HOLY,
 								SpellEngineParticles.ground_glow.texture().frames())
 		);
+		CustomParticleStatusEffect.register(
+				MoreRelicEffects.SUPERIOR_SHURELYAS_BATTLESONG.effect,
+				new BuffParticleSpawner("spell_engine:magic_white_spell_float", 4.0F)
+						.withGroundEffect(
+								SpellEngineParticles.ground_glow.id().toString(),
+								Color.WHITE,
+								SpellEngineParticles.ground_glow.texture().frames())
+		);
+		CustomParticleStatusEffect.register(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.effect, new GuardianAngelParticleSpawner());
 	}
 }

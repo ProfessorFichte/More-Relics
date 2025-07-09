@@ -3,7 +3,7 @@
 	"id": "more_relics",
 	"version": "${version}",
 	"name": "More Relics",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This is a Relics (RPG-Series) Add-On, adding relics for the More RPG Classes and powerful relics!",
 	"authors": [
 		"Fichte"
 	],
@@ -32,6 +32,8 @@
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.21.1",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"spell_engine": "*",
+		"relics_rpgs": "*"
 	}
 }

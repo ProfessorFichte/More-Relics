@@ -1,6 +1,6 @@
 {
-  "school": "spell_power:physical_melee",
-  "range": 0.0,
+  "school": "spell_power:fire",
+  "range": 4.0,
   "tier": 7,
   "tooltip": {
     "show_header": false,
@@ -17,6 +17,11 @@
     "triggers": [
       {
         "target_override": "CASTER",
+        "type": "DAMAGE_TAKEN",
+        "chance": 0.15
+      },
+      {
+        "target_override": "CASTER",
         "type": "MELEE_IMPACT",
         "chance": 0.15
       }
@@ -28,10 +33,13 @@
   "deliver": {
     "type": "STASH_EFFECT",
     "stash_effect": {
-      "id": "more_relics:greater_madreds_bloodrazor",
+      "id": "more_relics:greater_sunfire_cape",
       "triggers": [
         {
           "type": "MELEE_IMPACT"
+        },
+        {
+          "type": "DAMAGE_TAKEN"
         }
       ],
       "consume": 0
@@ -39,38 +47,31 @@
   },
   "impacts": [
     {
-      "attribute_from_target": true,
       "attribute": "minecraft:generic.max_health",
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 0.03
+          "spell_power_coefficient": 0.04
         }
       },
       "particles": [
         {
-          "particle_id": "spell_engine:dripping_blood",
+          "particle_id": "spell_engine:flame",
           "origin": "CENTER",
           "shape": "SPHERE",
-          "count": 20.0,
-          "min_speed": 0.2,
-          "max_speed": 0.8
-        },
-        {
-          "particle_id": "more_rpg_classes:blood_drop",
-          "origin": "CENTER",
-          "shape": "CIRCLE",
           "count": 20.0,
           "min_speed": 0.2,
           "max_speed": 0.8
         }
       ],
       "sound": {
-        "id": "more_relics:madreds_bloodrazor_impact",
-        "volume": 1.25
+        "id": "spell_engine:generic_fire_ignite"
       }
     }
   ],
+  "area_impact": {
+    "radius": 4.0
+  },
   "cost": {
     "cooldown": {
       "duration": 45.0

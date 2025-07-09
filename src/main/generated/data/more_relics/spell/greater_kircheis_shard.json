@@ -40,8 +40,8 @@
             "vertical_range_multiplier": 0.5
           }
         },
-        "time_to_live_seconds": 12.0,
-        "impact_tick_interval": 15,
+        "time_to_live_seconds": 10.0,
+        "impact_tick_interval": 20,
         "client_data": {
           "particles": [
             {

@@ -205,6 +205,8 @@ public class MoreRelicsItems {
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_madreds_bloodrazor.id()));
     public static final Entry GREATER_LIANDRYS_TORMENT = add(new Entry(3, "greater_liandrys_torment", "Liandry's Torment"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_liandrys_torment.id()));
+    public static final Entry GREATER_SUNFIRE_CAPE = add(new Entry(3, "greater_sunfire_cape", "Sunfire Cape"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_sunfire_cape.id()));
 
     public static final Entry SUPERIOR_MEJAIS_SOULSTEALER = add(new Entry(4, "superior_mejais_soulstealer", "Mejai's Soulstealer"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_mejais_soulstealer.id()));
@@ -212,6 +214,10 @@ public class MoreRelicsItems {
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_zhonyas_hourglass.id()));
     public static final Entry SUPERIOR_SHURELYAS_BATTLESONG = add(new Entry(4, "superior_shurelyas_battlesong", "Shurelya's Battlesong"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_shurelyas_battlesong.id()));
+    public static final Entry SUPERIOR_MIKAELS_BLESSING = add(new Entry(4, "superior_mikaels_blessing", "Mikael's Blessing"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_mikaels_blessing.id()));
+    public static final Entry SUPERIOR_GUARDIAN_ANGEL = add(new Entry(4, "superior_guardian_angel", "Guardian Angel"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_guardian_angel.id()));
 
     public static void register(Map<String, ItemConfig.Entry> config) {
         for (var entry : entries) {

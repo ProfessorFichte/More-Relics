@@ -11,7 +11,7 @@ public class LiandrysTornmentStatusEffect extends StatusEffect {
 
 
     public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
-        float damage = entity.getMaxHealth() * (0.02F * (amplifier + 1));
+        float damage = entity.getMaxHealth() * 0.03F;
         entity.damage(entity.getDamageSources().magic(), damage);
         return true;
     }

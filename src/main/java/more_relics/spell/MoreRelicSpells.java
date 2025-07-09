@@ -1,9 +1,9 @@
 package more_relics.spell;
 
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.more_rpg_classes.client.particle.MoreParticles;
 import net.more_rpg_classes.custom.MoreSpellSchools;
 import net.more_rpg_classes.sounds.ModSounds;
 import net.relics_rpgs.spell.RelicSounds;
@@ -14,6 +14,7 @@ import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
+import net.spell_engine.fx.SpellEngineSounds;
 import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,7 @@ public class MoreRelicSpells {
     private static final float T3_PERK_CC_COOLDOWN = 20;
     private static final float T3_PROC_CHANCE = 0.15F;
     private static final float T3_PROC_EFFECT_COOLDOWN = 30;
+    private static final float T3_PROC_EFFECT_DURATION = 10;
     private static final float T3_ZONE_RANGE = 3;
     private static final float T3_ZONE_DURATION = 10;
 
@@ -126,6 +128,10 @@ public class MoreRelicSpells {
                         SpellEngineParticles.MagicParticleFamily.Motion.DECELERATE).id().toString(),
                 count);
     }
+    private static final Identifier SPARK_DECELERATE = SpellEngineParticles.MagicParticles.get(
+            SpellEngineParticles.MagicParticles.Shape.SPARK,
+            SpellEngineParticles.MagicParticles.Motion.DECELERATE
+    ).id();
 
     private static @NotNull ParticleBatch lesserActivateParticles(String particleId, int count) {
         return new ParticleBatch(
@@ -133,6 +139,12 @@ public class MoreRelicSpells {
                 ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                 count, 0.14F, 0.15F);
     }
+
+    private static final Identifier HEALING_PARTICLES = SpellEngineParticles.getMagicParticleVariant(
+            SpellEngineParticles.NATURE,
+            SpellEngineParticles.MagicParticleFamily.Shape.IMPACT,
+            SpellEngineParticles.MagicParticleFamily.Motion.ASCEND
+    ).id();
 
     private static Spell.TargetCondition deadCondition() {
         var deadCondition = new Spell.TargetCondition();
@@ -149,6 +161,25 @@ public class MoreRelicSpells {
         var deadCondition = deadCondition();
         trigger.target_conditions = List.of(deadCondition);
         return trigger;
+    }
+
+    private static Spell.Trigger deathPlayer() {
+        var trigger = new Spell.Trigger();
+        trigger.type = Spell.Trigger.Type.DAMAGE_TAKEN;
+        trigger.impact = new Spell.Trigger.ImpactCondition();
+        trigger.impact.impact_type = Spell.Impact.Action.Type.DAMAGE.toString();
+        var deadCondition = deadCondition();
+        trigger.target_conditions = List.of(deadCondition);
+        return trigger;
+    }
+
+    private static Spell.Impact createHeal(float coefficient) {
+        var buff = new Spell.Impact();
+        buff.action = new Spell.Impact.Action();
+        buff.action.type = Spell.Impact.Action.Type.HEAL;
+        buff.action.heal = new Spell.Impact.Action.Heal();
+        buff.action.heal.spell_power_coefficient = coefficient;
+        return buff;
     }
 
     public static Entry lesser_proc_air_lightning = add(lesser_proc_air_lightning());
@@ -418,7 +449,7 @@ public class MoreRelicSpells {
     public static Entry medium_proc_lifesteal = add(medium_proc_lifesteal());
     private static Entry medium_proc_lifesteal() {
         var id = Identifier.of(MOD_ID, "medium_proc_lifesteal");
-        var description = "On melee and spell hit: {trigger_chance} chance to increase lifesteal and spell vampire by {bonus} for {effect_duration} seconds.";
+        var description = "On melee and spell hit: {trigger_chance_1} chance to increase lifesteal and spell vampire by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.MEDIUM_LIFESTEAL_POWER;
         var title = effect.title;
         SpellTooltip.DescriptionMutator mutator = (args) -> {
@@ -468,7 +499,7 @@ public class MoreRelicSpells {
         var effect = MoreRelicEffects.GREATER_RAGE_POWER;
         var title = "Svablod's Ritual";
         var health_threshold = 0.25F;
-        var description = "Taking damage below {health_threshold} health, reduces damage by {bonus}, increases rage by {bonus2} and attack speed by {bonus3} for {effect_duration} seconds.";
+        var description = "Taking damage below {health_threshold} health, reduces incoming damage by {bonus}, increases rage by {bonus2} and attack speed by {bonus3} for {effect_duration} seconds.";
         SpellTooltip.DescriptionMutator mutator = (args) -> {
             var modifier = effect.config().attributes().get(1);
             var modifier2 = effect.config().attributes().get(0);
@@ -516,7 +547,7 @@ public class MoreRelicSpells {
         var id = Identifier.of(MOD_ID, "greater_frozen_heart");
         var effect = MoreRelicEffects.GREATER_FROZEN_HEART;
         var title = effect.title;
-        var description = "On taking damage: {trigger_chance} chance to reduce the attack and movement speed from the attacker by {bonus} for {effect_duration} seconds.";
+        var description = "On taking damage: {trigger_chance} chance to reduce the attack and movement speed of nearby enemies by {bonus} for {effect_duration} seconds.";
         SpellTooltip.DescriptionMutator mutator = (args) -> {
             var modifier = effect.config().firstModifier();
             var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
@@ -526,6 +557,8 @@ public class MoreRelicSpells {
 
         var spell = passiveSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
+        spell.range = 5.0F;
+
         spell.release.sound = new Sound(ModSounds.FROST_CRACKLE_ID.toString());
 
         var trigger = new Spell.Trigger();
@@ -533,9 +566,11 @@ public class MoreRelicSpells {
         trigger.type = Spell.Trigger.Type.DAMAGE_TAKEN;
         spell.passive.triggers = List.of(trigger);
 
-        spell.target.type = Spell.Target.Type.FROM_TRIGGER;
+        spell.target.type = Spell.Target.Type.AREA;
+        spell.target.area = new Spell.Target.Area();
+        spell.target.area.vertical_range_multiplier = 1.0F;
 
-        var debuff = createEffectImpact(effect.id.toString(), T3_PERK_CC_DURATION * 3 );
+        var debuff = createEffectImpact(effect.id.toString(), T3_PROC_EFFECT_DURATION );
         debuff.particles = new ParticleBatch[]{
                 new ParticleBatch(SpellEngineParticles.frost_shard.id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
@@ -546,14 +581,14 @@ public class MoreRelicSpells {
         };
         spell.impacts = List.of(debuff);
 
-        configureCooldown(spell, 5);
+        configureCooldown(spell, T3_PROC_EFFECT_COOLDOWN);
 
         return new Entry(id, spell, title, description, mutator);
     }
     public static Entry greater_kircheis_shard = add(greater_kircheis_shard());
     private static Entry greater_kircheis_shard() {
         var id = Identifier.of(MOD_ID, "greater_kircheis_shard");
-        var description = "On arrow hit: {trigger_chance} chance to create a electric field for {cloud_duration} seconds dealing {damage}.";
+        var description = "On arrow hit: {trigger_chance} chance to create a electric field for {cloud_duration} seconds dealing {damage} damage.";
         var title = "Kircheis Shard";
 
         var spell = passiveSpellBase();
@@ -569,8 +604,8 @@ public class MoreRelicSpells {
         var cloud = new Spell.Delivery.Cloud();
         cloud.volume.radius = T3_ZONE_RANGE;
         cloud.volume.area.vertical_range_multiplier = 0.5F;
-        cloud.time_to_live_seconds = T3_ZONE_DURATION + 2F;
-        cloud.impact_tick_interval = 15;
+        cloud.time_to_live_seconds = T3_ZONE_DURATION;
+        cloud.impact_tick_interval = 20;
         cloud.client_data = new Spell.Delivery.Cloud.ClientData();
         cloud.client_data.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -606,19 +641,40 @@ public class MoreRelicSpells {
     public static Entry greater_madreds_bloodrazor = add(greater_madreds_bloodrazor());
     private static Entry greater_madreds_bloodrazor() {
         var id = Identifier.of(MOD_ID, "greater_madreds_bloodrazor");
-        var description = "On melee hit: {trigger_chance} chance to deal {damage} damage according to the targets max health.";
+        var description = "On melee hit: {trigger_chance_1} to receive increased attack speed by {bonus} and deal additional damage according to {max_health_damage} of the targets max health every hit.";
         var title = "Madred's Bloodrazor";
+        var effect = MoreRelicEffects.GREATER_MADREDS_BLOODRAZOR;
 
         var spell = passiveSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            var modifier_effect = effect.config().firstModifier();
+            var bonus_effect = SpellTooltip.bonus(modifier_effect.value, modifier_effect.operation);
+            var modifiedDescription = args.description();
+            var max_health_damage = spell.impacts.get(0).action.damage;
+            if (max_health_damage != null) {
+                modifiedDescription = modifiedDescription.replace("{max_health_damage}", SpellTooltip.percent(max_health_damage.spell_power_coefficient));
+            }
+            return modifiedDescription
+                    .replace("{bonus}", bonus_effect);
+        };
 
-
-        var trigger = new Spell.Trigger();
-        trigger.chance = T3_PROC_CHANCE;
-        trigger.type = Spell.Trigger.Type.MELEE_IMPACT;
-        spell.passive.triggers = List.of(trigger);
+        var trigger_passive = new Spell.Trigger();
+        trigger_passive.chance = T3_PROC_CHANCE;
+        trigger_passive.type = Spell.Trigger.Type.MELEE_IMPACT;
+        trigger_passive.target_override = Spell.Trigger.TargetSelector.CASTER;
+        spell.passive.triggers = List.of(trigger_passive);
 
         spell.target.type = Spell.Target.Type.FROM_TRIGGER;
+
+        var trigger_stash = new Spell.Trigger();
+        trigger_stash.type = Spell.Trigger.Type.MELEE_IMPACT;
+        spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
+        spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
+        spell.deliver.stash_effect.duration = T3_PROC_EFFECT_DURATION;
+        spell.deliver.stash_effect.id = effect.id.toString();
+        spell.deliver.stash_effect.consume = 0;
+        spell.deliver.stash_effect.triggers = List.of(trigger_stash);
 
         var damage = new Spell.Impact();
         damage.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
@@ -626,7 +682,7 @@ public class MoreRelicSpells {
         damage.action = new Spell.Impact.Action();
         damage.action.type = Spell.Impact.Action.Type.DAMAGE;
         damage.action.damage = new Spell.Impact.Action.Damage();
-        damage.action.damage.spell_power_coefficient = 0.05F;
+        damage.action.damage.spell_power_coefficient = 0.03F;
         damage.sound = Sound.withVolume(MoreRelicSounds.MADREDS_BLOODRAZOR_IMPACT.id(), 1.25F);
         damage.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -639,16 +695,17 @@ public class MoreRelicSpells {
                         20, 0.2F, 0.8F)
         };
 
-        spell.impacts = List.of(damage);
-        configureCooldown(spell, 5);
 
-        return new Entry(id, spell, title, description, null);
+        spell.impacts = List.of(damage);
+        configureCooldown(spell, T3_TRANCE_COOLDOWN);
+
+        return new Entry(id, spell, title, description, mutator);
     }
     public static Entry greater_liandrys_torment = add(greater_liandrys_torment());
     private static Entry greater_liandrys_torment() {
         var id = Identifier.of(MOD_ID, "greater_liandrys_torment");
         var title = "Liandry's Torment";
-        var description = "On spell hit: {trigger_chance} chance to torment the target for {effect_duration} seconds, damaging according to max health per second.";
+        var description = "On spell hit: {trigger_chance} chance to torment the target for {effect_duration} seconds, damaging according to 3%% of the targets max health per second.";
         var spell = passiveSpellBase();
         spell.school = SpellSchools.ARCANE;
 
@@ -659,7 +716,7 @@ public class MoreRelicSpells {
 
         spell.target.type = Spell.Target.Type.FROM_TRIGGER;
 
-        var debuff = createEffectImpact(MoreRelicEffects.GREATER_LIANDRYS_TORNMENT.id.toString(),T3_PERK_CC_DURATION * 2);
+        var debuff = createEffectImpact(MoreRelicEffects.GREATER_LIANDRYS_TORMENT.id.toString(),T3_PROC_EFFECT_DURATION);
         debuff.action.status_effect.apply_mode = Spell.Impact.Action.StatusEffect.ApplyMode.ADD;
         debuff.action.status_effect.amplifier = 1;
         debuff.action.status_effect.amplifier_cap = 4;
@@ -667,15 +724,79 @@ public class MoreRelicSpells {
         debuff.action.status_effect.refresh_duration = false;
         spell.impacts = List.of(debuff);
 
-        configureCooldown(spell, 5);
+        configureCooldown(spell, T3_TRANCE_COOLDOWN);
 
         return new Entry(id, spell, title, description, null);
+    }
+    public static Entry greater_sunfire_cape = add(greater_sunfire_cape());
+    private static Entry greater_sunfire_cape() {
+        var id = Identifier.of(MOD_ID, "greater_sunfire_cape");
+        var description = "On damage taken and dealt: {trigger_chance_1} to deal {max_health_damage} damage of your max health around you. ";
+        var effect = MoreRelicEffects.GREATER_SUNFIRE_CAPE;
+        var title = effect.title;
+
+        var spell = passiveSpellBase();
+        spell.range = 4.0F;
+        spell.school = SpellSchools.FIRE;
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            var modifiedDescription = args.description();
+            var max_health_damage = spell.impacts.get(0).action.damage;
+            if (max_health_damage != null) {
+                modifiedDescription = modifiedDescription.replace("{max_health_damage}", SpellTooltip.percent(max_health_damage.spell_power_coefficient));
+            }
+            return modifiedDescription;
+        };
+
+        var trigger_damage_taken = new Spell.Trigger();
+        trigger_damage_taken.chance = T3_PROC_CHANCE;
+        trigger_damage_taken.type = Spell.Trigger.Type.DAMAGE_TAKEN;
+        trigger_damage_taken.target_override = Spell.Trigger.TargetSelector.CASTER;
+        var trigger_damage_dealt = new Spell.Trigger();
+        trigger_damage_dealt.chance = T3_PROC_CHANCE;
+        trigger_damage_dealt.type = Spell.Trigger.Type.MELEE_IMPACT;
+        trigger_damage_dealt.target_override = Spell.Trigger.TargetSelector.CASTER;
+        spell.passive.triggers = List.of(trigger_damage_taken,trigger_damage_dealt);
+
+        spell.target.type = Spell.Target.Type.FROM_TRIGGER;
+
+        var trigger_stash_damage_dealt = new Spell.Trigger();
+        trigger_stash_damage_dealt.type = Spell.Trigger.Type.MELEE_IMPACT;
+        var trigger_stash_damage_taken = new Spell.Trigger();
+        trigger_stash_damage_taken.type = Spell.Trigger.Type.DAMAGE_TAKEN;
+        spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
+        spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
+        spell.deliver.stash_effect.duration = T3_PROC_EFFECT_DURATION;
+        spell.deliver.stash_effect.id = effect.id.toString();
+        spell.deliver.stash_effect.consume = 0;
+        spell.deliver.stash_effect.triggers = List.of(trigger_stash_damage_dealt,trigger_stash_damage_taken);
+
+        var damage = new Spell.Impact();
+        damage.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+        damage.attribute_from_target = false;
+        damage.action = new Spell.Impact.Action();
+        damage.action.type = Spell.Impact.Action.Type.DAMAGE;
+        damage.action.damage = new Spell.Impact.Action.Damage();
+        damage.action.damage.spell_power_coefficient = 0.04F;
+        damage.sound = Sound.withVolume(SpellEngineSounds.GENERIC_FIRE_IGNITE.id(), 1.0F);
+        damage.particles = new ParticleBatch[]{
+                new ParticleBatch(
+                        SpellEngineParticles.flame.id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        20, 0.2F, 0.8F)
+        };
+
+        spell.impacts = List.of(damage);
+        spell.area_impact = new Spell.AreaImpact();
+        spell.area_impact.radius = 4.0F;
+        configureCooldown(spell, T3_TRANCE_COOLDOWN);
+
+        return new Entry(id, spell, title, description, mutator);
     }
     ///SUPERIOR RELICS
     public static Entry superior_zhonyas_hourglass = add(superior_zhonyas_hourglass());
     private static Entry superior_zhonyas_hourglass() {
         var id = Identifier.of(MOD_ID, "superior_zhonyas_hourglass");
-        var description = "Use: become invulnerable for {effect_duration} seconds, you cant move, attack or cast spells.";
+        var description = "Use: Become invulnerable for {effect_duration} seconds, you cant move, attack or cast spells.";
         var effect = MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS;
         var title = effect.title;
 
@@ -705,7 +826,7 @@ public class MoreRelicSpells {
         var id = Identifier.of(MOD_ID, "superior_mejais_soulstealer");
         var effect = MoreRelicEffects.SUPERIOR_MEJAIS_SOULSTEALER;
         var title = effect.title;
-        var description = "Defeating enemies grants you spell power by {bonus}, stacking up to {effect_amplifier_cap} times.";
+        var description = "Defeating enemies grants you spell power by {bonus}, stacking up to {effect_amplifier_cap} times for {effect_duration} seconds.";
         var spell = passiveSpellBase();
         SpellTooltip.DescriptionMutator mutator = (args) -> {
             var modifier = effect.config().firstModifier();
@@ -719,14 +840,23 @@ public class MoreRelicSpells {
         trigger.target_override = Spell.Trigger.TargetSelector.CASTER;
         spell.passive.triggers = List.of(trigger);
 
-        var buff = createEffectImpact(MoreRelicEffects.SUPERIOR_MEJAIS_SOULSTEALER.id.toString(),60);
+        spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
+        spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
+        spell.deliver.stash_effect.id = effect.id.toString();
+        spell.deliver.stash_effect.consume = 0;
+        var stashTrigger = killedBySpellTrigger();
+        stashTrigger.type = Spell.Trigger.Type.SPELL_IMPACT_ANY;
+        stashTrigger.target_override = Spell.Trigger.TargetSelector.CASTER;
+        spell.deliver.stash_effect.triggers = List.of(stashTrigger);
+
+        var buff = createEffectImpact(MoreRelicEffects.SUPERIOR_MEJAIS_SOULSTEALER.id.toString(),T4_PROC_EFFECT_DURATION + 5);
         buff.action.status_effect.apply_mode = Spell.Impact.Action.StatusEffect.ApplyMode.ADD;
         buff.action.status_effect.amplifier = 1;
         buff.action.status_effect.amplifier_cap = 9;
         buff.action.status_effect.refresh_duration = false;
         spell.impacts = List.of(buff);
 
-        configureCooldown(spell, 3);
+        configureCooldown(spell, T4_PROC_EFFECT_COOLDOWN);
 
         return new Entry(id, spell, title, description, mutator);
     }
@@ -764,15 +894,117 @@ public class MoreRelicSpells {
         impact.action.cooldown.actives = new Spell.Impact.Action.Cooldown.Modify();
         impact.action.cooldown.actives.duration_multiplier = 0.8F;
         impact.particles = new ParticleBatch[]{
-                new ParticleBatch(SpellEngineParticles.sign_hourglass.id().toString(),
+                new ParticleBatch(SpellEngineParticles.sign_speed.id().toString(),
                         ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.CENTER,
                         1, 0.75F, 0.75F)
                         .scale(1.2F)
-                        .color(Color.HOLY.toRGBA())
+                        .color(Color.WHITE.toRGBA())
                         .followEntity(true)
         };
 
         spell.impacts = List.of(buff, impact);
+
+        configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
+
+        return new Entry(id, spell, title, description, mutator);
+    }
+    public static Entry superior_mikaels_blessing = add(superior_mikaels_blessing());
+    private static Entry superior_mikaels_blessing() {
+        var id = Identifier.of(MOD_ID, "superior_mikaels_blessing");
+        var effect = MoreRelicEffects.SUPERIOR_MIKAELS_BLESSING;
+        var title = effect.title;
+        var description = "Use: Heals you or the targeted ally for {heal_percent} of your max health and cleanses all harmful effects.";
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            var modifiedDescription = args.description();
+            var spell = args.spellEntry().value();
+            var heal = spell.impacts.get(0).action.heal;
+            if (heal != null) {
+                modifiedDescription = modifiedDescription.replace("{heal_percent}", SpellTooltip.percent(heal.spell_power_coefficient));
+            }
+            return modifiedDescription;
+        };
+
+        var spell = activeSpellBase();
+        spell.school = SpellSchools.HEALING;
+        spell.range = 16;
+
+        spell.release.animation = "spell_engine:one_handed_healing_release";
+        spell.release.sound = new Sound(MoreRelicSounds.MIKAELS_BLESSING_ACTIVATE.id());
+
+        spell.target.type = Spell.Target.Type.AIM;
+        spell.target.aim = new Spell.Target.Aim();
+        spell.target.aim.use_caster_as_fallback = true;
+
+        var buff = createEffectImpact(effect.id.toString(), 1 );
+
+        var heal = createHeal(0.15F);
+        heal.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+        heal.sound = new Sound(SpellEngineSounds.GENERIC_HEALING_IMPACT_1.id());
+        heal.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        HEALING_PARTICLES.toString(),
+                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
+                        20, 0.02F, 0.15F),
+                new ParticleBatch(SPARK_DECELERATE.toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        40, 0.3F, 0.3F)
+                        .color(Color.HOLY.toRGBA())
+        };
+
+        spell.impacts = List.of(heal,buff);
+
+        configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
+
+        return new Entry(id, spell, title, description, mutator);
+    }
+    public static Entry superior_guardian_angel = add(superior_guardian_angel());
+    private static Entry superior_guardian_angel() {
+        var id = Identifier.of(MOD_ID, "superior_guardian_angel");
+        var title = "Guardian Angel";
+        var effect = MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL;
+        var health_threshold = 0.15F;
+        var description = "Taking damage below {health_threshold} health, makes you invulnerable for {effect_duration} seconds and heals you for {health_percent} of your maximum health.";
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            var modifiedDescription = args.description();
+            var spell = args.spellEntry().value();
+            var heal = spell.impacts.get(0).action.heal;
+            if (heal != null) {
+                modifiedDescription = modifiedDescription.replace("{health_percent}", SpellTooltip.percent(heal.spell_power_coefficient));
+            }
+            return modifiedDescription
+                    .replace("{health_threshold}", SpellTooltip.percent(health_threshold));
+        };
+
+        var spell = passiveSpellBase();
+        spell.school = SpellSchools.HEALING;
+
+        spell.release.animation = "more_relics:guardian_angel";
+        spell.release.sound = Sound.withVolume(MoreRelicSounds.GUARDIAN_ANGEL_ACTIVATE.id(), 1.25F);
+
+        var trigger = new Spell.Trigger();
+        var healthCondition = new Spell.TargetCondition();
+        healthCondition.health_percent_below = health_threshold;
+        trigger.caster_conditions = List.of(healthCondition);
+        trigger.type = Spell.Trigger.Type.DAMAGE_TAKEN;
+        trigger.target_override = Spell.Trigger.TargetSelector.CASTER;
+        spell.passive.triggers = List.of(trigger);
+
+        var heal = createHeal(0.65F);
+        heal.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+        heal.sound = new Sound(SpellEngineSounds.GENERIC_HEALING_IMPACT_1.id());
+        heal.particles = new ParticleBatch[] {
+                new ParticleBatch(
+                        SpellEngineParticles.area_circle_1.id().toString(),
+                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.FEET,
+                        1, 0.2F, 0.2F)
+                        .followEntity(true)
+                        .scale(0.8F)
+                        .maxAge(0.8F)
+                        .color(Color.WHITE.toRGBA()),
+        };
+
+        var buff = createEffectImpact(effect.id.toString(), 4);
+        spell.impacts = List.of(heal, buff);
 
         configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
 

@@ -1,6 +1,6 @@
-// 1.21.1	2025-07-05T00:49:46.6069205	More Relics/Tags for minecraft:item
-6960fa89fda6d5103f73375a048dde0ef73f3e1c data\relics_rpgs\tags\item\all.json
+// 1.21.1	2025-07-10T00:55:12.2202795	More Relics/Tags for minecraft:item
+37cf41ef7bbb73d6294ff95eb3de1c1fe0655d59 data\relics_rpgs\tags\item\all.json
 f96640990ffda0ea614d46c2abb63af563f5389c data\rpg_series\tags\item\loot_tier\tier_2_relics.json
-ba18d2d0e91b018ad311e4ccfcd5c60b92a1d0c4 data\rpg_series\tags\item\loot_tier\tier_3_relics.json
-2c98c7680e2608a18b678f5ec6d14b8987f28594 data\rpg_series\tags\item\loot_tier\tier_4_relics.json
+c966e1147fccbfbacedadb0900e39b31870e2b61 data\rpg_series\tags\item\loot_tier\tier_3_relics.json
+fb27d40a753eaaaacfea419df6e986220690e3f3 data\rpg_series\tags\item\loot_tier\tier_4_relics.json
 ae7d7384da240c8d802042fc32c6993afe5cda31 data\rpg_series\tags\item\loot_tier\tier_1_relics.json

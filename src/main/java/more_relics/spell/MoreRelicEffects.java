@@ -1,6 +1,8 @@
 package more_relics.spell;
 
+import more_relics.spell.effect.CustomStatusEffect;
 import more_relics.spell.effect.LiandrysTornmentStatusEffect;
+import more_relics.spell.effect.MikaelsBlessingStatusEffect;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -16,7 +18,6 @@ import net.spell_engine.api.effect.Effects;
 import net.spell_engine.api.effect.EntityActionsAllowed;
 import net.spell_engine.api.effect.Synchronized;
 import net.spell_engine.api.entity.SpellEngineAttributes;
-import net.spell_power.api.SpellPower;
 import net.spell_power.api.SpellSchools;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class MoreRelicEffects {
     private static final float T3_BUFF_MULTIPLIER = 0.3F;
     private static final float T4_BUFF_MULTIPLIER = 0.4F;
 
+    ///LESSER
     public static Effects.Entry LESSER_RAGE_POWER = add(new Effects.Entry(Identifier.of(MOD_ID,"lesser_rage_power"),
             "Rage Power",
             "Increases Rage.",
@@ -98,7 +100,7 @@ public class MoreRelicEffects {
                             .toList()
             )
     ));
-
+    ///MEDIUM
     public static Effects.Entry MEDIUM_AIR_POWER = add(new Effects.Entry(Identifier.of(MOD_ID,"medium_air_power"),
             "Air Power",
             "Increases Air spell power.",
@@ -185,7 +187,7 @@ public class MoreRelicEffects {
                     )
             )
     ));
-
+    ///GREATER
     public static Effects.Entry GREATER_RAGE_POWER = add(new Effects.Entry(Identifier.of(MOD_ID,"greater_rage_power"),
             "Svablods Ritual",
             "Increases Rage and attack speed, also reduces incoming Damage taken.",
@@ -230,8 +232,8 @@ public class MoreRelicEffects {
                     )
             )
     ));
-    public static Effects.Entry GREATER_LIANDRYS_TORNMENT = add(new Effects.Entry(Identifier.of(MOD_ID,"greater_liandrys_tornment"),
-            "Liandry's Tornment",
+    public static Effects.Entry GREATER_LIANDRYS_TORMENT = add(new Effects.Entry(Identifier.of(MOD_ID,"greater_liandrys_torment"),
+            "Liandry's Torment",
             "Increases incoming Damage and dealing damage according to the maximum health of the target per second.",
             new LiandrysTornmentStatusEffect(StatusEffectCategory.HARMFUL, 0x888800),
             new EffectConfig(
@@ -244,7 +246,26 @@ public class MoreRelicEffects {
                     )
             )
     ));
-
+    public static Effects.Entry GREATER_MADREDS_BLOODRAZOR = add(new Effects.Entry(Identifier.of(MOD_ID,"greater_madreds_bloodrazor"),
+            "Madred' Bloodrazor",
+            "Increases attack speed.",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    EntityAttributes.GENERIC_ATTACK_SPEED.getIdAsString(),
+                                    0.15F,
+                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                            )
+                    )
+            )
+    ));
+    public static Effects.Entry GREATER_SUNFIRE_CAPE = add(new Effects.Entry(Identifier.of(MOD_ID,"greater_sunfire_cape"),
+            "Sunfire Cape",
+            "Deals damage around the user when taking or dealing melee damage.",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800)
+    ));
+    ///SUPERIOR
     public static Effects.Entry SUPERIOR_ZHONYAS_HOURGLASS = add(new Effects.Entry(Identifier.of(MOD_ID,"superior_zhonyas_hourglass"),
             "Zhonyas Hourglass",
             "Cant move, jump or cast spells but you're invulnerable.",
@@ -253,6 +274,11 @@ public class MoreRelicEffects {
                     List.of(
                             new AttributeModifier(
                                     EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(),
+                                    10.0F,
+                                    EntityAttributeModifier.Operation.ADD_VALUE
+                            ),
+                            new AttributeModifier(
+                                    EntityAttributes.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE.getIdAsString(),
                                     10.0F,
                                     EntityAttributeModifier.Operation.ADD_VALUE
                             )
@@ -268,7 +294,7 @@ public class MoreRelicEffects {
                             .map(school ->
                                     new AttributeModifier(
                                             school.id.toString(),
-                                            0.1F,
+                                            0.2F,
                                             EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
                                     )
                             )
@@ -289,11 +315,36 @@ public class MoreRelicEffects {
                     )
             )
     ));
+    public static Effects.Entry SUPERIOR_MIKAELS_BLESSING = add(new Effects.Entry(Identifier.of(MOD_ID,"superior_mikaels_blessing"),
+            "Mikaels's Blessing",
+            "Clears all harmful effects when applied.",
+            new MikaelsBlessingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800)
+    ));
+    public static Effects.Entry SUPERIOR_GUARDIAN_ANGEL = add(new Effects.Entry(Identifier.of(MOD_ID,"superior_guardian_angel"),
+            "Guardian Angel",
+            "Cant move, jump or cast spells but you're invulnerable.",
+            new MikaelsBlessingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
+            new EffectConfig(
+                    List.of(
+                            new AttributeModifier(
+                                    EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(),
+                                    10.0F,
+                                    EntityAttributeModifier.Operation.ADD_VALUE
+                            ),
+                            new AttributeModifier(
+                                    EntityAttributes.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE.getIdAsString(),
+                                    10.0F,
+                                    EntityAttributeModifier.Operation.ADD_VALUE
+                            )
+                    )
+            )
+    ));
 
 
     public static void register(ConfigFile.Effects config) {
         ActionImpairing.configure(GREATER_RAGE_POWER.effect, EntityActionsAllowed.SILENCE);
         ActionImpairing.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, EntityActionsAllowed.STUN);
+        ActionImpairing.configure(SUPERIOR_GUARDIAN_ANGEL.effect, EntityActionsAllowed.STUN);
         for (var entry: entries) {
             Synchronized.configure(entry.effect, true);
         }

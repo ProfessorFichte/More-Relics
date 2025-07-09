@@ -1,0 +1,78 @@
+{
+  "school": "spell_power:healing",
+  "range": 0.0,
+  "tier": 7,
+  "tooltip": {
+    "show_header": false,
+    "name": {
+      "show_in_compact": false,
+      "show_in_details": false
+    },
+    "description": {
+      "color": "dark_green"
+    }
+  },
+  "type": "PASSIVE",
+  "passive": {
+    "triggers": [
+      {
+        "target_override": "CASTER",
+        "type": "DAMAGE_TAKEN",
+        "caster_conditions": [
+          {
+            "health_percent_below": 0.15
+          }
+        ]
+      }
+    ]
+  },
+  "release": {
+    "animation": "more_relics:guardian_angel",
+    "sound": {
+      "id": "more_relics:guardian_angel_active",
+      "volume": 1.25
+    }
+  },
+  "impacts": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "action": {
+        "type": "HEAL",
+        "heal": {
+          "spell_power_coefficient": 0.65
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:area_circle_1",
+          "origin": "FEET",
+          "shape": "LINE_VERTICAL",
+          "count": 1.0,
+          "min_speed": 0.2,
+          "max_speed": 0.2,
+          "color_rgba": 4294967295,
+          "scale": 0.8,
+          "follow_entity": true,
+          "max_age": 0.8
+        }
+      ],
+      "sound": {
+        "id": "spell_engine:generic_healing_impact_1"
+      }
+    },
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "more_relics:superior_guardian_angel",
+          "duration": 4.0
+        }
+      }
+    }
+  ],
+  "cost": {
+    "cooldown": {
+      "duration": 90.0
+    }
+  }
+}

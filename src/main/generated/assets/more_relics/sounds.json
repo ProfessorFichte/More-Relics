@@ -1,4 +1,9 @@
 {
+  "guardian_angel_active": {
+    "sounds": [
+      "more_relics:guardian_angel_active"
+    ]
+  },
   "kircheis_shard_impact": {
     "sounds": [
       "more_relics:kircheis_shard_impact"
@@ -17,6 +22,11 @@
   "madreds_bloodrazor_impact": {
     "sounds": [
       "more_relics:madreds_bloodrazor_impact"
+    ]
+  },
+  "mikaels_blesssing_active": {
+    "sounds": [
+      "more_relics:mikaels_blesssing_active"
     ]
   },
   "rage_powder": {
