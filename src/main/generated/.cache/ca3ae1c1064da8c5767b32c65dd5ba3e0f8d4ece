@@ -1,4 +1,4 @@
-// 1.21.1	2025-07-10T00:55:12.2222812	More Relics/Model Definitions
+// 1.21.1	2025-07-13T23:29:22.0301627	More Relics/Model Definitions
 2862c8cbc6cadb6cd687614b94da5e0503882a4d assets\more_relics\models\item\lesser_proc_water_frost.json
 623b9b6847767191ef9ecd4a68520760ff432d05 assets\more_relics\models\item\medium_use_air_power.json
 6f6a892168c1eb061d8fe6a8a7fc549229eabcdd assets\more_relics\models\item\jewel_figurine_rage.json
@@ -12,8 +12,8 @@ c7c9956b4e553c575173f414e6c59a7cbb1b59a8 assets\more_relics\models\item\greater_
 420db15299c055316138c81602fe1f24592fdbbc assets\more_relics\models\item\lesser_use_rage.json
 27f19152dae637392394c317dbcc4efc6c62a385 assets\more_relics\models\item\superior_mikaels_blessing.json
 997b5d4f34f771d20e0faee71cb973b042033049 assets\more_relics\models\item\jewel_figurine_earth.json
-591183074e32c2f31c4ef156f02f480ac9c7f3a1 assets\more_relics\models\item\jewel_figurine_air.json
 4d317ff9c68ef4f2d887d18bca56b0746204dc60 assets\more_relics\models\item\medium_proc_rage.json
+591183074e32c2f31c4ef156f02f480ac9c7f3a1 assets\more_relics\models\item\jewel_figurine_air.json
 93233fc9e5134df6bbd5694b9fd011c998e4a3d8 assets\more_relics\models\item\greater_sunfire_cape.json
 d508e8e3aa06b3fc41bd5b3c28778d2229e3023c assets\more_relics\models\item\superior_zhonyas_hourglass.json
 535ffaf1b39c6ea2fcb691c4363257cc1befce23 assets\more_relics\models\item\lesser_proc_air_lightning.json

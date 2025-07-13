@@ -671,9 +671,9 @@ public class MoreRelicSpells {
         trigger_stash.type = Spell.Trigger.Type.MELEE_IMPACT;
         spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
         spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
-        spell.deliver.stash_effect.duration = T3_PROC_EFFECT_DURATION;
         spell.deliver.stash_effect.id = effect.id.toString();
         spell.deliver.stash_effect.consume = 0;
+        spell.deliver.stash_effect.duration = 10;
         spell.deliver.stash_effect.triggers = List.of(trigger_stash);
 
         var damage = new Spell.Impact();
@@ -710,7 +710,9 @@ public class MoreRelicSpells {
         spell.school = SpellSchools.ARCANE;
 
         var trigger = new Spell.Trigger();
-        trigger.type = Spell.Trigger.Type.SPELL_IMPACT_ANY;
+        trigger.type = Spell.Trigger.Type.SPELL_IMPACT_SPECIFIC;
+        trigger.impact = new Spell.Trigger.ImpactCondition();
+        trigger.impact.impact_type = Spell.Impact.Action.Type.DAMAGE.toString();
         trigger.chance = T3_PROC_CHANCE;
         spell.passive.triggers = List.of(trigger);
 

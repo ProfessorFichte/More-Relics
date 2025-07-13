@@ -29,6 +29,7 @@
     "type": "STASH_EFFECT",
     "stash_effect": {
       "id": "more_relics:greater_madreds_bloodrazor",
+      "duration": 10.0,
       "triggers": [
         {
           "type": "MELEE_IMPACT"
