@@ -1,6 +1,7 @@
 package more_relics;
 
 import more_relics.item.Group;
+import more_relics.item.ItemCompat;
 import more_relics.item.MoreRelicsItems;
 import more_relics.spell.MoreRelicEffects;
 import more_relics.spell.MoreRelicSounds;
@@ -37,6 +38,7 @@ public class MoreRelics implements ModInitializer {
 	public void onInitialize() {
 		itemConfig.refresh();
 		effectConfig.refresh();
+		ItemCompat.register();
 		MoreRelicSounds.register();
 		Group.GROUP = FabricItemGroup.builder()
 				.icon(Group.ICON)
