@@ -121,12 +121,12 @@ public class MoreRelicSpells {
         spell.cost.cooldown.duration = duration;
     }
 
-    private static @NotNull ParticleBatch lesserActivateParticles(SpellEngineParticles.MagicParticleFamily family, int count) {
-        return lesserActivateParticles(SpellEngineParticles.getMagicParticleVariant(
-                        family,
-                        SpellEngineParticles.MagicParticleFamily.Shape.SPARK,
-                        SpellEngineParticles.MagicParticleFamily.Motion.DECELERATE).id().toString(),
-                count);
+    private static @NotNull ParticleBatch lesserActivateParticles(Color color, int count) {
+        return lesserActivateParticles(SpellEngineParticles.MagicParticles.get(
+                        SpellEngineParticles.MagicParticles.Shape.SPARK,
+                        SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
+                count)
+                .color(color.toRGBA());
     }
     private static final Identifier SPARK_DECELERATE = SpellEngineParticles.MagicParticles.get(
             SpellEngineParticles.MagicParticles.Shape.SPARK,
@@ -279,7 +279,7 @@ public class MoreRelicSpells {
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 lesserActivateParticles("more_rpg_classes:big_splash", 12),
-                lesserActivateParticles(SpellEngineParticles.FROST, 12)
+                lesserActivateParticles(Color.FROST, 12)
         };
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
