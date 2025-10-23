@@ -3,7 +3,6 @@ package more_relics;
 import more_relics.client.effect.GuardianAngelParticleSpawner;
 import more_relics.spell.MoreRelicEffects;
 import more_relics.spell.MoreRelicSpells;
-import net.fabricmc.api.ClientModInitializer;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.BuffParticleSpawner;
 import net.spell_engine.client.gui.SpellTooltip;
@@ -12,10 +11,9 @@ import net.spell_engine.fx.SpellEngineParticles;
 
 import java.util.List;
 
-public class MoreRelicsClient implements ClientModInitializer {
+public class MoreRelicsClient {
 
-	@Override
-	public void onInitializeClient() {
+	public static void init() {
 		for (var entry: MoreRelicSpells.entries) {
 			if (entry.mutator() != null) {
 				SpellTooltip.addDescriptionMutator(entry.id(), entry.mutator());

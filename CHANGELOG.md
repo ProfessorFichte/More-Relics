@@ -1,3 +1,7 @@
+# 1.1.0 - 1.21.1
+- NeoForge Beta!
+- Fix crash with Spell Engine 1.8.3
+
 # 1.0.2 - 1.21.1
 - Spell Engine 1.7
 

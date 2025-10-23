@@ -1,7 +1,6 @@
 package more_relics.spell;
 
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.more_rpg_classes.custom.MoreSpellSchools;
@@ -70,7 +69,7 @@ public class MoreRelicSpells {
     private static Spell activeSpellBase() {
         var spell = new Spell();
         spell.range = 0;
-        spell.tier = 7;
+        spell.tier = 0;
 
         spell.type = Spell.Type.ACTIVE;
         spell.active = new Spell.Active();
@@ -140,10 +139,9 @@ public class MoreRelicSpells {
                 count, 0.14F, 0.15F);
     }
 
-    private static final Identifier HEALING_PARTICLES = SpellEngineParticles.getMagicParticleVariant(
-            SpellEngineParticles.NATURE,
-            SpellEngineParticles.MagicParticleFamily.Shape.IMPACT,
-            SpellEngineParticles.MagicParticleFamily.Motion.ASCEND
+    private static final Identifier HEALING_PARTICLES = SpellEngineParticles.MagicParticles.get(
+            SpellEngineParticles.MagicParticles.Shape.SPARK,
+            SpellEngineParticles.MagicParticles.Motion.DECELERATE
     ).id();
 
     private static Spell.TargetCondition deadCondition() {
@@ -531,7 +529,9 @@ public class MoreRelicSpells {
                         50, 1.0F, 1.8F)
                         .color(Color.RAGE.toRGBA()),
                 new ParticleBatch(
-                        SpellEngineParticles.RAGE.toString(),
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.STRIPE,
+                                SpellEngineParticles.MagicParticles.Motion.FLOAT).id().toString(),
                         ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.FEET,
                         ParticleBatch.Rotation.LOOK,20,1.0F,1.0F,0,2.5F)
                         .color(Color.RAGE.toRGBA()),
@@ -810,11 +810,9 @@ public class MoreRelicSpells {
 
         spell.release.particles = new ParticleBatch[]{
                 new ParticleBatch(
-                        SpellEngineParticles.getMagicParticleVariant(
-                                SpellEngineParticles.HOLY,
-                                SpellEngineParticles.MagicParticleFamily.Shape.IMPACT,
-                                SpellEngineParticles.MagicParticleFamily.Motion.DECELERATE
-                        ).id().toString(),
+                        SpellEngineParticles.MagicParticles.get(
+                                SpellEngineParticles.MagicParticles.Shape.HOLY,
+                                SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                         20, 0.1F, 0.4F)
         };

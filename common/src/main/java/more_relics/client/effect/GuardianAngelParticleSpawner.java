@@ -9,11 +9,9 @@ import net.spell_engine.fx.SpellEngineParticles;
 public class GuardianAngelParticleSpawner implements CustomParticleStatusEffect.Spawner {
 
     public static final ParticleBatch particles = new ParticleBatch(
-            SpellEngineParticles.getMagicParticleVariant(
-                    SpellEngineParticles.WHITE,
-                    SpellEngineParticles.MagicParticleFamily.Shape.STRIPE,
-                    SpellEngineParticles.MagicParticleFamily.Motion.ASCEND
-            ).id().toString(),
+            SpellEngineParticles.MagicParticles.get(
+                    SpellEngineParticles.MagicParticles.Shape.STRIPE,
+                    SpellEngineParticles.MagicParticles.Motion.ASCEND).id().toString(),
             ParticleBatch.Shape.WIDE_PIPE,
             ParticleBatch.Origin.FEET,
             null,

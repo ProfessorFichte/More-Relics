@@ -16,10 +16,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"client": [
-			"more_relics.MoreRelicsClient"
+			"com.more_relics.fabric.client.FabricClientMod"
 		],
 		"main": [
-			"more_relics.MoreRelics"
+			"com.more_relics.fabric.FabricMod"
 		],
 		"fabric-datagen": [
 			"more_relics.MoreRelicsDataGenerator"

@@ -1,22 +1,15 @@
 package more_relics;
 
-import more_relics.item.Group;
-import more_relics.item.ItemCompat;
 import more_relics.item.MoreRelicsItems;
 import more_relics.spell.MoreRelicEffects;
 import more_relics.spell.MoreRelicSounds;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
 import net.relics_rpgs.config.ItemConfig;
 import net.spell_engine.api.config.ConfigFile;
-import net.tinyconfig.ConfigManager;
+import net.tiny_config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MoreRelics implements ModInitializer {
+public class MoreRelics {
 	public static final String MOD_ID = "more_relics";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static ConfigManager<ItemConfig> itemConfig = new ConfigManager<>
@@ -34,19 +27,23 @@ public class MoreRelics implements ModInitializer {
 			.build();
 
 
-	@Override
-	public void onInitialize() {
+	public static void init() {
 		itemConfig.refresh();
 		effectConfig.refresh();
-		ItemCompat.register();
+		itemConfig.save();
+		effectConfig.save();
+	}
+
+	public static void registerSounds() {
 		MoreRelicSounds.register();
-		Group.GROUP = FabricItemGroup.builder()
-				.icon(Group.ICON)
-				.displayName(Text.translatable(Group.translationKey))
-				.build();
-		Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.GROUP);
+	}
+
+	public static void registerItems() {
 		MoreRelicsItems.register(itemConfig.value.entries);
 		itemConfig.save();
+	}
+
+	public static void registerEffects() {
 		MoreRelicEffects.register(effectConfig.value);
 		effectConfig.save();
 	}

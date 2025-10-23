@@ -1,0 +1,45 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+#issueTrackerURL = ""
+license = "ARR"
+
+[[mods]]
+modId = "more_relics"
+version = "${version}"
+displayName = "More Relics"
+authors = "Fichte"
+description = '''
+This is a Relics (RPG-Series) Add-On, adding relics for the More RPG Classes and powerful relics!
+'''
+#logoFile = ""
+
+[[dependencies.more_relics]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "spell_engine"
+type = "required"
+versionRange = "[${spell_engine_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "relics_rpgs"
+type = "required"
+versionRange = "[${relics_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "more-relics.mixins.json"
