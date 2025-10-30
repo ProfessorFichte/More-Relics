@@ -1,7 +1,7 @@
 {
   "school": "spell_power:healing",
   "range": 16.0,
-  "tier": 7,
+  "tier": 0,
   "tooltip": {
     "show_header": false,
     "name": {
@@ -36,7 +36,7 @@
       },
       "particles": [
         {
-          "particle_id": "spell_engine:magic_nature_impact_ascend",
+          "particle_id": "spell_engine:magic_spark_decelerate",
           "origin": "FEET",
           "shape": "PILLAR",
           "count": 20.0,

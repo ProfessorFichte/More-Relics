@@ -1,7 +1,7 @@
 {
   "school": "spell_power:earth",
   "range": 0.0,
-  "tier": 7,
+  "tier": 0,
   "tooltip": {
     "show_header": false,
     "name": {

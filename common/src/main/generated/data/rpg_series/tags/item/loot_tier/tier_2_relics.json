@@ -9,6 +9,10 @@
       "required": false
     },
     {
+      "id": "more_relics:medium_use_nature_power",
+      "required": false
+    },
+    {
       "id": "more_relics:medium_use_earth_power",
       "required": false
     },

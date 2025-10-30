@@ -6,6 +6,7 @@ import more_relics.spell.MoreRelicSpells;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -149,37 +150,32 @@ public class MoreRelicsItems {
 
     private static final float tier_0_multiplier = 0.05F;
 
-    public static final Entry JEWEL_FIGURINE_WATER = add(new Entry(1, "jewel_figurine_earth", "Citrine Honeybadger Figurine"))
+    public static final Entry JEWEL_FIGURINE_MALACHITE = add(new Entry(1, "jewel_figurine_malachite", "Malachite Honeybadger Figurine"))
             .config(new ItemConfig.Entry()
                     .withAttributes(List.of(
-                            new AttributeModifier(MoreSpellSchools.EARTH.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+                            new AttributeModifier(MoreSpellSchools.EARTH.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                            new AttributeModifier(MoreSpellSchools.NATURE.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
                     ))
             );
-    public static final Entry JEWEL_FIGURINE_JADE = add(new Entry(1, "jewel_figurine_air", "Jade Pegasus Figurine"))
+    public static final Entry JEWEL_FIGURINE_AQUAMARINE = add(new Entry(1, "jewel_figurine_aquamarine", "Aquamarine Koi-Carp Figurine"))
             .config(new ItemConfig.Entry()
                     .withAttributes(List.of(
-                            new AttributeModifier(MoreSpellSchools.AIR.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
-                    ))
-            );
-    public static final Entry JEWEL_FIGURINE_SAPPHIRE = add(new Entry(1, "jewel_figurine_water", "Sapphire Koi-Carp Figurine"))
-            .config(new ItemConfig.Entry()
-                    .withAttributes(List.of(
+                            new AttributeModifier(MoreSpellSchools.AIR.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE),
                             new AttributeModifier(MoreSpellSchools.WATER.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
                     ))
             );
-    public static final Entry JEWEL_FIGURINE_RAGE = add(new Entry(1, "jewel_figurine_rage", "Ruby Wolf Figurine"))
+    public static final Entry JEWEL_FIGURINE_CHAIN = add(new Entry(1, "jewel_figurine_chain", "Metallic Wolf Figurine"))
             .config(new ItemConfig.Entry()
                     .withAttributes(List.of(
-                            new AttributeModifier(MRPGCEntityAttributes.RAGE_MODIFIER.getIdAsString(), tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+                            new AttributeModifier(MRPGCEntityAttributes.RAGE_MODIFIER.getIdAsString(), tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                            new AttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), tier_0_multiplier/2, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
                     ))
             );
 
-    public static final Entry LESSER_PROC_AIR_LIGHTNING = add(new Entry(1, "lesser_proc_air_lightning", "Bottled Storm"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_air_lightning.id()));
-    public static final Entry LESSER_PROC_EARTH_FIRE = add(new Entry(1, "lesser_proc_earth_fire", "Volcanic Crystal"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_earth_fire.id()));
-    public static final Entry LESSER_PROC_WATER_FROST = add(new Entry(1, "lesser_proc_water_frost", "Crystallized Tear"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_water_frost.id()));
+    public static final Entry LESSER_PROC_AIR_WATER= add(new Entry(1, "lesser_proc_air_water", "Bottled Typhoon"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_air_water.id()));
+    public static final Entry LESSER_PROC_EARTH_NATURE = add(new Entry(1, "lesser_proc_earth_nature", "Glowing Moss Stone"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_earth_nature.id()));
     public static final Entry LESSER_USE_RAGE = add(new Entry(1, "lesser_use_rage", "Rage Powder"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_use_rage_power.id()));
 
@@ -189,6 +185,8 @@ public class MoreRelicsItems {
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_earth_power.id()));
     public static final Entry MEDIUM_USE_WATER_POWER = add(new Entry(2, "medium_use_water_power", "Water Orb"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_water_power.id()));
+    public static final Entry MEDIUM_USE_NATURE_POWER = add(new Entry(2, "medium_use_nature_power", "Nature Orb"))
+            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_nature_power.id()));
     public static final Entry MEDIUM_PROC_RAGE = add(new Entry(2, "medium_proc_rage", "Mardroeme Mushroom"))
             .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_perk_rage.id()));
     public static final Entry MEDIUM_PROC_LIFESTEAL = add(new Entry(2, "medium_proc_lifesteal", "Vampiric Scepter"))

@@ -1,3 +1,9 @@
+# 1.1.1 - 1.21.1
+- Add Nature Orb for the new Nature Spell Power
+- Change Jewelry Figurines to fit the new Gems from Additional Jewelry Mod
+- change lesser proc relics to match the style of the original Relic Mod's Relics
+- this was done to reduce unnecessary content and reduce the amount relic items a bit
+
 # 1.1.0 - 1.21.1
 - NeoForge Beta!
 - Fix crash with Spell Engine 1.8.3

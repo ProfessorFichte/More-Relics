@@ -1,7 +1,7 @@
 {
   "school": "spell_power:physical_melee",
   "range": 0.0,
-  "tier": 7,
+  "tier": 0,
   "tooltip": {
     "show_header": false,
     "name": {
@@ -17,7 +17,7 @@
     "animation": "spell_engine:dual_handed_weapon_charge",
     "particles": [
       {
-        "particle_id": "spell_engine:magic_holy_impact_decelerate",
+        "particle_id": "spell_engine:magic_holy_decelerate",
         "origin": "CENTER",
         "shape": "SPHERE",
         "count": 20.0,

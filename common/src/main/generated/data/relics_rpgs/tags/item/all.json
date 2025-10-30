@@ -1,31 +1,23 @@
 {
   "values": [
     {
-      "id": "more_relics:jewel_figurine_earth",
+      "id": "more_relics:jewel_figurine_malachite",
       "required": false
     },
     {
-      "id": "more_relics:jewel_figurine_air",
+      "id": "more_relics:jewel_figurine_aquamarine",
       "required": false
     },
     {
-      "id": "more_relics:jewel_figurine_water",
+      "id": "more_relics:jewel_figurine_chain",
       "required": false
     },
     {
-      "id": "more_relics:jewel_figurine_rage",
+      "id": "more_relics:lesser_proc_air_water",
       "required": false
     },
     {
-      "id": "more_relics:lesser_proc_air_lightning",
-      "required": false
-    },
-    {
-      "id": "more_relics:lesser_proc_earth_fire",
-      "required": false
-    },
-    {
-      "id": "more_relics:lesser_proc_water_frost",
+      "id": "more_relics:lesser_proc_earth_nature",
       "required": false
     },
     {
@@ -42,6 +34,10 @@
     },
     {
       "id": "more_relics:medium_use_water_power",
+      "required": false
+    },
+    {
+      "id": "more_relics:medium_use_nature_power",
       "required": false
     },
     {

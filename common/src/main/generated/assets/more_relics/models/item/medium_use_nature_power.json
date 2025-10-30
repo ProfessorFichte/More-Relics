@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "more_relics:item/jewel_figurine_water"
+    "layer0": "more_relics:item/medium_use_nature_power"
   }
 }

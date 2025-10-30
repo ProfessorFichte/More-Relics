@@ -11,17 +11,17 @@
   "category": "equipment",
   "key": {
     "M": {
-      "item": "minecraft:gold_ingot"
+      "item": "minecraft:chain"
     },
     "G": {
-      "item": "jewelry:citrine"
+      "item": "jewelry:ruby"
     }
   },
   "pattern": [
-    "GMG",
-    " G "
+    " G ",
+    "GMG"
   ],
   "result": {
-    "id": "more_relics:jewel_figurine_earth"
+    "id": "more_relics:jewel_figurine_chain"
   }
 }

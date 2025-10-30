@@ -38,7 +38,7 @@
         "color_rgba": 3208659199
       },
       {
-        "particle_id": "MagicParticleFamily[name=rage, color=Color[red=0.7490196, green=0.2509804, blue=0.2509804, alpha=1.0]]",
+        "particle_id": "spell_engine:magic_stripe_float",
         "origin": "FEET",
         "shape": "CIRCLE",
         "rotation": "LOOK",

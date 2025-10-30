@@ -3,7 +3,7 @@
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "jewelry"
+        "additional_rpg_jewelry"
       ]
     }
   ],
@@ -14,14 +14,14 @@
       "item": "minecraft:gold_ingot"
     },
     "G": {
-      "item": "jewelry:ruby"
+      "item": "additional_rpg_jewelry:aquamarine"
     }
   },
   "pattern": [
-    "GMG",
-    " G "
+    " G ",
+    "GMG"
   ],
   "result": {
-    "id": "more_relics:jewel_figurine_rage"
+    "id": "more_relics:jewel_figurine_aquamarine"
   }
 }

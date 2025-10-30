@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "more_relics:item/jewel_figurine_air"
+    "layer0": "more_relics:item/jewel_figurine_aquamarine"
   }
 }

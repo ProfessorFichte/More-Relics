@@ -23,16 +23,12 @@ public class MoreRelicsClient {
 		final Color PURPLE = new Color(104.0F, 12.0F, 104.0F);
 
 		CustomParticleStatusEffect.register(
-				MoreRelicEffects.LESSER_POWER_AIR_LIGHTNING.effect,
-				new BuffParticleSpawner(List.of("more_rpg_classes:small_gust", "spell_engine:electric_arc_a"), 0.5F, 0.11F, 0.12F)
+				MoreRelicEffects.LESSER_POWER_AIR_WATER.effect,
+				new BuffParticleSpawner(List.of("more_rpg_classes:small_gust", "more_rpg_classes:bubble"), 0.5F, 0.11F, 0.12F)
 		);
 		CustomParticleStatusEffect.register(
-				MoreRelicEffects.LESSER_POWER_EARTH_FIRE.effect,
-				new BuffParticleSpawner(List.of("more_rpg_classes:stone_particle", "spell_engine:flame_spark"), 0.5F, 0.11F, 0.12F)
-		);
-		CustomParticleStatusEffect.register(
-				MoreRelicEffects.LESSER_POWER_WATER_FROST.effect,
-				new BuffParticleSpawner(List.of("more_rpg_classes:big_splash", "spell_engine:snowflake"), 0.5F, 0.11F, 0.12F)
+				MoreRelicEffects.LESSER_POWER_EARTH_NATURE.effect,
+				new BuffParticleSpawner(List.of("more_rpg_classes:stone_particle", "more_rpg_classes:leaf"), 0.25F, 0.11F, 0.12F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_RAGE_POWER.effect,
@@ -50,6 +46,10 @@ public class MoreRelicsClient {
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_WATER_POWER.effect,
 				new BuffParticleSpawner("more_rpg_classes:bubble", 1.5F)
+		);
+		CustomParticleStatusEffect.register(
+				MoreRelicEffects.MEDIUM_NATURE_POWER.effect,
+				new BuffParticleSpawner("more_rpg_classes:leaf", 0.5F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_RAGE_POWER.effect,

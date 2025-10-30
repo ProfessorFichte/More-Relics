@@ -180,11 +180,11 @@ public class MoreRelicSpells {
         return buff;
     }
 
-    public static Entry lesser_proc_air_lightning = add(lesser_proc_air_lightning());
-    private static Entry lesser_proc_air_lightning() {
-        var id = Identifier.of(MOD_ID, "lesser_proc_air_lightning");
-        var description = "On spell hit: {trigger_chance} chance to increase air and lightning spell power by {bonus} for {effect_duration} seconds.";
-        var effect = MoreRelicEffects.LESSER_POWER_AIR_LIGHTNING;
+    public static Entry lesser_proc_air_water = add(lesser_proc_air_water());
+    private static Entry lesser_proc_air_water() {
+        var id = Identifier.of(MOD_ID, "lesser_proc_air_water");
+        var description = "On spell hit: {trigger_chance} chance to increase air and water spell power by {bonus} for {effect_duration} seconds.";
+        var effect = MoreRelicEffects.LESSER_POWER_AIR_WATER;
         var title = effect.title;
         SpellTooltip.DescriptionMutator mutator = (args) -> {
             var modifier = effect.config().firstModifier();
@@ -207,7 +207,7 @@ public class MoreRelicSpells {
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 lesserActivateParticles("more_rpg_classes:small_gust", 12),
-                lesserActivateParticles(SpellEngineParticles.electric_arc_A.id().toString(), 12)
+                lesserActivateParticles("more_rpg_classes:big_splash", 12)
         };
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
@@ -215,11 +215,11 @@ public class MoreRelicSpells {
 
         return new Entry(id, spell, title, description, mutator);
     }
-    public static Entry lesser_proc_earth_fire = add(lesser_proc_earth_fire());
-    private static Entry lesser_proc_earth_fire() {
-        var id = Identifier.of(MOD_ID, "lesser_proc_earth_fire");
-        var description = "On spell hit: {trigger_chance} chance to increase earth and fire spell power by {bonus} for {effect_duration} seconds.";
-        var effect = MoreRelicEffects.LESSER_POWER_EARTH_FIRE;
+    public static Entry lesser_proc_earth_nature = add(lesser_proc_earth_nature());
+    private static Entry lesser_proc_earth_nature() {
+        var id = Identifier.of(MOD_ID, "lesser_proc_earth_nature");
+        var description = "On spell hit: {trigger_chance} chance to increase earth and nature spell power by {bonus} for {effect_duration} seconds.";
+        var effect = MoreRelicEffects.LESSER_POWER_EARTH_NATURE;
         var title = effect.title;
         SpellTooltip.DescriptionMutator mutator = (args) -> {
             var modifier = effect.config().firstModifier();
@@ -242,42 +242,7 @@ public class MoreRelicSpells {
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 lesserActivateParticles("more_rpg_classes:stone_particle", 12),
-                lesserActivateParticles(SpellEngineParticles.flame_spark.id().toString(), 12)
-        };
-
-        spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
-        configureCooldown(spell, T1_PROC_EFFECT_COOLDOWN);
-
-        return new Entry(id, spell, title, description, mutator);
-    }
-    public static Entry lesser_proc_water_frost = add(lesser_proc_water_frost());
-    private static Entry lesser_proc_water_frost() {
-        var id = Identifier.of(MOD_ID, "lesser_proc_water_frost");
-        var description = "On spell hit: {trigger_chance} chance to increase water and frost spell power by {bonus} for {effect_duration} seconds.";
-        var effect = MoreRelicEffects.LESSER_POWER_WATER_FROST;
-        var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
-
-        var spell = passiveSpellBase();
-        spell.school = MoreSpellSchools.WATER;
-
-        var trigger = new Spell.Trigger();
-        trigger.chance = T1_PROC_CHANCE;
-        trigger.type = Spell.Trigger.Type.SPELL_IMPACT_ANY;
-        trigger.spell = new Spell.Trigger.SpellCondition();
-        trigger.spell.archetype = SpellSchool.Archetype.MAGIC;
-
-        spell.passive.triggers = List.of(trigger);
-
-        spell.release.animation = "spell_engine:one_handed_healing_release";
-        spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                lesserActivateParticles("more_rpg_classes:big_splash", 12),
-                lesserActivateParticles(Color.FROST, 12)
+                lesserActivateParticles("more_rpg_classes:leaf", 12)
         };
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
@@ -412,6 +377,40 @@ public class MoreRelicSpells {
                         "more_rpg_classes:big_splash",
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
                         25, 0.12F, 0.12F)
+        };
+        spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_USE_EFFECT_DURATION));
+        configureCooldown(spell, T2_USE_EFFECT_COOLDOWN);
+
+        return new Entry(id, spell, title, description, mutator);
+    }
+    public static Entry medium_use_nature_power = add(medium_use_nature_power());
+    private static Entry medium_use_nature_power() {
+        var id = Identifier.of(MOD_ID, "medium_use_nature_power");
+        var description = "Use: Increases nature spell power by {bonus} for {effect_duration} seconds.";
+        var effect = MoreRelicEffects.MEDIUM_NATURE_POWER;
+        var title = effect.title;
+        SpellTooltip.DescriptionMutator mutator = (args) -> {
+            var modifier = effect.config().firstModifier();
+            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
+            return args.description().replace("{bonus}", bonus);
+        };
+
+        var spell = activeSpellBase();
+        spell.school = MoreSpellSchools.NATURE;
+
+        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
+        spell.release.particles = new ParticleBatch[]{
+                new ParticleBatch(
+                        "more_rpg_classes:leaf",
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        25, 0.1F, 0.1F),
+                new ParticleBatch(SpellEngineParticles.MagicParticles.get(
+                        SpellEngineParticles.MagicParticles.Shape.SPARK,
+                        SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
+                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
+                        25, 0.1F, 0.1F)
+                        .color(Color.NATURE.toRGBA())
         };
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_USE_EFFECT_DURATION));
         configureCooldown(spell, T2_USE_EFFECT_COOLDOWN);

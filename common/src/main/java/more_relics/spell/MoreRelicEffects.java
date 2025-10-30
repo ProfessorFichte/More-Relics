@@ -52,12 +52,12 @@ public class MoreRelicEffects {
                     )
             )
     ));
-    public static Effects.Entry LESSER_POWER_AIR_LIGHTNING = add(new Effects.Entry(Identifier.of(MOD_ID,"lesser_air_lightning"),
-            "Air and Lightning Power",
-            "Increases Air and Lightning spell power.",
+    public static Effects.Entry LESSER_POWER_AIR_WATER = add(new Effects.Entry(Identifier.of(MOD_ID,"lesser_air_water"),
+            "Air and Water Power",
+            "Increases Air and Water spell power.",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
             new EffectConfig(
-                    List.of(MoreSpellSchools.AIR, SpellSchools.LIGHTNING).stream()
+                    List.of(MoreSpellSchools.AIR, MoreSpellSchools.WATER).stream()
                             .map(school ->
                                     new AttributeModifier(
                                             school.id.toString(),
@@ -68,28 +68,12 @@ public class MoreRelicEffects {
                             .toList()
             )
     ));
-    public static Effects.Entry LESSER_POWER_EARTH_FIRE = add(new Effects.Entry(Identifier.of(MOD_ID,"lesser_earth_fire"),
-            "Earth and Fire Power",
-            "Increases Earth and Fire spell power.",
+    public static Effects.Entry LESSER_POWER_EARTH_NATURE = add(new Effects.Entry(Identifier.of(MOD_ID,"lesser_earth_nature"),
+            "Earth and Nature Power",
+            "Increases Earth and Nature spell power.",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
             new EffectConfig(
-                    List.of(MoreSpellSchools.EARTH, SpellSchools.FIRE).stream()
-                            .map(school ->
-                                    new AttributeModifier(
-                                            school.id.toString(),
-                                            0.15F,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
-                                    )
-                            )
-                            .toList()
-            )
-    ));
-    public static Effects.Entry LESSER_POWER_WATER_FROST = add(new Effects.Entry(Identifier.of(MOD_ID,"lesser_water_frost"),
-            "Water and Frost Power",
-            "Increases Water and Frost spell power.",
-            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
-            new EffectConfig(
-                    List.of(MoreSpellSchools.WATER, SpellSchools.FROST).stream()
+                    List.of(MoreSpellSchools.EARTH, MoreSpellSchools.NATURE).stream()
                             .map(school ->
                                     new AttributeModifier(
                                             school.id.toString(),
@@ -139,6 +123,22 @@ public class MoreRelicEffects {
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
             new EffectConfig(
                     List.of(MoreSpellSchools.WATER).stream()
+                            .map(school ->
+                                    new AttributeModifier(
+                                            school.id.toString(),
+                                            T2_BUFF_MULTIPLIER,
+                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    )
+                            )
+                            .toList()
+            )
+    ));
+    public static Effects.Entry MEDIUM_NATURE_POWER = add(new Effects.Entry(Identifier.of(MOD_ID,"medium_nature_power"),
+            "Nature Power",
+            "Increases Nature spell power.",
+            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
+            new EffectConfig(
+                    List.of(MoreSpellSchools.NATURE).stream()
                             .map(school ->
                                     new AttributeModifier(
                                             school.id.toString(),
