@@ -1,15 +1,15 @@
 {
   "values": [
     {
-      "id": "more_relics:jewel_figurine_water",
-      "required": false
-    },
-    {
       "id": "more_relics:jewel_figurine_chain",
       "required": false
     },
     {
       "id": "more_relics:lesser_proc_earth_nature",
+      "required": false
+    },
+    {
+      "id": "more_relics:jewel_figurine_aquamarine",
       "required": false
     },
     {
