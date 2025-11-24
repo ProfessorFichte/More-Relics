@@ -15,7 +15,6 @@ import net.minecraft.util.Rarity;
 import net.more_rpg_classes.custom.MoreSpellSchools;
 import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
 import net.relics_rpgs.config.ItemConfig;
-import net.relics_rpgs.spell.RelicSpells;
 import net.spell_engine.api.config.AttributeModifier;
 import net.spell_engine.api.config.ConfigUtil;
 import net.spell_engine.api.spell.SpellDataComponents;
@@ -87,7 +86,7 @@ public class MoreRelicsItems {
                 if (rarity != Rarity.COMMON) {
                     settings = settings.rarity(rarity);
                 }
-                return getFactory().apply(new ItemArgs(settings, attributes));
+                return MoreRelicsFactory.getFactory().apply(new MoreRelicsFactory.ItemArgs(settings, attributes));
             });
         }
 

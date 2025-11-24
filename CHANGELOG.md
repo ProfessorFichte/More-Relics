@@ -3,6 +3,7 @@
 - Change Jewelry Figurines to fit the new Gems from Additional Jewelry Mod
 - change lesser proc relics to match the style of the original Relic Mod's Relics
 - this was done to reduce unnecessary content and reduce the amount relic items a bit
+- fix relics not working on neoforge
 
 # 1.1.0 - 1.21.1
 - NeoForge Beta!
