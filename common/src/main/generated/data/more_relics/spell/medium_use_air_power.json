@@ -14,7 +14,9 @@
   },
   "active": {},
   "release": {
-    "animation": "spell_engine:dual_handed_weapon_charge",
+    "animation": {
+      "id": "spell_engine:dual_handed_weapon_charge"
+    },
     "particles": [
       {
         "particle_id": "more_rpg_classes:small_gust",

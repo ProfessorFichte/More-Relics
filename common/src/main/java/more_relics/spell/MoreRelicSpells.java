@@ -9,6 +9,7 @@ import net.relics_rpgs.spell.RelicSounds;
 import net.spell_engine.api.spell.ExternalSpellSchools;
 import net.spell_engine.api.spell.Spell;
 import net.spell_engine.api.spell.fx.ParticleBatch;
+import net.spell_engine.api.spell.fx.PlayerAnimation;
 import net.spell_engine.api.spell.fx.Sound;
 import net.spell_engine.client.gui.SpellTooltip;
 import net.spell_engine.client.util.Color;
@@ -203,7 +204,7 @@ public class MoreRelicSpells {
 
         spell.passive.triggers = List.of(trigger);
 
-        spell.release.animation = "spell_engine:one_handed_healing_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 lesserActivateParticles("more_rpg_classes:small_gust", 12),
@@ -238,7 +239,7 @@ public class MoreRelicSpells {
 
         spell.passive.triggers = List.of(trigger);
 
-        spell.release.animation = "spell_engine:one_handed_healing_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 lesserActivateParticles("more_rpg_classes:stone_particle", 12),
@@ -265,7 +266,7 @@ public class MoreRelicSpells {
         var spell = activeSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
 
-        spell.release.animation = "spell_engine:dual_handed_ground_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_ground_release");
         spell.release.sound = new Sound(MoreRelicSounds.RAGE_POWDER.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -300,7 +301,7 @@ public class MoreRelicSpells {
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.AIR;
 
-        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -333,7 +334,7 @@ public class MoreRelicSpells {
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.EARTH;
 
-        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -366,7 +367,7 @@ public class MoreRelicSpells {
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.WATER;
 
-        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -398,7 +399,7 @@ public class MoreRelicSpells {
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.NATURE;
 
-        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -467,7 +468,7 @@ public class MoreRelicSpells {
         trigger2.type = Spell.Trigger.Type.SPELL_IMPACT_ANY;
         spell.passive.triggers = List.of(trigger, trigger2);
 
-        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.BLOODLUST_ACTIVATE.id().toString());
         spell.release.particles = new ParticleBatch[]{
                 new ParticleBatch(
@@ -794,6 +795,7 @@ public class MoreRelicSpells {
         return new Entry(id, spell, title, description, mutator);
     }
     ///SUPERIOR RELICS
+    public static final Color GOLD = Color.from(0xffd700);
     public static Entry superior_zhonyas_hourglass = add(superior_zhonyas_hourglass());
     private static Entry superior_zhonyas_hourglass() {
         var id = Identifier.of(MOD_ID, "superior_zhonyas_hourglass");
@@ -804,7 +806,7 @@ public class MoreRelicSpells {
         var spell = activeSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
 
-        spell.release.animation = "spell_engine:dual_handed_weapon_charge";
+        spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = Sound.withVolume(MoreRelicSounds.ZHONYAS_HOURGLASS.id(), 0.75F);
 
         spell.release.particles = new ParticleBatch[]{
@@ -813,7 +815,13 @@ public class MoreRelicSpells {
                                 SpellEngineParticles.MagicParticles.Shape.HOLY,
                                 SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
                         ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.1F, 0.4F)
+                        20, 0.1F, 0.4F).color(GOLD.toRGBA()),
+                new ParticleBatch(SpellEngineParticles.sign_hourglass.id().toString(),
+                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.CENTER,
+                        1, 0.75F, 0.75F)
+                        .scale(1.8F)
+                        .color(GOLD.toRGBA())
+                        .followEntity(true)
         };
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), 3));
         configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
@@ -884,6 +892,12 @@ public class MoreRelicSpells {
 
         var buff = createEffectImpact(effect.id.toString(), T4_USE_EFFECT_DURATION / 2 );
         buff.particles = new ParticleBatch[]{
+                new ParticleBatch(SpellEngineParticles.sign_speed.id().toString(),
+                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.CENTER,
+                        1, 0.75F, 0.75F)
+                        .scale(1.8F)
+                        .color(Color.WHITE.toRGBA())
+                        .followEntity(true)
         };
 
         var impact = new Spell.Impact();
@@ -927,7 +941,7 @@ public class MoreRelicSpells {
         spell.school = SpellSchools.HEALING;
         spell.range = 16;
 
-        spell.release.animation = "spell_engine:one_handed_healing_release";
+        spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
         spell.release.sound = new Sound(MoreRelicSounds.MIKAELS_BLESSING_ACTIVATE.id());
 
         spell.target.type = Spell.Target.Type.AIM;
@@ -977,7 +991,7 @@ public class MoreRelicSpells {
         var spell = passiveSpellBase();
         spell.school = SpellSchools.HEALING;
 
-        spell.release.animation = "more_relics:guardian_angel";
+        spell.release.animation = PlayerAnimation.of("more_relics:guardian_angel");
         spell.release.sound = Sound.withVolume(MoreRelicSounds.GUARDIAN_ANGEL_ACTIVATE.id(), 1.25F);
 
         var trigger = new Spell.Trigger();

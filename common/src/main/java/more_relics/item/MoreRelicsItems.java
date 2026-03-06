@@ -20,6 +20,7 @@ import net.spell_engine.api.config.ConfigUtil;
 import net.spell_engine.api.spell.SpellDataComponents;
 import net.spell_engine.api.spell.container.SpellContainer;
 import net.spell_engine.api.spell.container.SpellContainerHelper;
+import net.spell_engine.api.spell.container.SpellContainers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -172,49 +173,49 @@ public class MoreRelicsItems {
             );
 
     public static final Entry LESSER_PROC_AIR_WATER= add(new Entry(1, "lesser_proc_air_water", "Bottled Typhoon"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_air_water.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.lesser_proc_air_water.id()));
     public static final Entry LESSER_PROC_EARTH_NATURE = add(new Entry(1, "lesser_proc_earth_nature", "Glowing Moss Stone"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_proc_earth_nature.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.lesser_proc_earth_nature.id()));
     public static final Entry LESSER_USE_RAGE = add(new Entry(1, "lesser_use_rage", "Rage Powder"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.lesser_use_rage_power.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.lesser_use_rage_power.id()));
 
     public static final Entry MEDIUM_USE_AIR_POWER = add(new Entry(2, "medium_use_air_power", "Air Orb"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_air_power.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.medium_use_air_power.id()));
     public static final Entry MEDIUM_USE_EARTH_POWER = add(new Entry(2, "medium_use_earth_power", "Earth Orb"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_earth_power.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.medium_use_earth_power.id()));
     public static final Entry MEDIUM_USE_WATER_POWER = add(new Entry(2, "medium_use_water_power", "Water Orb"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_water_power.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.medium_use_water_power.id()));
     public static final Entry MEDIUM_USE_NATURE_POWER = add(new Entry(2, "medium_use_nature_power", "Nature Orb"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_use_nature_power.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.medium_use_nature_power.id()));
     public static final Entry MEDIUM_PROC_RAGE = add(new Entry(2, "medium_proc_rage", "Mardroeme Mushroom"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_perk_rage.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.medium_perk_rage.id()));
     public static final Entry MEDIUM_PROC_LIFESTEAL = add(new Entry(2, "medium_proc_lifesteal", "Vampiric Scepter"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.medium_proc_lifesteal.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.medium_proc_lifesteal.id()));
 
 
     public static final Entry GREATER_FROZEN_HEART = add(new Entry(3, "greater_frozen_heart", "Frozen Heart"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_frozen_heart.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.greater_frozen_heart.id()));
     public static final Entry GREATER_PROC_RAGE = add(new Entry(3, "greater_proc_rage", "Svablod's Totem"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_proc_rage.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.greater_proc_rage.id()));
     public static final Entry GREATER_KIRCHEIS_SHARD = add(new Entry(3, "greater_kircheis_shard", "Kircheis Shard"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_kircheis_shard.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.greater_kircheis_shard.id()));
     public static final Entry GREATER_MADREDS_BLOODRAZOR = add(new Entry(3, "greater_madreds_bloodrazor", "Madred's Bloodrazor"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_madreds_bloodrazor.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.greater_madreds_bloodrazor.id()));
     public static final Entry GREATER_LIANDRYS_TORMENT = add(new Entry(3, "greater_liandrys_torment", "Liandry's Torment"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_liandrys_torment.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.greater_liandrys_torment.id()));
     public static final Entry GREATER_SUNFIRE_CAPE = add(new Entry(3, "greater_sunfire_cape", "Sunfire Cape"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.greater_sunfire_cape.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.greater_sunfire_cape.id()));
 
     public static final Entry SUPERIOR_MEJAIS_SOULSTEALER = add(new Entry(4, "superior_mejais_soulstealer", "Mejai's Soulstealer"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_mejais_soulstealer.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.superior_mejais_soulstealer.id()));
     public static final Entry SUPERIOR_ZHONYAS_HOURGLASS = add(new Entry(4, "superior_zhonyas_hourglass", "Zhonya's Hourglass"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_zhonyas_hourglass.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.superior_zhonyas_hourglass.id()));
     public static final Entry SUPERIOR_SHURELYAS_BATTLESONG = add(new Entry(4, "superior_shurelyas_battlesong", "Shurelya's Battlesong"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_shurelyas_battlesong.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.superior_shurelyas_battlesong.id()));
     public static final Entry SUPERIOR_MIKAELS_BLESSING = add(new Entry(4, "superior_mikaels_blessing", "Mikael's Blessing"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_mikaels_blessing.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.superior_mikaels_blessing.id()));
     public static final Entry SUPERIOR_GUARDIAN_ANGEL = add(new Entry(4, "superior_guardian_angel", "Guardian Angel"))
-            .spell(SpellContainerHelper.createForRelic(MoreRelicSpells.superior_guardian_angel.id()));
+            .spell(SpellContainers.forRelic(MoreRelicSpells.superior_guardian_angel.id()));
 
     public static void register(Map<String, ItemConfig.Entry> config) {
         for (var entry : entries) {

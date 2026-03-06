@@ -1,12 +1,12 @@
-// 1.21.1	2025-11-24T23:26:42.4347702	More Relics/Model Definitions
+// 1.21.1	2026-03-06T10:17:44.5217499	More Relics/Model Definitions
 b5418c0d0374231ae9744b86ea10f928caec4848 assets\more_relics\models\item\jewel_figurine_chain.json
 4d317ff9c68ef4f2d887d18bca56b0746204dc60 assets\more_relics\models\item\medium_proc_rage.json
 35b143c13be81bd57ec54038ffc0783ac56eca58 assets\more_relics\models\item\greater_frozen_heart.json
 2ac28dbf2894e6f020a9310b6fdc186e63037687 assets\more_relics\models\item\medium_use_water_power.json
 2071129edbd6363e480176aa4b5a88c0159c14d5 assets\more_relics\models\item\medium_proc_lifesteal.json
 0d921d6d5e3aeb92f6210d8a17f6939527c6ccbe assets\more_relics\models\item\greater_kircheis_shard.json
-62772e0b4c33d25a8d44ecb7aab7be4eee2907f1 assets\more_relics\models\item\greater_proc_rage.json
 281e629cea9fd12934650fa4d42706e61b690cdf assets\more_relics\models\item\medium_use_nature_power.json
+62772e0b4c33d25a8d44ecb7aab7be4eee2907f1 assets\more_relics\models\item\greater_proc_rage.json
 420db15299c055316138c81602fe1f24592fdbbc assets\more_relics\models\item\lesser_use_rage.json
 530a08e716b3448c73cc14175ad26b0ba341f0bc assets\more_relics\models\item\lesser_proc_earth_nature.json
 aeff6a935400c1cc5d7c0fe3145bcdda661c0a36 assets\more_relics\models\item\superior_shurelyas_battlesong.json

@@ -25,7 +25,9 @@
     ]
   },
   "release": {
-    "animation": "spell_engine:one_handed_healing_release",
+    "animation": {
+      "id": "spell_engine:one_handed_healing_release"
+    },
     "particles": [
       {
         "particle_id": "more_rpg_classes:stone_particle",

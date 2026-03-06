@@ -3,6 +3,7 @@ package more_relics.spell;
 import more_relics.spell.effect.CustomStatusEffect;
 import more_relics.spell.effect.LiandrysTornmentStatusEffect;
 import more_relics.spell.effect.MikaelsBlessingStatusEffect;
+import more_relics.spell.effect.MoreRelicsActionImpairing;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -343,8 +344,8 @@ public class MoreRelicEffects {
 
     public static void register(ConfigFile.Effects config) {
         ActionImpairing.configure(GREATER_RAGE_POWER.effect, EntityActionsAllowed.SILENCE);
-        ActionImpairing.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, EntityActionsAllowed.STUN);
-        ActionImpairing.configure(SUPERIOR_GUARDIAN_ANGEL.effect, EntityActionsAllowed.STUN);
+        ActionImpairing.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, MoreRelicsActionImpairing.ZHONYAS);
+        ActionImpairing.configure(SUPERIOR_GUARDIAN_ANGEL.effect, MoreRelicsActionImpairing.REVIVING);
         for (var entry: entries) {
             Synchronized.configure(entry.effect, true);
         }

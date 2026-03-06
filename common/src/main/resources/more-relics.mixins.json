@@ -5,6 +5,9 @@
   "mixins": [
     "LivingEntityMixin"
   ],
+  "client": [
+    "HudMessagesMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

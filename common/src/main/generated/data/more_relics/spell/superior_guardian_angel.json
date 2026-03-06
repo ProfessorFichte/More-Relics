@@ -27,7 +27,9 @@
     ]
   },
   "release": {
-    "animation": "more_relics:guardian_angel",
+    "animation": {
+      "id": "more_relics:guardian_angel"
+    },
     "sound": {
       "id": "more_relics:guardian_angel_active",
       "volume": 1.25

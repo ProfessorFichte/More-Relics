@@ -1,8 +1,11 @@
 package more_relics;
 
 import more_relics.client.effect.GuardianAngelParticleSpawner;
+import more_relics.client.render.GoldenPlayerRenderLayer;
 import more_relics.spell.MoreRelicEffects;
 import more_relics.spell.MoreRelicSpells;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.BuffParticleSpawner;
 import net.spell_engine.client.gui.SpellTooltip;
@@ -21,6 +24,14 @@ public class MoreRelicsClient {
 		}
 		final Color ORANGE = new Color(255.0F, 165.0F, 0.0F);
 		final Color PURPLE = new Color(104.0F, 12.0F, 104.0F);
+		final Color GOLD = Color.from(0xffd700);
+
+		var stripe_float = SpellEngineParticles.MagicParticles.get(
+				SpellEngineParticles.MagicParticles.Shape.STRIPE,
+				SpellEngineParticles.MagicParticles.Motion.FLOAT).id().toString();
+		var arcane_ascend = SpellEngineParticles.MagicParticles.get(
+				SpellEngineParticles.MagicParticles.Shape.ARCANE,
+				SpellEngineParticles.MagicParticles.Motion.ASCEND).id().toString();
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_POWER_AIR_WATER.effect,
@@ -32,8 +43,11 @@ public class MoreRelicsClient {
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_RAGE_POWER.effect,
-				new BuffParticleSpawner("spell_engine:magic_rage_stripe_float", 1.5F)
-		);
+				new BuffParticleSpawner(
+						BuffParticleSpawner.defaultBatch(
+								stripe_float,
+								1,
+								Color.RAGE.toRGBA())));
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_AIR_POWER.effect,
@@ -53,20 +67,27 @@ public class MoreRelicsClient {
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_RAGE_POWER.effect,
-				new BuffParticleSpawner("spell_engine:magic_rage_stripe_float", 1.5F)
-		);
+				new BuffParticleSpawner(
+						BuffParticleSpawner.defaultBatch(
+								stripe_float,
+								1.5F,
+								Color.RAGE.toRGBA())));
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.GREATER_RAGE_POWER.effect,
-				new BuffParticleSpawner("spell_engine:magic_rage_stripe_float", 1.5F)
-		);
+				new BuffParticleSpawner(
+						BuffParticleSpawner.defaultBatch(
+								stripe_float,
+								1.5F,
+								Color.RAGE.toRGBA())));
+
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.GREATER_FROZEN_HEART.effect,
-				new BuffParticleSpawner("spell_engine:snowflake", 5.0F)
+				new BuffParticleSpawner(SpellEngineParticles.snowflake.id().toString(), 5.0F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.GREATER_LIANDRYS_TORMENT.effect,
-				new BuffParticleSpawner("spell_engine:flame_medium_b", 0.5F)
+				new BuffParticleSpawner(SpellEngineParticles.flame_medium_b.id().toString(), 0.5F)
 						.withGroundEffect(
 								SpellEngineParticles.area_effect_480.id().toString(),
 								Color.RAGE,
@@ -74,15 +95,23 @@ public class MoreRelicsClient {
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.GREATER_MADREDS_BLOODRAZOR.effect,
-				new BuffParticleSpawner("spell_engine:magic_rage_stripe_float", 5.0F)
+				new BuffParticleSpawner(
+						BuffParticleSpawner.defaultBatch(
+								stripe_float,
+								5.0F,
+								Color.RED.toRGBA()))
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.SUPERIOR_MEJAIS_SOULSTEALER.effect,
-				new BuffParticleSpawner("spell_engine:magic_arcane_spell_ascend", 1.0F)
+				new BuffParticleSpawner(
+						BuffParticleSpawner.defaultBatch(
+								arcane_ascend,
+								5.0F,
+								Color.ARCANE.toRGBA()))
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.GREATER_SUNFIRE_CAPE.effect,
-				new BuffParticleSpawner("spell_engine:flame_medium_b", 0.5F)
+				new BuffParticleSpawner(SpellEngineParticles.flame_medium_b.id().toString(), 0.5F)
 						.withGroundEffect(
 								SpellEngineParticles.area_effect_293.id().toString(),
 								ORANGE,
@@ -91,20 +120,34 @@ public class MoreRelicsClient {
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.effect,
-				new BuffParticleSpawner("spell_engine:magic_holy_stripe_float", 4.0F)
+				new BuffParticleSpawner(
+						BuffParticleSpawner.defaultBatch(
+								stripe_float,
+								4.0F,
+								GOLD.toRGBA()))
 						.withGroundEffect(
 								SpellEngineParticles.ground_glow.id().toString(),
-								Color.HOLY,
+                                Color.fromRGBA(GOLD.toRGBA()),
 								SpellEngineParticles.ground_glow.texture().frames())
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.SUPERIOR_SHURELYAS_BATTLESONG.effect,
-				new BuffParticleSpawner("spell_engine:magic_white_spell_float", 4.0F)
+				new BuffParticleSpawner(
+						BuffParticleSpawner.defaultBatch(
+								stripe_float,
+								4.0F,
+								Color.HOLY.toRGBA()))
 						.withGroundEffect(
 								SpellEngineParticles.ground_glow.id().toString(),
 								Color.WHITE,
 								SpellEngineParticles.ground_glow.texture().frames())
 		);
 		CustomParticleStatusEffect.register(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.effect, new GuardianAngelParticleSpawner());
+
+		LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
+			if (entityRenderer instanceof PlayerEntityRenderer playerRenderer) {
+				registrationHelper.register(new GoldenPlayerRenderLayer(playerRenderer));
+			}
+		});
 	}
 }

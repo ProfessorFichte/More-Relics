@@ -1,3 +1,10 @@
+# 1.2.0 - 1.21.1
+- Spell Engine 1.9 API Update
+- Guardian Angel and Zhonyas Hourglass now have their own Action Impairing Hud Message
+- When Zhonyas Hourglass is used, the player model is now rendered Gold
+- Fixed some wrong Buff Particle Id's
+- Fixed the wrong Id for the Guardian Angel Sound
+
 # 1.1.1 - 1.21.1
 - Add Nature Orb for the new Nature Spell Power
 - Change Jewelry Figurines to fit the new Gems from Additional Jewelry Mod

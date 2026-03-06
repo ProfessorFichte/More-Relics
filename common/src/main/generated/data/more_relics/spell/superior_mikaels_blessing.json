@@ -14,7 +14,9 @@
   },
   "active": {},
   "release": {
-    "animation": "spell_engine:one_handed_healing_release",
+    "animation": {
+      "id": "spell_engine:one_handed_healing_release"
+    },
     "sound": {
       "id": "more_relics:mikaels_blesssing_active"
     }

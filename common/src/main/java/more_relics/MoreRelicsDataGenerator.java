@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 import net.relics_rpgs.item.RelicItemTags;
 import net.spell_engine.api.datagen.SimpleSoundGenerator;
 import net.spell_engine.api.datagen.SpellGenerator;
-import net.spell_engine.api.item.Equipment;
+import net.spell_engine.rpg_series.item.Equipment;
 import net.spell_engine.rpg_series.datagen.RPGSeriesDataGen;
 
 import java.util.HashMap;
@@ -77,6 +77,8 @@ public class MoreRelicsDataGenerator implements DataGeneratorEntrypoint {
 				translationBuilder.add(entry.effect.getTranslationKey(), entry.title);
 				translationBuilder.add(entry.effect.getTranslationKey() + ".description", entry.description);
 			});
+			translationBuilder.add("hud.more_relics.guardian_angel", "Reviving");
+			translationBuilder.add("hud.more_relics.zhonyas", "Immortal");
 		}
 	}
 

@@ -32,7 +32,20 @@
           "effect_id": "more_relics:superior_shurelyas_battlesong",
           "duration": 7.5
         }
-      }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:sign_speed",
+          "origin": "CENTER",
+          "shape": "LINE_VERTICAL",
+          "count": 1.0,
+          "min_speed": 0.75,
+          "max_speed": 0.75,
+          "color_rgba": 4294967295,
+          "scale": 1.8,
+          "follow_entity": true
+        }
+      ]
     },
     {
       "action": {
