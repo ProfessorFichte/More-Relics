@@ -1,3 +1,6 @@
+# 1.2.1 - 1.21.1
+- Fixed a crash due to a missing reference caused by a new MRPG-Lib Update
+
 # 1.2.0 - 1.21.1
 - Spell Engine 1.9 API Update
 - Guardian Angel and Zhonyas Hourglass now have their own Action Impairing Hud Message

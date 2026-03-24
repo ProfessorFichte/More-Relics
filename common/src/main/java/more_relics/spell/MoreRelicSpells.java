@@ -4,7 +4,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.more_rpg_classes.custom.MoreSpellSchools;
-import net.more_rpg_classes.sounds.ModSounds;
+import net.more_rpg_classes.sounds.MRPGLibSounds;
 import net.relics_rpgs.spell.RelicSounds;
 import net.spell_engine.api.spell.ExternalSpellSchools;
 import net.spell_engine.api.spell.Spell;
@@ -559,7 +559,7 @@ public class MoreRelicSpells {
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
         spell.range = 5.0F;
 
-        spell.release.sound = new Sound(ModSounds.FROST_CRACKLE_ID.toString());
+        spell.release.sound = new Sound(MRPGLibSounds.FROST_CRACKLE.id().toString());
 
         var trigger = new Spell.Trigger();
         trigger.chance = T4_PROC_CHANCE;
