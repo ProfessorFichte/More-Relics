@@ -36,25 +36,38 @@
           "spell_power_coefficient": 0.15
         }
       },
-      "particles": [
-        {
-          "particle_id": "spell_engine:magic_spark_decelerate",
-          "origin": "FEET",
-          "shape": "PILLAR",
-          "count": 20.0,
-          "min_speed": 0.02,
-          "max_speed": 0.15
-        },
-        {
-          "particle_id": "spell_engine:magic_spark_decelerate",
-          "origin": "CENTER",
-          "shape": "SPHERE",
-          "count": 40.0,
-          "min_speed": 0.3,
-          "max_speed": 0.3,
-          "color_rgba": 4294954239
-        }
-      ],
+      "visuals": {
+        "particles": [
+          {
+            "id": "spell_engine:magic_spark",
+            "appearance": {
+              "motion": "DECELERATE"
+            },
+            "batch": {
+              "count": 20.0,
+              "shape": "PILLAR",
+              "anchor": "ENTITY",
+              "vertical_origin": 0.1,
+              "min_speed": 0.02,
+              "max_speed": 0.15
+            }
+          },
+          {
+            "id": "spell_engine:magic_spark",
+            "appearance": {
+              "color": 4294954239,
+              "motion": "DECELERATE"
+            },
+            "batch": {
+              "count": 40.0,
+              "shape": "SPHERE",
+              "anchor": "ENTITY",
+              "min_speed": 0.3,
+              "max_speed": 0.3
+            }
+          }
+        ]
+      },
       "sound": {
         "id": "spell_engine:generic_healing_impact_1"
       }

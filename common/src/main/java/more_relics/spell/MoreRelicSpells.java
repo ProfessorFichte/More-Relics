@@ -1,33 +1,39 @@
 package more_relics.spell;
 
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.more_rpg_classes.client.particle.MoreParticles;
 import net.more_rpg_classes.custom.MoreSpellSchools;
+import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
 import net.more_rpg_classes.sounds.MRPGLibSounds;
 import net.relics_rpgs.spell.RelicSounds;
+import net.spell_engine.api.entity.SpellEngineAttributes;
 import net.spell_engine.api.spell.ExternalSpellSchools;
 import net.spell_engine.api.spell.Spell;
-import net.spell_engine.api.spell.fx.ParticleBatch;
+import net.spell_engine.api.spell.fx.Fx;
+import net.spell_engine.api.spell.fx.ParticleGroup;
+import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
 import net.spell_engine.api.spell.fx.PlayerAnimation;
 import net.spell_engine.api.spell.fx.Sound;
-import net.spell_engine.client.gui.SpellTooltip;
+import net.spell_engine.api.spell.tooltip.TooltipTokens;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
 import net.spell_engine.fx.SpellEngineSounds;
 import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static more_relics.MoreRelics.MOD_ID;
 
 public class MoreRelicSpells {
-    public record Entry(Identifier id, Spell spell, String title, String description,
-                        @Nullable SpellTooltip.DescriptionMutator mutator) {
+    public record Entry(Identifier id, Spell spell, String title, String description) {
     }
 
     public static final List<Entry> entries = new ArrayList<>();
@@ -101,6 +107,13 @@ public class MoreRelicSpells {
         return spell;
     }
 
+    /// The registry id of an attribute, for naming a specific modifier inside an `{effect|...}`
+    /// tooltip token. Needed because an effect's modifier map is unordered, so a multi-modifier
+    /// effect can only be read unambiguously by attribute, never by list position.
+    private static Identifier attributeId(RegistryEntry<EntityAttribute> attribute) {
+        return Identifier.of(attribute.getIdAsString());
+    }
+
     private static Spell.Impact createEffectImpact(String effectIdString, float duration) {
         var buff = new Spell.Impact();
         buff.action = new Spell.Impact.Action();
@@ -121,29 +134,28 @@ public class MoreRelicSpells {
         spell.cost.cooldown.duration = duration;
     }
 
-    private static @NotNull ParticleBatch lesserActivateParticles(Color color, int count) {
-        return lesserActivateParticles(SpellEngineParticles.MagicParticles.get(
-                        SpellEngineParticles.MagicParticles.Shape.SPARK,
-                        SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
-                count)
-                .color(color.toRGBA());
-    }
-    private static final Identifier SPARK_DECELERATE = SpellEngineParticles.MagicParticles.get(
-            SpellEngineParticles.MagicParticles.Shape.SPARK,
-            SpellEngineParticles.MagicParticles.Motion.DECELERATE
-    ).id();
-
-    private static @NotNull ParticleBatch lesserActivateParticles(String particleId, int count) {
-        return new ParticleBatch(
-                particleId,
-                ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                count, 0.14F, 0.15F);
+    /// V1: `new ParticleBatch(id, Shape.SPHERE, Origin.CENTER, count, 0.14F, 0.15F)`.
+    private static Consumer<ParticleGroup.Batch> lesserActivateBatch(int count) {
+        return b -> b.shape(ParticleGroup.Shape.SPHERE)
+                .count(count).speed(0.14F, 0.15F);
     }
 
-    private static final Identifier HEALING_PARTICLES = SpellEngineParticles.MagicParticles.get(
-            SpellEngineParticles.MagicParticles.Shape.SPARK,
-            SpellEngineParticles.MagicParticles.Motion.DECELERATE
-    ).id();
+    private static @NotNull ParticleGroup lesserActivateParticles(Color color, int count) {
+        return sparkDecelerate().color(color)
+                .batch(lesserActivateBatch(count));
+    }
+
+    private static @NotNull ParticleGroup lesserActivateParticles(SpellEngineParticles.Entry entry, int count) {
+        return ParticleGroupBuilder.of(entry)
+                .batch(lesserActivateBatch(count));
+    }
+
+    /// V1 `spell_engine:magic_spark_decelerate` — the id both the `SPARK_DECELERATE` and the
+    /// (identical) `HEALING_PARTICLES` constant resolved to before the 32 magic variants
+    /// collapsed to 8 entries plus a motion payload.
+    private static ParticleGroupBuilder sparkDecelerate() {
+        return ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.DECELERATE);
+    }
 
     private static Spell.TargetCondition deadCondition() {
         var deadCondition = new Spell.TargetCondition();
@@ -184,14 +196,13 @@ public class MoreRelicSpells {
     public static Entry lesser_proc_air_water = add(lesser_proc_air_water());
     private static Entry lesser_proc_air_water() {
         var id = Identifier.of(MOD_ID, "lesser_proc_air_water");
-        var description = "On spell hit: {trigger_chance} chance to increase air and water spell power by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.LESSER_POWER_AIR_WATER;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Air and Water share one value, but the registered effect's modifier map is unordered, so
+        // the attribute is named instead of relying on the token's first-modifier fallback.
+        var description = "On spell hit: {trigger_chance} chance to increase air and water spell power by "
+                + TooltipTokens.effect(effect.id, 0, MoreSpellSchools.AIR.id)
+                + " for {effect_duration} seconds.";
 
         var spell = passiveSpellBase();
         spell.school = MoreSpellSchools.AIR;
@@ -206,27 +217,24 @@ public class MoreRelicSpells {
 
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                lesserActivateParticles("more_rpg_classes:small_gust", 12),
-                lesserActivateParticles("more_rpg_classes:big_splash", 12)
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                lesserActivateParticles(MoreParticles.SMALL_GUST, 12),
+                lesserActivateParticles(MoreParticles.BIG_SPLASH, 12));
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
         configureCooldown(spell, T1_PROC_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry lesser_proc_earth_nature = add(lesser_proc_earth_nature());
     private static Entry lesser_proc_earth_nature() {
         var id = Identifier.of(MOD_ID, "lesser_proc_earth_nature");
-        var description = "On spell hit: {trigger_chance} chance to increase earth and nature spell power by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.LESSER_POWER_EARTH_NATURE;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Earth and Nature share one value; the attribute is named for the same reason as above.
+        var description = "On spell hit: {trigger_chance} chance to increase earth and nature spell power by "
+                + TooltipTokens.effect(effect.id, 0, MoreSpellSchools.EARTH.id)
+                + " for {effect_duration} seconds.";
 
         var spell = passiveSpellBase();
         spell.school = MoreSpellSchools.EARTH;
@@ -241,182 +249,157 @@ public class MoreRelicSpells {
 
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                lesserActivateParticles("more_rpg_classes:stone_particle", 12),
-                lesserActivateParticles("more_rpg_classes:leaf", 12)
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                lesserActivateParticles(MoreParticles.STONE_PARTICLE, 12),
+                lesserActivateParticles(MoreParticles.LEAF, 12));
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
         configureCooldown(spell, T1_PROC_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry lesser_use_rage_power = add(lesser_use_rage_power());
     private static Entry lesser_use_rage_power() {
         var id = Identifier.of(MOD_ID, "lesser_use_rage_power");
-        var description = "Use: Increases rage by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.LESSER_RAGE_POWER;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Single modifier, so the token's blank-attribute fallback is unambiguous.
+        var description = "Use: Increases rage by "
+                + TooltipTokens.effect(effect.id)
+                + " for {effect_duration} seconds.";
 
         var spell = activeSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
 
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_ground_release");
         spell.release.sound = new Sound(MoreRelicSounds.RAGE_POWDER.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.smoke_medium.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.1F)
-                        .color(Color.RAGE.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.smoke_medium.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        ParticleBatch.Rotation.LOOK,25 ,0.1F, 0.5F,0,2)
-                        .color(Color.RAGE.toRGBA()),
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.smoke_medium)
+                        .color(Color.RAGE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.1F, 0.1F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.smoke_medium)
+                        .color(Color.RAGE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .alignment(ParticleGroup.Alignment.LOOK)
+                                .count(25).speed(0.1F, 0.5F)
+                                .extent(2F)));
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_USE_EFFECT_DURATION));
         configureCooldown(spell, T1_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     ///MEDIUM RELICS
     public static Entry medium_use_air_power = add(medium_use_air_power());
     private static Entry medium_use_air_power() {
         var id = Identifier.of(MOD_ID, "medium_use_air_power");
-        var description = "Use: Increases air spell power by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.MEDIUM_AIR_POWER;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Single modifier, so the token's blank-attribute fallback is unambiguous.
+        var description = "Use: Increases air spell power by "
+                + TooltipTokens.effect(effect.id)
+                + " for {effect_duration} seconds.";
 
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.AIR;
 
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        "more_rpg_classes:small_gust",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.1F),
-                new ParticleBatch(
-                        "more_rpg_classes:small_gust",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.12F, 0.12F)
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(MoreParticles.SMALL_GUST)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.1F, 0.1F)),
+                ParticleGroupBuilder.of(MoreParticles.SMALL_GUST)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.12F, 0.12F)));
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_USE_EFFECT_DURATION));
         configureCooldown(spell, T2_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry medium_use_earth_power = add(medium_use_earth_power());
     private static Entry medium_use_earth_power() {
         var id = Identifier.of(MOD_ID, "medium_use_earth_power");
-        var description = "Use: Increases earth spell power by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.MEDIUM_EARTH_POWER;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Single modifier, so the token's blank-attribute fallback is unambiguous.
+        var description = "Use: Increases earth spell power by "
+                + TooltipTokens.effect(effect.id)
+                + " for {effect_duration} seconds.";
 
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.EARTH;
 
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        "more_rpg_classes:stone_particle",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.1F),
-                new ParticleBatch(
-                        "more_rpg_classes:stone_particle",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.12F, 0.12F)
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(MoreParticles.STONE_PARTICLE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.1F, 0.1F)),
+                ParticleGroupBuilder.of(MoreParticles.STONE_PARTICLE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.12F, 0.12F)));
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_USE_EFFECT_DURATION));
         configureCooldown(spell, T2_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry medium_use_water_power = add(medium_use_water_power());
     private static Entry medium_use_water_power() {
         var id = Identifier.of(MOD_ID, "medium_use_water_power");
-        var description = "Use: Increases water spell power by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.MEDIUM_WATER_POWER;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Single modifier, so the token's blank-attribute fallback is unambiguous.
+        var description = "Use: Increases water spell power by "
+                + TooltipTokens.effect(effect.id)
+                + " for {effect_duration} seconds.";
 
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.WATER;
 
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        "more_rpg_classes:bubble",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.1F),
-                new ParticleBatch(
-                        "more_rpg_classes:big_splash",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.12F, 0.12F)
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(MoreParticles.BUBBLE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.1F, 0.1F)),
+                ParticleGroupBuilder.of(MoreParticles.BIG_SPLASH)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.12F, 0.12F)));
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_USE_EFFECT_DURATION));
         configureCooldown(spell, T2_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry medium_use_nature_power = add(medium_use_nature_power());
     private static Entry medium_use_nature_power() {
         var id = Identifier.of(MOD_ID, "medium_use_nature_power");
-        var description = "Use: Increases nature spell power by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.MEDIUM_NATURE_POWER;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Single modifier, so the token's blank-attribute fallback is unambiguous.
+        var description = "Use: Increases nature spell power by "
+                + TooltipTokens.effect(effect.id)
+                + " for {effect_duration} seconds.";
 
         var spell = activeSpellBase();
         spell.school = MoreSpellSchools.NATURE;
 
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        "more_rpg_classes:leaf",
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.1F),
-                new ParticleBatch(SpellEngineParticles.MagicParticles.get(
-                        SpellEngineParticles.MagicParticles.Shape.SPARK,
-                        SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.1F, 0.1F)
-                        .color(Color.NATURE.toRGBA())
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(MoreParticles.LEAF)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.1F, 0.1F)),
+                sparkDecelerate()
+                        .color(Color.NATURE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.1F, 0.1F)));
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_USE_EFFECT_DURATION));
         configureCooldown(spell, T2_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry medium_perk_rage = add(medium_perk_rage());
     private static Entry medium_perk_rage() {
@@ -431,30 +414,32 @@ public class MoreRelicSpells {
         trigger.chance = T2_PROC_CHANCE;
         spell.passive.triggers = List.of(trigger);
 
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.smoke_medium.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.GROUND,
-                        ParticleBatch.Rotation.LOOK, 0.4F, 1.0F,1,0,2)
-                        .color(Color.RAGE.toRGBA()),
-        };
+        // V1 count 0.4 on a one-shot release = a 40% chance of a single particle (§9),
+        // which is `count(1).chance(0.4)` here - a literal `count(0.4)` would emit every time.
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.smoke_medium)
+                        .color(Color.RAGE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .anchor(ParticleGroup.Anchor.GROUND)
+                                .alignment(ParticleGroup.Alignment.LOOK)
+                                .count(1F).chance(0.4F).speed(1.0F, 1.0F)
+                                .extent(2F)));
 
         spell.impacts = List.of(createEffectImpact(MoreRelicEffects.MEDIUM_RAGE_POWER.id.toString(), T2_PROC_EFFECT_DURATION));
         configureCooldown(spell, T2_PROC_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, null);
+        return new Entry(id, spell, title, description);
     }
     public static Entry medium_proc_lifesteal = add(medium_proc_lifesteal());
     private static Entry medium_proc_lifesteal() {
         var id = Identifier.of(MOD_ID, "medium_proc_lifesteal");
-        var description = "On melee and spell hit: {trigger_chance_1} chance to increase lifesteal and spell vampire by {bonus} for {effect_duration} seconds.";
         var effect = MoreRelicEffects.MEDIUM_LIFESTEAL_POWER;
         var title = effect.title;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
+        // Lifesteal and Spell Vampire share one value; the attribute is named because the effect's
+        // modifier map is unordered. Two triggers exist (melee + spell), hence the indexed chance.
+        var description = "On melee and spell hit: {trigger_chance_1} chance to increase lifesteal and spell vampire by "
+                + TooltipTokens.effect(effect.id, 0, attributeId(MRPGCEntityAttributes.LIFESTEAL_MODIFIER))
+                + " for {effect_duration} seconds.";
 
         var spell = passiveSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
@@ -470,25 +455,20 @@ public class MoreRelicSpells {
 
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.BLOODLUST_ACTIVATE.id().toString());
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.dripping_blood.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.2F, 0.8F),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                        SpellEngineParticles.MagicParticles.Shape.SPARK,
-                        SpellEngineParticles.MagicParticles.Motion.FLOAT
-                        ).id().toString(),
-                        ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.CENTER,
-                        15, 0.02F, 0.1F)
-                        .color(Color.RAGE.toRGBA()),
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.dripping_blood)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(20).speed(0.2F, 0.8F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.FLOAT)
+                        .color(Color.RAGE)
+                        // V1 WIDE_PIPE = PIPE at double the entity radius
+                        .batch(b -> b.shape(ParticleGroup.Shape.PIPE).widthFactor(2F)
+                                .count(15).speed(0.02F, 0.1F)));
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_PROC_EFFECT_DURATION));
         configureCooldown(spell, T2_PROC_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     ///GREATER RELICS
     public static Entry greater_proc_rage = add(greater_proc_rage());
@@ -497,20 +477,18 @@ public class MoreRelicSpells {
         var effect = MoreRelicEffects.GREATER_RAGE_POWER;
         var title = "Svablod's Ritual";
         var health_threshold = 0.25F;
-        var description = "Taking damage below {health_threshold} health, reduces incoming damage by {bonus}, increases rage by {bonus2} and attack speed by {bonus3} for {effect_duration} seconds.";
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().attributes().get(1);
-            var modifier2 = effect.config().attributes().get(0);
-            var modifier3 = effect.config().attributes().get(2);
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            var bonus2 = SpellTooltip.bonus(modifier2.value, modifier2.operation);
-            var bonus3 = SpellTooltip.bonus(modifier3.value, modifier3.operation);
-            return args.description()
-                    .replace("{health_threshold}", SpellTooltip.percent(health_threshold))
-                    .replace("{bonus}", bonus)
-                    .replace("{bonus2}", bonus2)
-                    .replace("{bonus3}", bonus3);
-        };
+        // Three modifiers with three different values, previously read by list position - unsafe,
+        // because the registered effect keeps them in an unordered map. Each is now named.
+        // `damage_taken` is configured negative (-65%) while the prose says "reduces ... by", so it
+        // takes the ABS format; the positional mutator rendered "reduces incoming damage by -65%".
+        var description = "Taking damage below " + TooltipTokens.bakedPercent(health_threshold)
+                + " health, reduces incoming damage by "
+                + TooltipTokens.effect(effect.id, 0, SpellEngineAttributes.DAMAGE_TAKEN.id, TooltipTokens.Format.ABS)
+                + ", increases rage by "
+                + TooltipTokens.effect(effect.id, 0, attributeId(MRPGCEntityAttributes.RAGE_MODIFIER))
+                + " and attack speed by "
+                + TooltipTokens.effect(effect.id, 0, attributeId(EntityAttributes.GENERIC_ATTACK_SPEED))
+                + " for {effect_duration} seconds.";
         var spell = passiveSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
 
@@ -522,38 +500,36 @@ public class MoreRelicSpells {
         trigger.target_override = Spell.Trigger.TargetSelector.CASTER;
         spell.passive.triggers = List.of(trigger);
 
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.smoke_medium.id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.GROUND,
-                        50, 1.0F, 1.8F)
-                        .color(Color.RAGE.toRGBA()),
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.STRIPE,
-                                SpellEngineParticles.MagicParticles.Motion.FLOAT).id().toString(),
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.FEET,
-                        ParticleBatch.Rotation.LOOK,20,1.0F,1.0F,0,2.5F)
-                        .color(Color.RAGE.toRGBA()),
-        };
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.smoke_medium)
+                        .color(Color.RAGE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .anchor(ParticleGroup.Anchor.GROUND)
+                                .count(50).speed(1.0F, 1.8F)),
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_stripe, ParticleGroup.Motion.FLOAT)
+                        .color(Color.RAGE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                                .alignment(ParticleGroup.Alignment.LOOK)
+                                .count(20).speed(1.0F, 1.0F)
+                                .extent(2.5F)));
 
         spell.impacts = List.of(createEffectImpact(MoreRelicEffects.GREATER_RAGE_POWER.id.toString(), T3_TRANCE_DURATION/2));
         configureCooldown(spell, T3_TRANCE_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry greater_frozen_heart = add(greater_frozen_heart());
     private static Entry greater_frozen_heart() {
         var id = Identifier.of(MOD_ID, "greater_frozen_heart");
         var effect = MoreRelicEffects.GREATER_FROZEN_HEART;
         var title = effect.title;
-        var description = "On taking damage: {trigger_chance} chance to reduce the attack and movement speed of nearby enemies by {bonus} for {effect_duration} seconds.";
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description()
-                    .replace("{bonus}", bonus);
-        };
+        // Attack speed and movement speed share one value (-30%), but the effect's modifier map is
+        // unordered so the attribute is named. ABS because the prose already says "reduce ... by" -
+        // the old mutator passed the raw value through and rendered "by -30%".
+        var description = "On taking damage: {trigger_chance} chance to reduce the attack and movement speed of nearby enemies by "
+                + TooltipTokens.effect(effect.id, 0, attributeId(EntityAttributes.GENERIC_ATTACK_SPEED), TooltipTokens.Format.ABS)
+                + " for {effect_duration} seconds.";
 
         var spell = passiveSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
@@ -571,19 +547,20 @@ public class MoreRelicSpells {
         spell.target.area.vertical_range_multiplier = 1.0F;
 
         var debuff = createEffectImpact(effect.id.toString(), T3_PROC_EFFECT_DURATION );
-        debuff.particles = new ParticleBatch[]{
-                new ParticleBatch(SpellEngineParticles.frost_shard.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        25, 0.55F, 0.8F),
-                new ParticleBatch(SpellEngineParticles.snowflake.id().toString(),
-                        ParticleBatch.Shape.WIDE_PIPE, ParticleBatch.Origin.FEET,
-                        15, 0.2F, 0.2F)
-        };
+        debuff.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.frost_shard)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(25).speed(0.55F, 0.8F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
+                        // V1 WIDE_PIPE = PIPE at double the entity radius
+                        .batch(b -> b.shape(ParticleGroup.Shape.PIPE).widthFactor(2F)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                                .count(15).speed(0.2F, 0.2F)));
         spell.impacts = List.of(debuff);
 
         configureCooldown(spell, T3_PROC_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry greater_kircheis_shard = add(greater_kircheis_shard());
     private static Entry greater_kircheis_shard() {
@@ -607,16 +584,17 @@ public class MoreRelicSpells {
         cloud.time_to_live_seconds = T3_ZONE_DURATION;
         cloud.impact_tick_interval = 20;
         cloud.client_data = new Spell.Delivery.Cloud.ClientData();
-        cloud.client_data.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.electric_arc_A.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        5, 0, 0),
-                new ParticleBatch(
-                        SpellEngineParticles.electric_arc_B.id().toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        5, 0, 0)
-        };
+        // Continuous cloud presence FX - stays a plain list, not an Fx.Visuals.
+        // V1 `electric_arc_A/B` were retired; `electricArc(lightning_arc_*)` rebuilds their look.
+        cloud.client_data.particles = List.of(
+                ParticleGroupBuilder.electricArc(SpellEngineParticles.lightning_arc_A)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                                .count(5).speed(0F, 0F)),
+                ParticleGroupBuilder.electricArc(SpellEngineParticles.lightning_arc_B)
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                                .count(5).speed(0F, 0F)));
         spell.deliver.clouds = List.of(cloud);
 
 
@@ -636,28 +614,25 @@ public class MoreRelicSpells {
         spell.impacts = List.of(damage);
         configureCooldown(spell, T3_PROC_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, null);
+        return new Entry(id, spell, title, description);
     }
     public static Entry greater_madreds_bloodrazor = add(greater_madreds_bloodrazor());
     private static Entry greater_madreds_bloodrazor() {
         var id = Identifier.of(MOD_ID, "greater_madreds_bloodrazor");
-        var description = "On melee hit: {trigger_chance_1} to receive increased attack speed by {bonus} and deal additional damage according to {max_health_damage} of the targets max health every hit.";
         var title = "Madred's Bloodrazor";
         var effect = MoreRelicEffects.GREATER_MADREDS_BLOODRAZOR;
+        // Fraction of the target's max health each hit deals; the tooltip prints the same constant.
+        // The old mutator read it off the build-time `spell` object, so baking it is equivalent.
+        var maxHealthDamage = 0.03F;
+        // Single modifier (attack speed), so the token's blank-attribute fallback is unambiguous.
+        // Two triggers (passive melee + stashed melee), hence the indexed chance.
+        var description = "On melee hit: {trigger_chance_1} to receive increased attack speed by "
+                + TooltipTokens.effect(effect.id)
+                + " and deal additional damage according to " + TooltipTokens.bakedPercent(maxHealthDamage)
+                + " of the targets max health every hit.";
 
         var spell = passiveSpellBase();
         spell.school = ExternalSpellSchools.PHYSICAL_MELEE;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier_effect = effect.config().firstModifier();
-            var bonus_effect = SpellTooltip.bonus(modifier_effect.value, modifier_effect.operation);
-            var modifiedDescription = args.description();
-            var max_health_damage = spell.impacts.get(0).action.damage;
-            if (max_health_damage != null) {
-                modifiedDescription = modifiedDescription.replace("{max_health_damage}", SpellTooltip.percent(max_health_damage.spell_power_coefficient));
-            }
-            return modifiedDescription
-                    .replace("{bonus}", bonus_effect);
-        };
 
         var trigger_passive = new Spell.Trigger();
         trigger_passive.chance = T3_PROC_CHANCE;
@@ -682,24 +657,21 @@ public class MoreRelicSpells {
         damage.action = new Spell.Impact.Action();
         damage.action.type = Spell.Impact.Action.Type.DAMAGE;
         damage.action.damage = new Spell.Impact.Action.Damage();
-        damage.action.damage.spell_power_coefficient = 0.03F;
+        damage.action.damage.spell_power_coefficient = maxHealthDamage;
         damage.sound = Sound.withVolume(MoreRelicSounds.MADREDS_BLOODRAZOR_IMPACT.id(), 1.25F);
-        damage.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.dripping_blood.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.2F, 0.8F),
-                new ParticleBatch(
-                        "more_rpg_classes:blood_drop",
-                        ParticleBatch.Shape.CIRCLE, ParticleBatch.Origin.CENTER,
-                        20, 0.2F, 0.8F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.dripping_blood)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(20).speed(0.2F, 0.8F)),
+                ParticleGroupBuilder.of(MoreParticles.BLOOD_DROP)
+                        .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
+                                .count(20).speed(0.2F, 0.8F)));
 
 
         spell.impacts = List.of(damage);
         configureCooldown(spell, T3_TRANCE_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry greater_liandrys_torment = add(greater_liandrys_torment());
     private static Entry greater_liandrys_torment() {
@@ -728,26 +700,24 @@ public class MoreRelicSpells {
 
         configureCooldown(spell, T3_TRANCE_COOLDOWN);
 
-        return new Entry(id, spell, title, description, null);
+        return new Entry(id, spell, title, description);
     }
     public static Entry greater_sunfire_cape = add(greater_sunfire_cape());
     private static Entry greater_sunfire_cape() {
         var id = Identifier.of(MOD_ID, "greater_sunfire_cape");
-        var description = "On damage taken and dealt: {trigger_chance_1} to deal {max_health_damage} damage of your max health around you. ";
         var effect = MoreRelicEffects.GREATER_SUNFIRE_CAPE;
         var title = effect.title;
+        // Fraction of the caster's max health the burst deals; the old mutator read it off the
+        // build-time `spell` object, so baking the same constant is equivalent.
+        var maxHealthDamage = 0.04F;
+        // Four triggers (2 passive + 2 stashed), hence the indexed chance.
+        var description = "On damage taken and dealt: {trigger_chance_1} to deal "
+                + TooltipTokens.bakedPercent(maxHealthDamage)
+                + " damage of your max health around you. ";
 
         var spell = passiveSpellBase();
         spell.range = 4.0F;
         spell.school = SpellSchools.FIRE;
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifiedDescription = args.description();
-            var max_health_damage = spell.impacts.get(0).action.damage;
-            if (max_health_damage != null) {
-                modifiedDescription = modifiedDescription.replace("{max_health_damage}", SpellTooltip.percent(max_health_damage.spell_power_coefficient));
-            }
-            return modifiedDescription;
-        };
 
         var trigger_damage_taken = new Spell.Trigger();
         trigger_damage_taken.chance = T3_PROC_CHANCE;
@@ -778,21 +748,19 @@ public class MoreRelicSpells {
         damage.action = new Spell.Impact.Action();
         damage.action.type = Spell.Impact.Action.Type.DAMAGE;
         damage.action.damage = new Spell.Impact.Action.Damage();
-        damage.action.damage.spell_power_coefficient = 0.04F;
+        damage.action.damage.spell_power_coefficient = maxHealthDamage;
         damage.sound = Sound.withVolume(SpellEngineSounds.GENERIC_FIRE_IGNITE.id(), 1.0F);
-        damage.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.flame.id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.2F, 0.8F)
-        };
+        damage.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.flame)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(20).speed(0.2F, 0.8F)));
 
         spell.impacts = List.of(damage);
         spell.area_impact = new Spell.AreaImpact();
         spell.area_impact.radius = 4.0F;
         configureCooldown(spell, T3_TRANCE_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     ///SUPERIOR RELICS
     public static final Color GOLD = Color.from(0xffd700);
@@ -809,37 +777,34 @@ public class MoreRelicSpells {
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = Sound.withVolume(MoreRelicSounds.ZHONYAS_HOURGLASS.id(), 0.75F);
 
-        spell.release.particles = new ParticleBatch[]{
-                new ParticleBatch(
-                        SpellEngineParticles.MagicParticles.get(
-                                SpellEngineParticles.MagicParticles.Shape.HOLY,
-                                SpellEngineParticles.MagicParticles.Motion.DECELERATE).id().toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        20, 0.1F, 0.4F).color(GOLD.toRGBA()),
-                new ParticleBatch(SpellEngineParticles.sign_hourglass.id().toString(),
-                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.CENTER,
-                        1, 0.75F, 0.75F)
+        spell.release.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.magic(SpellEngineParticles.magic_holy, ParticleGroup.Motion.DECELERATE)
+                        .color(GOLD)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(20).speed(0.1F, 0.4F)),
+                ParticleGroupBuilder.of(SpellEngineParticles.sign_hourglass)
                         .scale(1.8F)
-                        .color(GOLD.toRGBA())
-                        .followEntity(true)
-        };
+                        .color(GOLD)
+                        .attached()
+                        .batch(b -> b.shape(ParticleGroup.Shape.LINE_VERTICAL)
+                                .count(1).speed(0.75F, 0.75F)));
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), 3));
         configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, null);
+        return new Entry(id, spell, title, description);
     }
     public static Entry superior_mejais_soulstealer = add(superior_mejais_soulstealer());
     private static Entry superior_mejais_soulstealer() {
         var id = Identifier.of(MOD_ID, "superior_mejais_soulstealer");
         var effect = MoreRelicEffects.SUPERIOR_MEJAIS_SOULSTEALER;
         var title = effect.title;
-        var description = "Defeating enemies grants you spell power by {bonus}, stacking up to {effect_amplifier_cap} times for {effect_duration} seconds.";
+        // Every school in `allOffensiveMagicSchools()` gets the same modifier value, so the token's
+        // first-modifier fallback is unambiguous - and no single school could stand in for the
+        // generic "spell power" the prose names. ABS mirrors the old mutator's `Math.abs`.
+        var description = "Defeating enemies grants you spell power by "
+                + TooltipTokens.effect(effect.id, 0, null, TooltipTokens.Format.ABS)
+                + ", stacking up to {effect_amplifier_cap} times for {effect_duration} seconds.";
         var spell = passiveSpellBase();
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(Math.abs(modifier.value), modifier.operation);
-            return args.description().replace("{bonus}", bonus);
-        };
 
         spell.school = SpellSchools.ARCANE;
 
@@ -865,20 +830,18 @@ public class MoreRelicSpells {
 
         configureCooldown(spell, T4_PROC_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry superior_shurelyas_battlesong = add(superior_shurelyas_battlesong());
     private static Entry superior_shurelyas_battlesong() {
         var id = Identifier.of(MOD_ID, "superior_shurelyas_battlesong");
         var effect = MoreRelicEffects.SUPERIOR_SHURELYAS_BATTLESONG;
         var title = effect.title;
-        var description = "Use: Increase movement speed by {bonus} for {effect_duration} seconds and reduces spell cooldowns for allies.";
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifier = effect.config().firstModifier();
-            var bonus = SpellTooltip.bonus(modifier.value, modifier.operation);
-            return args.description()
-                    .replace("{bonus}", bonus);
-        };
+        // Single modifier, so the token's blank-attribute fallback is unambiguous. Only one of the
+        // two impacts is a STATUS_EFFECT, so `{effect_duration}` stays un-indexed.
+        var description = "Use: Increase movement speed by "
+                + TooltipTokens.effect(effect.id)
+                + " for {effect_duration} seconds and reduces spell cooldowns for allies.";
 
         var spell = activeSpellBase();
         spell.range = 10;
@@ -891,14 +854,13 @@ public class MoreRelicSpells {
         spell.target.area.include_caster = true;
 
         var buff = createEffectImpact(effect.id.toString(), T4_USE_EFFECT_DURATION / 2 );
-        buff.particles = new ParticleBatch[]{
-                new ParticleBatch(SpellEngineParticles.sign_speed.id().toString(),
-                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.CENTER,
-                        1, 0.75F, 0.75F)
+        buff.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.sign_speed)
                         .scale(1.8F)
-                        .color(Color.WHITE.toRGBA())
-                        .followEntity(true)
-        };
+                        .color(Color.WHITE)
+                        .attached()
+                        .batch(b -> b.shape(ParticleGroup.Shape.LINE_VERTICAL)
+                                .count(1).speed(0.75F, 0.75F)));
 
         var impact = new Spell.Impact();
         impact.action = new Spell.Impact.Action();
@@ -906,36 +868,28 @@ public class MoreRelicSpells {
         impact.action.cooldown = new Spell.Impact.Action.Cooldown();
         impact.action.cooldown.actives = new Spell.Impact.Action.Cooldown.Modify();
         impact.action.cooldown.actives.duration_multiplier = 0.8F;
-        impact.particles = new ParticleBatch[]{
-                new ParticleBatch(SpellEngineParticles.sign_speed.id().toString(),
-                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.CENTER,
-                        1, 0.75F, 0.75F)
+        impact.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.sign_speed)
                         .scale(1.2F)
-                        .color(Color.WHITE.toRGBA())
-                        .followEntity(true)
-        };
+                        .color(Color.WHITE)
+                        .attached()
+                        .batch(b -> b.shape(ParticleGroup.Shape.LINE_VERTICAL)
+                                .count(1).speed(0.75F, 0.75F)));
 
         spell.impacts = List.of(buff, impact);
 
         configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry superior_mikaels_blessing = add(superior_mikaels_blessing());
     private static Entry superior_mikaels_blessing() {
         var id = Identifier.of(MOD_ID, "superior_mikaels_blessing");
         var effect = MoreRelicEffects.SUPERIOR_MIKAELS_BLESSING;
         var title = effect.title;
+        // `{heal_percent}` is the HEAL impact's coefficient read off the live spell - see
+        // `registerTooltipTokens()`. No declarative token expresses it.
         var description = "Use: Heals you or the targeted ally for {heal_percent} of your max health and cleanses all harmful effects.";
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifiedDescription = args.description();
-            var spell = args.spellEntry().value();
-            var heal = spell.impacts.get(0).action.heal;
-            if (heal != null) {
-                modifiedDescription = modifiedDescription.replace("{heal_percent}", SpellTooltip.percent(heal.spell_power_coefficient));
-            }
-            return modifiedDescription;
-        };
 
         var spell = activeSpellBase();
         spell.school = SpellSchools.HEALING;
@@ -953,22 +907,21 @@ public class MoreRelicSpells {
         var heal = createHeal(0.15F);
         heal.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
         heal.sound = new Sound(SpellEngineSounds.GENERIC_HEALING_IMPACT_1.id());
-        heal.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        HEALING_PARTICLES.toString(),
-                        ParticleBatch.Shape.PILLAR, ParticleBatch.Origin.FEET,
-                        20, 0.02F, 0.15F),
-                new ParticleBatch(SPARK_DECELERATE.toString(),
-                        ParticleBatch.Shape.SPHERE, ParticleBatch.Origin.CENTER,
-                        40, 0.3F, 0.3F)
-                        .color(Color.HOLY.toRGBA())
-        };
+        heal.visuals = Fx.Visuals.of(
+                sparkDecelerate()
+                        .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                                .count(20).speed(0.02F, 0.15F)),
+                sparkDecelerate()
+                        .color(Color.HOLY)
+                        .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
+                                .count(40).speed(0.3F, 0.3F)));
 
         spell.impacts = List.of(heal,buff);
 
         configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
     }
     public static Entry superior_guardian_angel = add(superior_guardian_angel());
     private static Entry superior_guardian_angel() {
@@ -976,17 +929,11 @@ public class MoreRelicSpells {
         var title = "Guardian Angel";
         var effect = MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL;
         var health_threshold = 0.15F;
-        var description = "Taking damage below {health_threshold} health, makes you invulnerable for {effect_duration} seconds and heals you for {health_percent} of your maximum health.";
-        SpellTooltip.DescriptionMutator mutator = (args) -> {
-            var modifiedDescription = args.description();
-            var spell = args.spellEntry().value();
-            var heal = spell.impacts.get(0).action.heal;
-            if (heal != null) {
-                modifiedDescription = modifiedDescription.replace("{health_percent}", SpellTooltip.percent(heal.spell_power_coefficient));
-            }
-            return modifiedDescription
-                    .replace("{health_threshold}", SpellTooltip.percent(health_threshold));
-        };
+        // The threshold is a local constant, so it is baked straight into the lang value (`%%`
+        // because the description is fed through `String.format` on translation). `{health_percent}`
+        // is the HEAL impact's coefficient read off the live spell - see `registerTooltipTokens()`.
+        var description = "Taking damage below " + TooltipTokens.bakedPercent(health_threshold)
+                + " health, makes you invulnerable for {effect_duration} seconds and heals you for {health_percent} of your maximum health.";
 
         var spell = passiveSpellBase();
         spell.school = SpellSchools.HEALING;
@@ -1005,22 +952,47 @@ public class MoreRelicSpells {
         var heal = createHeal(0.65F);
         heal.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
         heal.sound = new Sound(SpellEngineSounds.GENERIC_HEALING_IMPACT_1.id());
-        heal.particles = new ParticleBatch[] {
-                new ParticleBatch(
-                        SpellEngineParticles.area_circle_1.id().toString(),
-                        ParticleBatch.Shape.LINE_VERTICAL, ParticleBatch.Origin.FEET,
-                        1, 0.2F, 0.2F)
-                        .followEntity(true)
+        heal.visuals = Fx.Visuals.of(
+                ParticleGroupBuilder.of(SpellEngineParticles.area_circle_1)
+                        .attached()
                         .scale(0.8F)
-                        .maxAge(0.8F)
-                        .color(Color.WHITE.toRGBA()),
-        };
+                        .playbackSpeed(1.25F) // V1 maxAge 0.8 -> playback_speed 1 / 0.8
+                        .color(Color.WHITE)
+                        .batch(b -> b.shape(ParticleGroup.Shape.LINE_VERTICAL)
+                                .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
+                                .count(1).speed(0.2F, 0.2F)));
 
         var buff = createEffectImpact(effect.id.toString(), 4);
         spell.impacts = List.of(heal, buff);
 
         configureCooldown(spell, T4_USE_EFFECT_COOLDOWN);
 
-        return new Entry(id, spell, title, description, mutator);
+        return new Entry(id, spell, title, description);
+    }
+
+    /// Description values that no declarative `{token}` expresses, registered through the
+    /// server-safe `TooltipTokens` (the deprecated, client-only `SpellTooltip.DescriptionMutator`
+    /// is gone). Called from client init; every other tooltip value in this mod is a plain token.
+    public static void registerTooltipTokens() {
+        healPercent(superior_mikaels_blessing.id(), "{heal_percent}");
+        healPercent(superior_guardian_angel.id(), "{health_percent}");
+    }
+
+    /// Resolves `token` to the spell's own HEAL coefficient as a percentage. Both callers heal for a
+    /// *fraction of max health* (`heal.attribute` is `generic.max_health`), which the built-in
+    /// `{heal}` token cannot say - it estimates an absolute number instead. Read off the live
+    /// registry entry, so a datapack override of the spell is reflected. Uses `percent`, not
+    /// `bakedPercent`: the value is spliced in after translation, so `%` must not be doubled.
+    private static void healPercent(Identifier spellId, String token) {
+        TooltipTokens.registerCustom(spellId, args -> {
+            var description = args.description();
+            for (var impact : args.spellEntry().value().impacts) {
+                if (impact.action != null && impact.action.heal != null) {
+                    return description.replace(token,
+                            TooltipTokens.percent(impact.action.heal.spell_power_coefficient));
+                }
+            }
+            return description;
+        });
     }
 }

@@ -4,7 +4,7 @@ import more_relics.item.MoreRelicsItems;
 import more_relics.spell.MoreRelicEffects;
 import more_relics.spell.MoreRelicSounds;
 import net.relics_rpgs.config.ItemConfig;
-import net.spell_engine.api.config.ConfigFile;
+import net.spell_engine.rpg_series.config.ConfigFile;
 import net.tiny_config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

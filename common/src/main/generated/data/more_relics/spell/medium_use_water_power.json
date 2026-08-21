@@ -17,24 +17,32 @@
     "animation": {
       "id": "spell_engine:dual_handed_weapon_charge"
     },
-    "particles": [
-      {
-        "particle_id": "more_rpg_classes:bubble",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 25.0,
-        "min_speed": 0.1,
-        "max_speed": 0.1
-      },
-      {
-        "particle_id": "more_rpg_classes:big_splash",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 25.0,
-        "min_speed": 0.12,
-        "max_speed": 0.12
-      }
-    ],
+    "visuals": {
+      "particles": [
+        {
+          "id": "more_rpg_classes:bubble",
+          "appearance": {},
+          "batch": {
+            "count": 25.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.1,
+            "max_speed": 0.1
+          }
+        },
+        {
+          "id": "more_rpg_classes:big_splash",
+          "appearance": {},
+          "batch": {
+            "count": 25.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.12,
+            "max_speed": 0.12
+          }
+        }
+      ]
+    },
     "sound": {
       "id": "relics_rpgs:intellect_buff"
     }

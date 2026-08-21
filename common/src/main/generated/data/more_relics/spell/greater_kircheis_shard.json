@@ -45,18 +45,38 @@
         "client_data": {
           "particles": [
             {
-              "particle_id": "spell_engine:electric_arc_a",
-              "origin": "FEET",
-              "shape": "PILLAR",
-              "count": 5.0,
-              "max_speed": 0.0
+              "id": "spell_engine:lightning_arc_a",
+              "appearance": {
+                "playback_speed": 0.41,
+                "lifetime_variance": 0.55,
+                "color": 4294928127,
+                "scale": 0.75,
+                "drag": 0.96,
+                "collides": true
+              },
+              "batch": {
+                "count": 5.0,
+                "shape": "PILLAR",
+                "anchor": "ENTITY",
+                "vertical_origin": 0.1
+              }
             },
             {
-              "particle_id": "spell_engine:electric_arc_b",
-              "origin": "FEET",
-              "shape": "PILLAR",
-              "count": 5.0,
-              "max_speed": 0.0
+              "id": "spell_engine:lightning_arc_b",
+              "appearance": {
+                "playback_speed": 0.41,
+                "lifetime_variance": 0.55,
+                "color": 4294928127,
+                "scale": 0.75,
+                "drag": 0.96,
+                "collides": true
+              },
+              "batch": {
+                "count": 5.0,
+                "shape": "PILLAR",
+                "anchor": "ENTITY",
+                "vertical_origin": 0.1
+              }
             }
           ]
         }
