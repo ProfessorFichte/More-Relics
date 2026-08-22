@@ -27,27 +27,40 @@
     ]
   },
   "release": {
-    "particles": [
-      {
-        "particle_id": "spell_engine:smoke_medium",
-        "origin": "GROUND",
-        "shape": "CIRCLE",
-        "count": 50.0,
-        "min_speed": 1.0,
-        "max_speed": 1.8,
-        "color_rgba": 3208659199
-      },
-      {
-        "particle_id": "spell_engine:magic_stripe_float",
-        "origin": "FEET",
-        "shape": "CIRCLE",
-        "rotation": "LOOK",
-        "count": 20.0,
-        "min_speed": 1.0,
-        "extent": 2.5,
-        "color_rgba": 3208659199
-      }
-    ]
+    "visuals": {
+      "particles": [
+        {
+          "id": "spell_engine:smoke_medium",
+          "appearance": {
+            "color": 3208659199
+          },
+          "batch": {
+            "count": 50.0,
+            "shape": "CIRCLE",
+            "anchor": "GROUND",
+            "min_speed": 1.0,
+            "max_speed": 1.8
+          }
+        },
+        {
+          "id": "spell_engine:magic_stripe",
+          "appearance": {
+            "color": 3208659199,
+            "motion": "FLOAT"
+          },
+          "batch": {
+            "count": 20.0,
+            "shape": "CIRCLE",
+            "anchor": "ENTITY",
+            "vertical_origin": 0.1,
+            "alignment": "LOOK",
+            "min_speed": 1.0,
+            "max_speed": 1.0,
+            "extent": 2.5
+          }
+        }
+      ]
+    }
   },
   "impacts": [
     {

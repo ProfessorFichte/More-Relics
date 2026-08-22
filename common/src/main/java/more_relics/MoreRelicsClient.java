@@ -8,7 +8,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRe
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.BuffParticleSpawner;
-import net.spell_engine.client.gui.SpellTooltip;
+import net.spell_engine.api.spell.fx.ParticleGroup;
+import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
 import net.spell_engine.client.util.Color;
 import net.spell_engine.fx.SpellEngineParticles;
 
@@ -17,21 +18,13 @@ import java.util.List;
 public class MoreRelicsClient {
 
 	public static void init() {
-		for (var entry: MoreRelicSpells.entries) {
-			if (entry.mutator() != null) {
-				SpellTooltip.addDescriptionMutator(entry.id(), entry.mutator());
-			}
-		}
+		// Description values that aren't expressible as declarative `{token}`s. `TooltipTokens` is
+		// server-safe; it is registered here simply because the tooltip is a client concern.
+		MoreRelicSpells.registerTooltipTokens();
+
 		final Color ORANGE = new Color(255.0F, 165.0F, 0.0F);
 		final Color PURPLE = new Color(104.0F, 12.0F, 104.0F);
 		final Color GOLD = Color.from(0xffd700);
-
-		var stripe_float = SpellEngineParticles.MagicParticles.get(
-				SpellEngineParticles.MagicParticles.Shape.STRIPE,
-				SpellEngineParticles.MagicParticles.Motion.FLOAT).id().toString();
-		var arcane_ascend = SpellEngineParticles.MagicParticles.get(
-				SpellEngineParticles.MagicParticles.Shape.ARCANE,
-				SpellEngineParticles.MagicParticles.Motion.ASCEND).id().toString();
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_POWER_AIR_WATER.effect,
@@ -44,8 +37,8 @@ public class MoreRelicsClient {
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_RAGE_POWER.effect,
 				new BuffParticleSpawner(
-						BuffParticleSpawner.defaultBatch(
-								stripe_float,
+						magicBuff(
+								SpellEngineParticles.magic_stripe, ParticleGroup.Motion.FLOAT,
 								1,
 								Color.RAGE.toRGBA())));
 
@@ -68,16 +61,16 @@ public class MoreRelicsClient {
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_RAGE_POWER.effect,
 				new BuffParticleSpawner(
-						BuffParticleSpawner.defaultBatch(
-								stripe_float,
+						magicBuff(
+								SpellEngineParticles.magic_stripe, ParticleGroup.Motion.FLOAT,
 								1.5F,
 								Color.RAGE.toRGBA())));
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.GREATER_RAGE_POWER.effect,
 				new BuffParticleSpawner(
-						BuffParticleSpawner.defaultBatch(
-								stripe_float,
+						magicBuff(
+								SpellEngineParticles.magic_stripe, ParticleGroup.Motion.FLOAT,
 								1.5F,
 								Color.RAGE.toRGBA())));
 
@@ -96,16 +89,16 @@ public class MoreRelicsClient {
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.GREATER_MADREDS_BLOODRAZOR.effect,
 				new BuffParticleSpawner(
-						BuffParticleSpawner.defaultBatch(
-								stripe_float,
+						magicBuff(
+								SpellEngineParticles.magic_stripe, ParticleGroup.Motion.FLOAT,
 								5.0F,
 								Color.RED.toRGBA()))
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.SUPERIOR_MEJAIS_SOULSTEALER.effect,
 				new BuffParticleSpawner(
-						BuffParticleSpawner.defaultBatch(
-								arcane_ascend,
+						magicBuff(
+								SpellEngineParticles.magic_arcane, ParticleGroup.Motion.ASCEND,
 								5.0F,
 								Color.ARCANE.toRGBA()))
 		);
@@ -121,8 +114,8 @@ public class MoreRelicsClient {
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.effect,
 				new BuffParticleSpawner(
-						BuffParticleSpawner.defaultBatch(
-								stripe_float,
+						magicBuff(
+								SpellEngineParticles.magic_stripe, ParticleGroup.Motion.FLOAT,
 								4.0F,
 								GOLD.toRGBA()))
 						.withGroundEffect(
@@ -133,8 +126,8 @@ public class MoreRelicsClient {
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.SUPERIOR_SHURELYAS_BATTLESONG.effect,
 				new BuffParticleSpawner(
-						BuffParticleSpawner.defaultBatch(
-								stripe_float,
+						magicBuff(
+								SpellEngineParticles.magic_stripe, ParticleGroup.Motion.FLOAT,
 								4.0F,
 								Color.HOLY.toRGBA()))
 						.withGroundEffect(
@@ -149,5 +142,19 @@ public class MoreRelicsClient {
 				registrationHelper.register(new GoldenPlayerRenderLayer(playerRenderer));
 			}
 		});
+	}
+
+	/// V1 baked the motion into the particle id (`magic_stripe_float`), so these buffs went through
+	/// `BuffParticleSpawner.defaultBatch(String, ...)`. In 1.10 motion is an appearance payload and
+	/// those ids are dead, so the group has to be built via `ParticleGroupBuilder.magic`. The batch
+	/// below is `defaultBatch(id, count, color)`'s body verbatim, so the emission is unchanged.
+	private static ParticleGroup magicBuff(SpellEngineParticles.Entry entry, ParticleGroup.Motion motion,
+										   float particleCount, long color) {
+		var builder = ParticleGroupBuilder.magic(entry, motion);
+		if (color != 0) {
+			builder.color(color);
+		}
+		return builder.batch(ParticleGroupBuilder.Batches.casting(particleCount, 0.12F)
+				.andThen(b -> b.speed(0.11F, 0.12F).extent(-0.2F)));
 	}
 }

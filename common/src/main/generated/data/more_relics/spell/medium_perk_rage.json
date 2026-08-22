@@ -22,18 +22,26 @@
     ]
   },
   "release": {
-    "particles": [
-      {
-        "particle_id": "spell_engine:smoke_medium",
-        "origin": "GROUND",
-        "shape": "CIRCLE",
-        "rotation": "LOOK",
-        "count": 0.4,
-        "min_speed": 1.0,
-        "extent": 2.0,
-        "color_rgba": 3208659199
-      }
-    ]
+    "visuals": {
+      "particles": [
+        {
+          "id": "spell_engine:smoke_medium",
+          "appearance": {
+            "color": 3208659199
+          },
+          "batch": {
+            "count": 1.0,
+            "chance": 0.4,
+            "shape": "CIRCLE",
+            "anchor": "GROUND",
+            "alignment": "LOOK",
+            "min_speed": 1.0,
+            "max_speed": 1.0,
+            "extent": 2.0
+          }
+        }
+      ]
+    }
   },
   "impacts": [
     {

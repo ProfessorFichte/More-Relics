@@ -28,24 +28,32 @@
     "animation": {
       "id": "spell_engine:one_handed_healing_release"
     },
-    "particles": [
-      {
-        "particle_id": "more_rpg_classes:small_gust",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 12.0,
-        "min_speed": 0.14,
-        "max_speed": 0.15
-      },
-      {
-        "particle_id": "more_rpg_classes:big_splash",
-        "origin": "CENTER",
-        "shape": "SPHERE",
-        "count": 12.0,
-        "min_speed": 0.14,
-        "max_speed": 0.15
-      }
-    ],
+    "visuals": {
+      "particles": [
+        {
+          "id": "more_rpg_classes:small_gust",
+          "appearance": {},
+          "batch": {
+            "count": 12.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.14,
+            "max_speed": 0.15
+          }
+        },
+        {
+          "id": "more_rpg_classes:big_splash",
+          "appearance": {},
+          "batch": {
+            "count": 12.0,
+            "shape": "SPHERE",
+            "anchor": "ENTITY",
+            "min_speed": 0.14,
+            "max_speed": 0.15
+          }
+        }
+      ]
+    },
     "sound": {
       "id": "relics_rpgs:intellect_buff"
     }
