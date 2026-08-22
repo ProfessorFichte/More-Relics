@@ -47,7 +47,7 @@ dependencies {
     modImplementation("maven.modrinth:ranged-weapon-api:${project.ranged_weapon_api_version}-${platform}")
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
     modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
-    modImplementation("net.rpg_series:relics-${platform}:${project.relics_version}") { transitive = false }
+    modImplementation("maven.modrinth:relics-rpg:${project.relics_version}-${platform}")
     modImplementation("net.more_rpg_classes:more_rpg_library-${platform}:${project.more_rpg_library_version}") { transitive = false }
 
 
