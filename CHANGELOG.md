@@ -1,3 +1,5 @@
+# 1.3.0 - 1.21.1
+- Adopt Spell Engine 1.10
 # 1.2.1 - 1.21.1
 - Fixed a crash due to a missing reference caused by a new MRPG-Lib Update
 
