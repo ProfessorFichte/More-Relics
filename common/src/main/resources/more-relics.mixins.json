@@ -3,7 +3,8 @@
   "package": "more_relics.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "EntityRelationsMixin"
   ],
   "client": [
     "HudMessagesMixin"

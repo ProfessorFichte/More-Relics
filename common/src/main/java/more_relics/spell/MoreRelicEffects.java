@@ -11,15 +11,11 @@ import net.minecraft.util.Identifier;
 import net.more_rpg_classes.custom.MoreSpellSchools;
 import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
 import net.relics_rpgs.util.SpellSchoolUtil;
+import net.spell_engine.api.effect.*;
 import net.spell_engine.rpg_series.config.AttributeModifier;
 import net.spell_engine.rpg_series.config.ConfigFile;
 import net.spell_engine.rpg_series.config.EffectConfig;
-import net.spell_engine.api.effect.ActionImpairing;
-import net.spell_engine.api.effect.Effects;
-import net.spell_engine.api.effect.EntityActionsAllowed;
-import net.spell_engine.api.effect.Synchronized;
 import net.spell_engine.api.entity.SpellEngineAttributes;
-import net.spell_power.api.SpellSchools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -263,8 +259,8 @@ public class MoreRelicEffects {
     ));
     public static Effects.Entry GREATER_SUNFIRE_CAPE = add(new Effects.Entry(Identifier.of(MOD_ID,"greater_sunfire_cape"),
             "Sunfire Cape",
-            "Deals damage around the user when taking or dealing melee damage.",
-            new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800)
+            "Burns all entities around the user for their max health every second.",
+            new TickingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800).interval(20)
     ));
     ///SUPERIOR
     public static Effects.Entry SUPERIOR_ZHONYAS_HOURGLASS = add(new Effects.Entry(Identifier.of(MOD_ID,"superior_zhonyas_hourglass"),
@@ -346,6 +342,8 @@ public class MoreRelicEffects {
         ActionImpairing.configure(GREATER_RAGE_POWER.effect, EntityActionsAllowed.SILENCE);
         ActionImpairing.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, MoreRelicsActionImpairing.ZHONYAS);
         ActionImpairing.configure(SUPERIOR_GUARDIAN_ANGEL.effect, MoreRelicsActionImpairing.REVIVING);
+        KnockbackImmunity.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, true);
+        KnockbackImmunity.configure(SUPERIOR_GUARDIAN_ANGEL.effect, true);
         for (var entry: entries) {
             Synchronized.configure(entry.effect, true);
         }

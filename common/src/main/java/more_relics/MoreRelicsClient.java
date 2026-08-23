@@ -18,8 +18,6 @@ import java.util.List;
 public class MoreRelicsClient {
 
 	public static void init() {
-		// Description values that aren't expressible as declarative `{token}`s. `TooltipTokens` is
-		// server-safe; it is registered here simply because the tooltip is a client concern.
 		MoreRelicSpells.registerTooltipTokens();
 
 		final Color ORANGE = new Color(255.0F, 165.0F, 0.0F);
@@ -106,9 +104,9 @@ public class MoreRelicsClient {
 				MoreRelicEffects.GREATER_SUNFIRE_CAPE.effect,
 				new BuffParticleSpawner(SpellEngineParticles.flame_medium_b.id().toString(), 0.5F)
 						.withGroundEffect(
-								SpellEngineParticles.area_effect_293.id().toString(),
+								SpellEngineParticles.area_effect_748.id().toString(),
 								ORANGE,
-								SpellEngineParticles.area_effect_293.texture().frames())
+								SpellEngineParticles.area_effect_748.texture().frames())
 		);
 
 		CustomParticleStatusEffect.register(
@@ -144,10 +142,6 @@ public class MoreRelicsClient {
 		});
 	}
 
-	/// V1 baked the motion into the particle id (`magic_stripe_float`), so these buffs went through
-	/// `BuffParticleSpawner.defaultBatch(String, ...)`. In 1.10 motion is an appearance payload and
-	/// those ids are dead, so the group has to be built via `ParticleGroupBuilder.magic`. The batch
-	/// below is `defaultBatch(id, count, color)`'s body verbatim, so the emission is unchanged.
 	private static ParticleGroup magicBuff(SpellEngineParticles.Entry entry, ParticleGroup.Motion motion,
 										   float particleCount, long color) {
 		var builder = ParticleGroupBuilder.magic(entry, motion);

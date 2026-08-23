@@ -107,9 +107,6 @@ public class MoreRelicSpells {
         return spell;
     }
 
-    /// The registry id of an attribute, for naming a specific modifier inside an `{effect|...}`
-    /// tooltip token. Needed because an effect's modifier map is unordered, so a multi-modifier
-    /// effect can only be read unambiguously by attribute, never by list position.
     private static Identifier attributeId(RegistryEntry<EntityAttribute> attribute) {
         return Identifier.of(attribute.getIdAsString());
     }
@@ -134,7 +131,6 @@ public class MoreRelicSpells {
         spell.cost.cooldown.duration = duration;
     }
 
-    /// V1: `new ParticleBatch(id, Shape.SPHERE, Origin.CENTER, count, 0.14F, 0.15F)`.
     private static Consumer<ParticleGroup.Batch> lesserActivateBatch(int count) {
         return b -> b.shape(ParticleGroup.Shape.SPHERE)
                 .count(count).speed(0.14F, 0.15F);
@@ -150,9 +146,6 @@ public class MoreRelicSpells {
                 .batch(lesserActivateBatch(count));
     }
 
-    /// V1 `spell_engine:magic_spark_decelerate` — the id both the `SPARK_DECELERATE` and the
-    /// (identical) `HEALING_PARTICLES` constant resolved to before the 32 magic variants
-    /// collapsed to 8 entries plus a motion payload.
     private static ParticleGroupBuilder sparkDecelerate() {
         return ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.DECELERATE);
     }
@@ -414,8 +407,6 @@ public class MoreRelicSpells {
         trigger.chance = T2_PROC_CHANCE;
         spell.passive.triggers = List.of(trigger);
 
-        // V1 count 0.4 on a one-shot release = a 40% chance of a single particle (§9),
-        // which is `count(1).chance(0.4)` here - a literal `count(0.4)` would emit every time.
         spell.release.visuals = Fx.Visuals.of(
                 ParticleGroupBuilder.of(SpellEngineParticles.smoke_medium)
                         .color(Color.RAGE)
@@ -461,7 +452,6 @@ public class MoreRelicSpells {
                                 .count(20).speed(0.2F, 0.8F)),
                 ParticleGroupBuilder.magic(SpellEngineParticles.magic_spark, ParticleGroup.Motion.FLOAT)
                         .color(Color.RAGE)
-                        // V1 WIDE_PIPE = PIPE at double the entity radius
                         .batch(b -> b.shape(ParticleGroup.Shape.PIPE).widthFactor(2F)
                                 .count(15).speed(0.02F, 0.1F)));
 
@@ -477,10 +467,9 @@ public class MoreRelicSpells {
         var effect = MoreRelicEffects.GREATER_RAGE_POWER;
         var title = "Svablod's Ritual";
         var health_threshold = 0.25F;
-        // Three modifiers with three different values, previously read by list position - unsafe,
-        // because the registered effect keeps them in an unordered map. Each is now named.
-        // `damage_taken` is configured negative (-65%) while the prose says "reduces ... by", so it
-        // takes the ABS format; the positional mutator rendered "reduces incoming damage by -65%".
+        // Three modifiers with three different values, so each token names its attribute - the
+        // registered effect keeps them in an unordered map. `damage_taken` is configured negative
+        // (-65%) while the prose says "reduces ... by", so it takes the ABS format.
         var description = "Taking damage below " + TooltipTokens.bakedPercent(health_threshold)
                 + " health, reduces incoming damage by "
                 + TooltipTokens.effect(effect.id, 0, SpellEngineAttributes.DAMAGE_TAKEN.id, TooltipTokens.Format.ABS)
@@ -525,8 +514,7 @@ public class MoreRelicSpells {
         var effect = MoreRelicEffects.GREATER_FROZEN_HEART;
         var title = effect.title;
         // Attack speed and movement speed share one value (-30%), but the effect's modifier map is
-        // unordered so the attribute is named. ABS because the prose already says "reduce ... by" -
-        // the old mutator passed the raw value through and rendered "by -30%".
+        // unordered so the attribute is named. ABS because the prose already says "reduce ... by".
         var description = "On taking damage: {trigger_chance} chance to reduce the attack and movement speed of nearby enemies by "
                 + TooltipTokens.effect(effect.id, 0, attributeId(EntityAttributes.GENERIC_ATTACK_SPEED), TooltipTokens.Format.ABS)
                 + " for {effect_duration} seconds.";
@@ -552,7 +540,6 @@ public class MoreRelicSpells {
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.55F, 0.8F)),
                 ParticleGroupBuilder.of(SpellEngineParticles.snowflake)
-                        // V1 WIDE_PIPE = PIPE at double the entity radius
                         .batch(b -> b.shape(ParticleGroup.Shape.PIPE).widthFactor(2F)
                                 .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
                                 .count(15).speed(0.2F, 0.2F)));
@@ -584,8 +571,6 @@ public class MoreRelicSpells {
         cloud.time_to_live_seconds = T3_ZONE_DURATION;
         cloud.impact_tick_interval = 20;
         cloud.client_data = new Spell.Delivery.Cloud.ClientData();
-        // Continuous cloud presence FX - stays a plain list, not an Fx.Visuals.
-        // V1 `electric_arc_A/B` were retired; `electricArc(lightning_arc_*)` rebuilds their look.
         cloud.client_data.particles = List.of(
                 ParticleGroupBuilder.electricArc(SpellEngineParticles.lightning_arc_A)
                         .batch(b -> b.shape(ParticleGroup.Shape.PILLAR)
@@ -621,8 +606,8 @@ public class MoreRelicSpells {
         var id = Identifier.of(MOD_ID, "greater_madreds_bloodrazor");
         var title = "Madred's Bloodrazor";
         var effect = MoreRelicEffects.GREATER_MADREDS_BLOODRAZOR;
-        // Fraction of the target's max health each hit deals; the tooltip prints the same constant.
-        // The old mutator read it off the build-time `spell` object, so baking it is equivalent.
+        // Fraction of the target's max health each hit deals; the tooltip prints this same constant,
+        // so keep them in sync if this value changes.
         var maxHealthDamage = 0.03F;
         // Single modifier (attack speed), so the token's blank-attribute fallback is unambiguous.
         // Two triggers (passive melee + stashed melee), hence the indexed chance.
@@ -707,8 +692,8 @@ public class MoreRelicSpells {
         var id = Identifier.of(MOD_ID, "greater_sunfire_cape");
         var effect = MoreRelicEffects.GREATER_SUNFIRE_CAPE;
         var title = effect.title;
-        // Fraction of the caster's max health the burst deals; the old mutator read it off the
-        // build-time `spell` object, so baking the same constant is equivalent.
+        // Fraction of the caster's max health the burst deals; the tooltip prints this same
+        // constant, so keep them in sync if this value changes.
         var maxHealthDamage = 0.04F;
         // Four triggers (2 passive + 2 stashed), hence the indexed chance.
         var description = "On damage taken and dealt: {trigger_chance_1} to deal "
@@ -731,16 +716,14 @@ public class MoreRelicSpells {
 
         spell.target.type = Spell.Target.Type.FROM_TRIGGER;
 
-        var trigger_stash_damage_dealt = new Spell.Trigger();
-        trigger_stash_damage_dealt.type = Spell.Trigger.Type.MELEE_IMPACT;
-        var trigger_stash_damage_taken = new Spell.Trigger();
-        trigger_stash_damage_taken.type = Spell.Trigger.Type.DAMAGE_TAKEN;
+        var trigger_stash_effect_tick = new Spell.Trigger();
+        trigger_stash_effect_tick.type = Spell.Trigger.Type.EFFECT_TICK;
         spell.deliver.type = Spell.Delivery.Type.STASH_EFFECT;
         spell.deliver.stash_effect = new Spell.Delivery.StashEffect();
         spell.deliver.stash_effect.duration = T3_PROC_EFFECT_DURATION;
         spell.deliver.stash_effect.id = effect.id.toString();
         spell.deliver.stash_effect.consume = 0;
-        spell.deliver.stash_effect.triggers = List.of(trigger_stash_damage_dealt,trigger_stash_damage_taken);
+        spell.deliver.stash_effect.triggers = List.of(trigger_stash_effect_tick);
 
         var damage = new Spell.Impact();
         damage.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
@@ -800,7 +783,7 @@ public class MoreRelicSpells {
         var title = effect.title;
         // Every school in `allOffensiveMagicSchools()` gets the same modifier value, so the token's
         // first-modifier fallback is unambiguous - and no single school could stand in for the
-        // generic "spell power" the prose names. ABS mirrors the old mutator's `Math.abs`.
+        // generic "spell power" the prose names.
         var description = "Defeating enemies grants you spell power by "
                 + TooltipTokens.effect(effect.id, 0, null, TooltipTokens.Format.ABS)
                 + ", stacking up to {effect_amplifier_cap} times for {effect_duration} seconds.";
@@ -887,8 +870,6 @@ public class MoreRelicSpells {
         var id = Identifier.of(MOD_ID, "superior_mikaels_blessing");
         var effect = MoreRelicEffects.SUPERIOR_MIKAELS_BLESSING;
         var title = effect.title;
-        // `{heal_percent}` is the HEAL impact's coefficient read off the live spell - see
-        // `registerTooltipTokens()`. No declarative token expresses it.
         var description = "Use: Heals you or the targeted ally for {heal_percent} of your max health and cleanses all harmful effects.";
 
         var spell = activeSpellBase();
@@ -956,7 +937,7 @@ public class MoreRelicSpells {
                 ParticleGroupBuilder.of(SpellEngineParticles.area_circle_1)
                         .attached()
                         .scale(0.8F)
-                        .playbackSpeed(1.25F) // V1 maxAge 0.8 -> playback_speed 1 / 0.8
+                        .playbackSpeed(1.25F)
                         .color(Color.WHITE)
                         .batch(b -> b.shape(ParticleGroup.Shape.LINE_VERTICAL)
                                 .verticalOrigin(ParticleGroupBuilder.Batches.FEET)
@@ -970,19 +951,13 @@ public class MoreRelicSpells {
         return new Entry(id, spell, title, description);
     }
 
-    /// Description values that no declarative `{token}` expresses, registered through the
-    /// server-safe `TooltipTokens` (the deprecated, client-only `SpellTooltip.DescriptionMutator`
-    /// is gone). Called from client init; every other tooltip value in this mod is a plain token.
     public static void registerTooltipTokens() {
         healPercent(superior_mikaels_blessing.id(), "{heal_percent}");
         healPercent(superior_guardian_angel.id(), "{health_percent}");
     }
 
-    /// Resolves `token` to the spell's own HEAL coefficient as a percentage. Both callers heal for a
-    /// *fraction of max health* (`heal.attribute` is `generic.max_health`), which the built-in
-    /// `{heal}` token cannot say - it estimates an absolute number instead. Read off the live
-    /// registry entry, so a datapack override of the spell is reflected. Uses `percent`, not
-    /// `bakedPercent`: the value is spliced in after translation, so `%` must not be doubled.
+    /// Uses `percent`, not `bakedPercent`: the value is spliced in after translation, so `%` must
+    /// not be doubled.
     private static void healPercent(Identifier spellId, String token) {
         TooltipTokens.registerCustom(spellId, args -> {
             var description = args.description();

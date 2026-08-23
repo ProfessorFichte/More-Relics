@@ -8,7 +8,7 @@
   "effect.more_relics.greater_rage_power": "Svablods Ritual",
   "effect.more_relics.greater_rage_power.description": "Increases Rage and attack speed, also reduces incoming Damage taken.",
   "effect.more_relics.greater_sunfire_cape": "Sunfire Cape",
-  "effect.more_relics.greater_sunfire_cape.description": "Deals damage around the user when taking or dealing melee damage.",
+  "effect.more_relics.greater_sunfire_cape.description": "Burns all entities around the user for their max health every second.",
   "effect.more_relics.lesser_air_water": "Air and Water Power",
   "effect.more_relics.lesser_air_water.description": "Increases Air and Water spell power.",
   "effect.more_relics.lesser_earth_nature": "Earth and Nature Power",

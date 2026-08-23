@@ -89,7 +89,7 @@ dependencies {
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}")
     modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}")
     modImplementation("maven.modrinth:relics-rpg:${project.relics_version}-${platform}")
-    modImplementation("net.more_rpg_classes:more_rpg_library-${platform}:${project.more_rpg_library_version}") { transitive = false }
+    modImplementation("maven.modrinth:more-rpg-library:${project.more_rpg_library_version}-${platform}")
 }
 
 processResources {
@@ -160,7 +160,7 @@ publishMods {
 
     modrinth {
         environment = me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment.CLIENT_AND_SERVER
-        projectId = providers.environmentVariable("MODRINTH_PROJECT_ID")
+        projectId = providers.environmentVariable("MODRINTH_PROJECT_ID").orElse(providers.environmentVariable("MODRINTH_PROJECT_RAW_ID"))
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.add(project.minecraft_version)
         requires { slug = "spell-engine" }

@@ -36,10 +36,7 @@
       "id": "more_relics:greater_sunfire_cape",
       "triggers": [
         {
-          "type": "MELEE_IMPACT"
-        },
-        {
-          "type": "DAMAGE_TAKEN"
+          "type": "EFFECT_TICK"
         }
       ],
       "consume": 0

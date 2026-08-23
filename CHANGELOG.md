@@ -1,5 +1,8 @@
 # 1.3.0 - 1.21.1
-- Adopt Spell Engine 1.10
+- Adopt Spell Engine 1.10 - Thanks Daedelus for the PR!
+- You cant get Buffs or Heals while the Zhonyas Hourglass and the Guardian Angle Effect are active
+- The Sunfire Cape Effect was changed to a ticking Stash Effect (Dealing Damage every second) 
+
 # 1.2.1 - 1.21.1
 - Fixed a crash due to a missing reference caused by a new MRPG-Lib Update
 
