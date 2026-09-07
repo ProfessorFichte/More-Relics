@@ -1,11 +1,8 @@
 package more_relics;
 
 import more_relics.client.effect.GuardianAngelParticleSpawner;
-import more_relics.client.render.GoldenPlayerRenderLayer;
 import more_relics.spell.MoreRelicEffects;
 import more_relics.spell.MoreRelicSpells;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import net.spell_engine.api.render.BuffParticleSpawner;
 import net.spell_engine.api.spell.fx.ParticleGroup;
@@ -134,12 +131,6 @@ public class MoreRelicsClient {
 								SpellEngineParticles.ground_glow.texture().frames())
 		);
 		CustomParticleStatusEffect.register(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.effect, new GuardianAngelParticleSpawner());
-
-		LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-			if (entityRenderer instanceof PlayerEntityRenderer playerRenderer) {
-				registrationHelper.register(new GoldenPlayerRenderLayer(playerRenderer));
-			}
-		});
 	}
 
 	private static ParticleGroup magicBuff(SpellEngineParticles.Entry entry, ParticleGroup.Motion motion,

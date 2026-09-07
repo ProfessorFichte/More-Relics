@@ -28,13 +28,6 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.more_relics]]
-modId = "forgified_fabric_api"
-type = "required"
-versionRange = "[${forgified_fabric_api_version},)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.more_relics]]
 modId = "spell_engine"
 type = "required"
 versionRange = "[${spell_engine_version},)"
@@ -46,6 +39,12 @@ modId = "relics_rpgs"
 type = "required"
 versionRange = "[${relics_version},)"
 ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "curios"
+type = "optional"
+ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]

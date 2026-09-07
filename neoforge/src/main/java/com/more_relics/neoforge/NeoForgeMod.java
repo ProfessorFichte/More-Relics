@@ -3,6 +3,7 @@ package com.more_relics.neoforge;
 import com.more_relics.neoforge.compat.CompatFeatures;
 import more_relics.MoreRelics;
 import more_relics.item.Group;
+import more_relics.item.MoreRelicsItems;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -28,6 +29,7 @@ public final class NeoForgeMod {
             Group.GROUP = ItemGroup.builder()
                     .icon(Group.ICON)
                     .displayName(Text.translatable(Group.translationKey))
+                    .entries((ctx, entries) -> MoreRelicsItems.addToGroup(entries))
                     .build();
             Registry.register(Registries.ITEM_GROUP, Group.KEY, Group.GROUP);
         });

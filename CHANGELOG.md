@@ -1,3 +1,6 @@
+# 1.3.1 - 1.21.1
+- Drop Forgified Fabric API (FFAPI) as a required dependency
+
 # 1.3.0 - 1.21.1
 - Adopt Spell Engine 1.10 - Thanks Daedelus for the PR!
 - You cant get Buffs or Heals while the Zhonyas Hourglass and the Guardian Angle Effect are active

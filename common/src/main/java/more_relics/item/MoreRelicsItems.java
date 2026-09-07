@@ -3,11 +3,11 @@ package more_relics.item;
 
 import com.google.common.base.Suppliers;
 import more_relics.spell.MoreRelicSpells;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -233,12 +233,13 @@ public class MoreRelicsItems {
                 Registry.register(Registries.ITEM, entry.id(), entry.item().get());
             }
         }
-        ItemGroupEvents.modifyEntriesEvent(Group.KEY).register(content -> {
-            for(var entry: entries) {
-                if (entry.isEnabled()) {
-                    content.add(entry.item().get());
-                }
+    }
+
+    public static void addToGroup(ItemGroup.Entries entries) {
+        for (var entry : MoreRelicsItems.entries) {
+            if (entry.isEnabled()) {
+                entries.add(entry.item().get());
             }
-        });
+        }
     }
 }
