@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
     private boolean moreRelics$isStasis(LivingEntity entity) {
-        return entity.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.entry) || entity.hasStatusEffect(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.entry);
+        return entity.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.effect) || entity.hasStatusEffect(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.effect);
     }
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
@@ -43,7 +43,7 @@ public class LivingEntityMixin {
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     private void moreRelics$blockNegativeEffects(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (effect.getEffectType().value().getCategory() == StatusEffectCategory.HARMFUL && moreRelics$isStasis(entity)) {
+        if (effect.getEffectType().getCategory() == StatusEffectCategory.HARMFUL && moreRelics$isStasis(entity)) {
             cir.setReturnValue(false);
         }
     }

@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "more_relics:superior_mikaels_blessing",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_zhonyas_hourglass",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_mejais_soulstealer",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_shurelyas_battlesong",
+      "required": false
+    },
+    {
+      "id": "more_relics:superior_guardian_angel",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "jewelry"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "jewelry"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": {
+      "item": "minecraft:chain"
+    },
+    "G": {
+      "item": "jewelry:ruby"
+    }
+  },
+  "pattern": [
+    " G ",
+    "GMG"
+  ],
+  "result": {
+    "item": "more_relics:jewel_figurine_chain"
+  }
+}

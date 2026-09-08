@@ -3,7 +3,6 @@ package more_relics.item;
 
 import com.google.common.base.Suppliers;
 import more_relics.spell.MoreRelicSpells;
-import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
@@ -15,18 +14,17 @@ import net.minecraft.util.Rarity;
 import net.more_rpg_classes.custom.MoreSpellSchools;
 import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
 import net.relics_rpgs.config.ItemConfig;
+import net.relics_rpgs.util.AttributeIds;
 import net.spell_engine.rpg_series.config.AttributeModifier;
 import net.spell_engine.rpg_series.config.ConfigUtil;
-import net.spell_engine.api.spell.SpellDataComponents;
+import net.spell_engine.api.item.SpellItemData;
 import net.spell_engine.api.spell.container.SpellContainer;
-import net.spell_engine.api.spell.container.SpellContainerHelper;
 import net.spell_engine.api.spell.container.SpellContainers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static more_relics.MoreRelics.MOD_ID;
@@ -37,16 +35,6 @@ public class MoreRelicsItems {
         entries.add(entry);
         return entry;
     }
-
-    public record ItemArgs(Item.Settings settings, @Nullable AttributeModifiersComponent attributes) { }
-    public static Function<ItemArgs, Item> factory = args -> {
-        var settings = args.settings;
-        if (args.attributes != null) {
-            settings.attributeModifiers(args.attributes);
-        }
-        return new Item(settings);
-    };
-    private static Function<ItemArgs, Item> getFactory() { return factory; }
 
     public static final class Entry {
         private final int tier;
@@ -77,7 +65,9 @@ public class MoreRelicsItems {
                         : null;
                 var spellContainer = spellContainer();
                 if (spellContainer != null) {
-                    settings = settings.component(SpellDataComponents.SPELL_CONTAINER, spellContainer);
+                    // No data components on 1.20.1: item-level defaults go through SpellEngine's
+                    // `SpellItemData` NBT facade, which `ItemDefaultsMixin` stamps onto fresh stacks.
+                    SpellItemData.defaults(settings).spellContainer(spellContainer);
                 }
                 if (config().durability > 0) {
                     settings = settings.maxDamage(config().durability);
@@ -153,22 +143,22 @@ public class MoreRelicsItems {
     public static final Entry JEWEL_FIGURINE_MALACHITE = add(new Entry(1, "jewel_figurine_malachite", "Malachite Honeybadger Figurine"))
             .config(new ItemConfig.Entry()
                     .withAttributes(List.of(
-                            new AttributeModifier(MoreSpellSchools.EARTH.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-                            new AttributeModifier(MoreSpellSchools.NATURE.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+                            new AttributeModifier(MoreSpellSchools.EARTH.id, tier_0_multiplier, EntityAttributeModifier.Operation.MULTIPLY_BASE),
+                            new AttributeModifier(MoreSpellSchools.NATURE.id, tier_0_multiplier, EntityAttributeModifier.Operation.MULTIPLY_BASE)
                     ))
             );
     public static final Entry JEWEL_FIGURINE_AQUAMARINE = add(new Entry(1, "jewel_figurine_aquamarine", "Aquamarine Koi-Carp Figurine"))
             .config(new ItemConfig.Entry()
                     .withAttributes(List.of(
-                            new AttributeModifier(MoreSpellSchools.AIR.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-                            new AttributeModifier(MoreSpellSchools.WATER.id, tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+                            new AttributeModifier(MoreSpellSchools.AIR.id, tier_0_multiplier, EntityAttributeModifier.Operation.MULTIPLY_BASE),
+                            new AttributeModifier(MoreSpellSchools.WATER.id, tier_0_multiplier, EntityAttributeModifier.Operation.MULTIPLY_BASE)
                     ))
             );
     public static final Entry JEWEL_FIGURINE_CHAIN = add(new Entry(1, "jewel_figurine_chain", "Metallic Wolf Figurine"))
             .config(new ItemConfig.Entry()
                     .withAttributes(List.of(
-                            new AttributeModifier(MRPGCEntityAttributes.RAGE_MODIFIER.getIdAsString(), tier_0_multiplier, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-                            new AttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE.getIdAsString(), tier_0_multiplier/2, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+                            new AttributeModifier(AttributeIds.of(MRPGCEntityAttributes.RAGE_MODIFIER), tier_0_multiplier, EntityAttributeModifier.Operation.MULTIPLY_BASE),
+                            new AttributeModifier(AttributeIds.of(EntityAttributes.GENERIC_ATTACK_DAMAGE), tier_0_multiplier/2, EntityAttributeModifier.Operation.MULTIPLY_BASE)
                     ))
             );
 

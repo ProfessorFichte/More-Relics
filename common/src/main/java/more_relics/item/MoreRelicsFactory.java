@@ -1,19 +1,26 @@
 package more_relics.item;
 
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
-import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.item.Item;
+import net.spell_engine.api.item.ItemAttributeModifiers;
+import net.spell_engine.utils.AttributeModifierUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
 public class MoreRelicsFactory {
-    public record ItemArgs(Item.Settings settings, @Nullable AttributeModifiersComponent attributes) { }
+    /// `attributes` is SpellEngine's 1.20.1 stand-in for the 1.21 `AttributeModifiersComponent`
+    /// (`net.spell_engine.api.item.ItemAttributeModifiers`).
+    public record ItemArgs(Item.Settings settings, @Nullable ItemAttributeModifiers attributes) { }
+
     public static Function<ItemArgs, Item> factory = args -> {
-        var settings = args.settings;
-        if (args.attributes != null) {
-            settings.attributeModifiers(args.attributes);
+        var item = new Item(args.settings());
+        if (args.attributes() != null) {
+            // 1.20.1 has no `Item.Settings#attributeModifiers`; SpellEngine keeps a per-item map that
+            // `ItemStackAttributeModifiersMixin` serves from `ItemStack#getAttributeModifiers`.
+            AttributeModifierUtil.setItemModifiers(item, args.attributes());
         }
-        return new Item(settings);
+        return item;
     };
+
     public static Function<ItemArgs, Item> getFactory() { return factory; }
 }

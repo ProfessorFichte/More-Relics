@@ -9,13 +9,15 @@ public class LiandrysTornmentStatusEffect extends StatusEffect {
         super(category, color);
     }
 
-
-    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+    // 1.20.1 `applyUpdateEffect` returns void (the 1.21 `boolean` return, whose `false` ends the
+    // effect early, does not exist). Nothing here relied on it.
+    @Override
+    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         float damage = entity.getMaxHealth() * 0.03F;
         entity.damage(entity.getDamageSources().magic(), damage);
-        return true;
     }
 
+    @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
         int i;
         i = 20;

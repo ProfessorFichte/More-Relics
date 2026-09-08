@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 public class GoldenPlayerRenderLayer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
 
-    private static final Identifier GOLD_BLOCK_TEXTURE = Identifier.of("minecraft", "textures/block/gold_block.png");
+    private static final Identifier GOLD_BLOCK_TEXTURE = new Identifier("minecraft", "textures/block/gold_block.png");
 
     public GoldenPlayerRenderLayer(FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> context) {
         super(context);
@@ -22,10 +22,11 @@ public class GoldenPlayerRenderLayer extends FeatureRenderer<AbstractClientPlaye
 
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity player, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-        if (!player.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.entry)) {
+        if (!player.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.effect)) {
             return;
         }
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(GOLD_BLOCK_TEXTURE));
-        getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+        // 1.20.1 `Model#render` has no 4-arg overload: the colour/alpha quadruple is explicit.
+        getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

@@ -29,11 +29,12 @@
 		"more-relics.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=${fabric_loader_compat_version}",
-		"minecraft": "~1.21.1",
-		"java": ">=21",
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
 		"fabric-api": "*",
-		"spell_engine": ">=${spell_engine_version}",
-		"relics_rpgs": ">=${relics_version}"
+		"spell_engine": ">=1.10.5",
+		"relics_rpgs": ">=1.4.0",
+		"more_rpg_classes": ">=2.7.2"
 	}
 }
