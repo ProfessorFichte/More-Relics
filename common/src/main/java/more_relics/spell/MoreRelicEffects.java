@@ -6,7 +6,10 @@ import more_relics.spell.effect.MikaelsBlessingStatusEffect;
 import more_relics.spell.effect.MoreRelicsActionImpairing;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.more_rpg_classes.custom.MoreSpellSchools;
 import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
@@ -20,6 +23,7 @@ import net.spell_engine.api.entity.SpellEngineAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static more_relics.MoreRelics.MOD_ID;
 
@@ -337,7 +341,9 @@ public class MoreRelicEffects {
     ));
 
 
-    public static void register(ConfigFile.Effects config) {
+    /// Behaviour wiring that has to happen before the effects reach the registry. Every call here reads
+    /// the raw `Entry#effect`, which exists from class-init, so it is safe ahead of registration.
+    public static void configureBehaviours() {
         ActionImpairing.configure(GREATER_RAGE_POWER.effect, EntityActionsAllowed.SILENCE);
         ActionImpairing.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, MoreRelicsActionImpairing.ZHONYAS);
         ActionImpairing.configure(SUPERIOR_GUARDIAN_ANGEL.effect, MoreRelicsActionImpairing.REVIVING);
@@ -346,7 +352,27 @@ public class MoreRelicEffects {
         for (var entry: entries) {
             Synchronized.configure(entry.effect, true);
         }
+    }
 
-        Effects.register(entries, config.effects);
+    /// Creation only: wires the behaviours, applies configuration and attribute modifiers, and returns
+    /// the effects still to register keyed by their id. Writes nothing, so a loader that registers
+    /// status effects itself (Forge's `RegisterEvent`, whose helper is the only way past the locked
+    /// vanilla registry on Forge 47.0-47.3) iterates this instead of calling {@link #register}.
+    /// Follow it with {@link #linkEntries()}.
+    public static Map<Identifier, StatusEffect> effectsToRegister(ConfigFile.Effects config) {
+        configureBehaviours();
+        return Effects.effectsToRegister(entries, config.effects);
+    }
+
+    /// Reads `Effects.Entry#entry` back out of the registry - Forge's `RegisterEvent` helper returns
+    /// void where `Registry.registerReference` returns the entry. Throws naming the id if one is missing.
+    public static void linkEntries() {
+        Effects.linkEntries(entries);
+    }
+
+    public static void register(ConfigFile.Effects config) {
+        effectsToRegister(config).forEach((id, effect) ->
+                Registry.register(Registries.STATUS_EFFECT, id, effect));
+        linkEntries();
     }
 }

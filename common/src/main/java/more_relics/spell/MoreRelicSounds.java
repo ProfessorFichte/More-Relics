@@ -6,7 +6,9 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static more_relics.MoreRelics.MOD_ID;
 
@@ -32,11 +34,22 @@ public class MoreRelicSounds {
     public static final Entry MIKAELS_BLESSING_ACTIVATE = add(new Entry("mikaels_blesssing_active"));
     public static final Entry GUARDIAN_ANGEL_ACTIVATE = add(new Entry("guardian_angel_active"));
 
-    public static void register() {
+    /// Creation only: builds every sound event and returns them keyed by the id they register under.
+    /// Writes nothing, so a loader that registers sound events itself (Forge's `RegisterEvent`, whose
+    /// helper is the only way past the locked vanilla registry on Forge 47.0-47.3) iterates this
+    /// instead of calling {@link #register}. Ids already in the registry are skipped.
+    public static Map<Identifier, SoundEvent> soundsToRegister() {
+        var toRegister = new LinkedHashMap<Identifier, SoundEvent>();
         for (var entry: entries) {
             var soundId = entry.id();
-            var soundEvent = SoundEvent.of(soundId);
-            Registry.register(Registries.SOUND_EVENT, soundId, soundEvent);
+            if (Registries.SOUND_EVENT.containsId(soundId)) { continue; }
+            toRegister.put(soundId, SoundEvent.of(soundId));
         }
+        return toRegister;
+    }
+
+    public static void register() {
+        soundsToRegister().forEach((id, soundEvent) ->
+                Registry.register(Registries.SOUND_EVENT, id, soundEvent));
     }
 }

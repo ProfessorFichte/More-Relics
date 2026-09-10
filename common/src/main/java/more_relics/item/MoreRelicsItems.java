@@ -23,6 +23,7 @@ import net.spell_engine.api.spell.container.SpellContainers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -207,7 +208,15 @@ public class MoreRelicsItems {
     public static final Entry SUPERIOR_GUARDIAN_ANGEL = add(new Entry(4, "superior_guardian_angel", "Guardian Angel"))
             .spell(SpellContainers.forRelic(MoreRelicSpells.superior_guardian_angel.id()));
 
-    public static void register(Map<String, ItemConfig.Entry> config) {
+    /// Creation only: merges `config` into every entry, constructs the enabled items and returns them
+    /// keyed by the id they register under. Writes nothing, so a loader that registers items itself
+    /// (Forge's `RegisterEvent`, whose helper is the only way past the locked vanilla registry on
+    /// Forge 47.0-47.3) iterates this instead of calling {@link #register}. Ids already in the registry
+    /// are skipped, so it is idempotent.
+    ///
+    /// `Item`'s constructor takes an intrusive registry holder on 1.20.1, so this must be called from
+    /// inside the `RegisterEvent` sequence - the ITEM window is where Forge calls it.
+    public static Map<Identifier, Item> itemsToRegister(Map<String, ItemConfig.Entry> config) {
         for (var entry : entries) {
             var key = entry.id().toString();
             var configEntry = config.get(key);
@@ -218,11 +227,17 @@ public class MoreRelicsItems {
             }
         }
 
-        for(var entry: entries) {
-            if (entry.isEnabled()) {
-                Registry.register(Registries.ITEM, entry.id(), entry.item().get());
-            }
+        var toRegister = new LinkedHashMap<Identifier, Item>();
+        for (var entry: entries) {
+            if (!entry.isEnabled()) { continue; }
+            if (Registries.ITEM.containsId(entry.id())) { continue; }
+            toRegister.put(entry.id(), entry.item().get());
         }
+        return toRegister;
+    }
+
+    public static void register(Map<String, ItemConfig.Entry> config) {
+        itemsToRegister(config).forEach((id, item) -> Registry.register(Registries.ITEM, id, item));
     }
 
     public static void addToGroup(ItemGroup.Entries entries) {
