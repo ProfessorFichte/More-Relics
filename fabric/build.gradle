@@ -65,11 +65,13 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("net.tiny_config:tiny_config-${platform}:${project.tiny_config_version}") { transitive = false }
-    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}") { transitive = false }
-    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
+    // Ecosystem libraries with a 1.20.1 release: resolved from the Modrinth maven.
+    modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}") { transitive = false }
+    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}") { transitive = false }
+    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}") { transitive = false }
+    modImplementation("maven.modrinth:relics-rpg:${project.relics_version}-${platform}") { transitive = false }
+    // No 1.20.1 release on Modrinth yet - see gradle.properties.
     modImplementation("net.more_rpg_classes:more_rpg_library-${platform}:${project.more_rpg_library_version}") { transitive = false }
-    modImplementation("net.rpg_series:relics-${platform}:${project.relics_version}") { transitive = false }
 
     // Trinkets: a compile dependency (MoreRelicsTrinketItem extends TrinketItem). Must use the very
     // coordinate Spell Engine's own POM declares, or two copies of every Trinkets class land on the
@@ -82,8 +84,8 @@ dependencies {
     // Spell Engine hard-depends on the player animation library at runtime.
     modLocalRuntime("dev.kosmx.player-anim:player-animation-lib-fabric:${rootProject.player_anim_version}")
     // Dev-runtime only, both for More RPG Library's sake (see gradle.properties).
-    modLocalRuntime("net.rpg_series:runes-fabric:${rootProject.runes_version}") { transitive = false }
-    modLocalRuntime("net.critical_strike:critical_strike-fabric:${rootProject.critical_strike_version}") { transitive = false }
+    modLocalRuntime("maven.modrinth:runes:${rootProject.runes_version}-fabric") { transitive = false }
+    modLocalRuntime("maven.modrinth:critical-strike:${rootProject.critical_strike_version}-fabric") { transitive = false }
 }
 
 processResources {

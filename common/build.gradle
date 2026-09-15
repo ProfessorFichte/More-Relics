@@ -29,10 +29,13 @@ dependencies {
     // Everything Fabric-API-shaped (datagen) lives in fabric/ instead.
 
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    modImplementation("net.tiny_config:tiny_config-${platform}:${project.tiny_config_version}") { transitive = false }
+    // Ecosystem libraries with a 1.20.1 release: resolved from the Modrinth maven. Modrinth serves only
+    // the per-loader jars, so `common` keeps compiling against the `-fabric` flavour it already took.
+    modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}") { transitive = false }
 
-    modImplementation("net.spell_power:spell_power-${platform}:${project.spell_power_version}") { transitive = false }
-    modImplementation("net.spell_engine:spell_engine-${platform}:${project.spell_engine_version}") { transitive = false }
+    modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}") { transitive = false }
+    modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}") { transitive = false }
+    modImplementation("maven.modrinth:relics-rpg:${project.relics_version}-${platform}") { transitive = false }
+    // No 1.20.1 release on Modrinth yet - see gradle.properties.
     modImplementation("net.more_rpg_classes:more_rpg_library-${platform}:${project.more_rpg_library_version}") { transitive = false }
-    modImplementation("net.rpg_series:relics-${platform}:${project.relics_version}") { transitive = false }
 }
