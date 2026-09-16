@@ -54,8 +54,6 @@ repositories {
     maven { url 'https://maven.fabricmc.net' }
     // Curios (Forge accessory slots, used by Spell Engine and Relics)
     maven { url 'https://maven.theillusivec4.top/' }
-
-    mavenLocal()
 }
 
 dependencies {
@@ -69,8 +67,8 @@ dependencies {
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}") { transitive = false }
     modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}") { transitive = false }
     modImplementation("maven.modrinth:relics-rpg:${project.relics_version}-${platform}") { transitive = false }
-    // No 1.20.1 release on Modrinth yet - see gradle.properties.
-    modImplementation("net.more_rpg_classes:more_rpg_library-${platform}:${project.more_rpg_library_version}") { transitive = false }
+    // More RPG Library resolves once its 1.20.1 release is published (Fichte release tier 1).
+    modImplementation("maven.modrinth:more-rpg-library:${project.more_rpg_library_version}-${platform}") { transitive = false }
 
     // Curios: a compile dependency here - `CuriosHelper` instantiates Relics' `RelicCurioItem`,
     // whose supertype `ICurioItem` must be resolvable.
