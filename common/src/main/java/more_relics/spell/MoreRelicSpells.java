@@ -2,7 +2,6 @@ package more_relics.spell;
 
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.more_rpg_classes.client.particle.MoreParticles;
@@ -10,6 +9,7 @@ import net.more_rpg_classes.custom.MoreSpellSchools;
 import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
 import net.more_rpg_classes.sounds.MRPGLibSounds;
 import net.relics_rpgs.spell.RelicSounds;
+import net.relics_rpgs.util.AttributeIds;
 import net.spell_engine.api.entity.SpellEngineAttributes;
 import net.spell_engine.api.spell.ExternalSpellSchools;
 import net.spell_engine.api.spell.Spell;
@@ -107,8 +107,10 @@ public class MoreRelicSpells {
         return spell;
     }
 
-    private static Identifier attributeId(RegistryEntry<EntityAttribute> attribute) {
-        return Identifier.of(attribute.getIdAsString());
+    /// 1.20.1 attributes are raw objects with no id accessor (1.21's `getIdAsString()` does not
+    /// exist), so the id is read back out of the registry.
+    private static Identifier attributeId(EntityAttribute attribute) {
+        return AttributeIds.identifierOf(attribute);
     }
 
     private static Spell.Impact createEffectImpact(String effectIdString, float duration) {
@@ -637,7 +639,7 @@ public class MoreRelicSpells {
         spell.deliver.stash_effect.triggers = List.of(trigger_stash);
 
         var damage = new Spell.Impact();
-        damage.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+        damage.attribute = AttributeIds.of(EntityAttributes.GENERIC_MAX_HEALTH);
         damage.attribute_from_target = true;
         damage.action = new Spell.Impact.Action();
         damage.action.type = Spell.Impact.Action.Type.DAMAGE;
@@ -726,7 +728,7 @@ public class MoreRelicSpells {
         spell.deliver.stash_effect.triggers = List.of(trigger_stash_effect_tick);
 
         var damage = new Spell.Impact();
-        damage.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+        damage.attribute = AttributeIds.of(EntityAttributes.GENERIC_MAX_HEALTH);
         damage.attribute_from_target = false;
         damage.action = new Spell.Impact.Action();
         damage.action.type = Spell.Impact.Action.Type.DAMAGE;
@@ -886,7 +888,7 @@ public class MoreRelicSpells {
         var buff = createEffectImpact(effect.id.toString(), 1 );
 
         var heal = createHeal(0.15F);
-        heal.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+        heal.attribute = AttributeIds.of(EntityAttributes.GENERIC_MAX_HEALTH);
         heal.sound = new Sound(SpellEngineSounds.GENERIC_HEALING_IMPACT_1.id());
         heal.visuals = Fx.Visuals.of(
                 sparkDecelerate()
@@ -931,7 +933,7 @@ public class MoreRelicSpells {
         spell.passive.triggers = List.of(trigger);
 
         var heal = createHeal(0.65F);
-        heal.attribute = EntityAttributes.GENERIC_MAX_HEALTH.getIdAsString();
+        heal.attribute = AttributeIds.of(EntityAttributes.GENERIC_MAX_HEALTH);
         heal.sound = new Sound(SpellEngineSounds.GENERIC_HEALING_IMPACT_1.id());
         heal.visuals = Fx.Visuals.of(
                 ParticleGroupBuilder.of(SpellEngineParticles.area_circle_1)

@@ -19,12 +19,12 @@ public class HudMessagesMixin {
         if (client.player != null) {
             PlayerEntity player = client.player;
 
-            if (player.hasStatusEffect(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.entry)) {
+            if (player.hasStatusEffect(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.effect)) {
                 ((HudMessages)(Object)this).error(Text.translatable("hud.more_relics.guardian_angel").formatted(Formatting.RED));
                 ci.cancel();
                 return;
             }
-            if (player.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.entry)) {
+            if (player.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.effect)) {
                 ((HudMessages)(Object)this).error(Text.translatable("hud.more_relics.zhonyas").formatted(Formatting.RED));
                 ci.cancel();
                 return;

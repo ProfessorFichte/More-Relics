@@ -1,0 +1,59 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+#issueTrackerURL = ""
+license = "ARR"
+
+[[mods]]
+modId = "more_relics"
+version = "${version}"
+displayName = "More Relics"
+authors = "Fichte"
+description = '''
+This is a Relics (RPG-Series) Add-On, adding relics for the More RPG Classes and powerful relics!
+'''
+#logoFile = ""
+
+[[dependencies.more_relics]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "spell_engine"
+mandatory = true
+versionRange = "[1.10.5,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "relics_rpgs"
+mandatory = true
+versionRange = "[1.4.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "more_rpg_classes"
+mandatory = true
+versionRange = "[2.7.2,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.more_relics]]
+modId = "curios"
+mandatory = false
+# Forge 47's ModSorter rejects an optional dependency with no versionRange
+# ("Unsupported installed optional dependencies ... Expected range: ''"), which aborts mod
+# loading before the mixin config is readable. NeoForge tolerated the missing key.
+versionRange = "[5,)"
+ordering = "AFTER"
+side = "BOTH"

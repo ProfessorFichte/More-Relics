@@ -15,7 +15,7 @@ public class EntityRelationsMixin {
     @Inject(method = "actionAllowed", at = @At("HEAD"), cancellable = true)
     private static void moreRelics$blockUntargetable(SpellTarget.FocusMode mode, SpellTarget.Intent intent, LivingEntity caster, Entity target, CallbackInfoReturnable<Boolean> cir) {
         if (target != caster && target instanceof LivingEntity livingTarget
-                && (livingTarget.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.entry) || livingTarget.hasStatusEffect(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.entry))) {
+                && (livingTarget.hasStatusEffect(MoreRelicEffects.SUPERIOR_ZHONYAS_HOURGLASS.effect) || livingTarget.hasStatusEffect(MoreRelicEffects.SUPERIOR_GUARDIAN_ANGEL.effect))) {
             cir.setReturnValue(false);
         }
     }

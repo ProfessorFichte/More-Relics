@@ -6,7 +6,10 @@ import more_relics.spell.effect.MikaelsBlessingStatusEffect;
 import more_relics.spell.effect.MoreRelicsActionImpairing;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.more_rpg_classes.custom.MoreSpellSchools;
 import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
@@ -15,10 +18,12 @@ import net.spell_engine.api.effect.*;
 import net.spell_engine.rpg_series.config.AttributeModifier;
 import net.spell_engine.rpg_series.config.ConfigFile;
 import net.spell_engine.rpg_series.config.EffectConfig;
+import net.relics_rpgs.util.AttributeIds;
 import net.spell_engine.api.entity.SpellEngineAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static more_relics.MoreRelics.MOD_ID;
 
@@ -42,9 +47,9 @@ public class MoreRelicEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    MRPGCEntityAttributes.RAGE_MODIFIER.getIdAsString(),
+                                    AttributeIds.of(MRPGCEntityAttributes.RAGE_MODIFIER),
                                     T1_BUFF_MULTIPLIER,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -59,7 +64,7 @@ public class MoreRelicEffects {
                                     new AttributeModifier(
                                             school.id.toString(),
                                             0.15F,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                            EntityAttributeModifier.Operation.MULTIPLY_BASE
                                     )
                             )
                             .toList()
@@ -75,7 +80,7 @@ public class MoreRelicEffects {
                                     new AttributeModifier(
                                             school.id.toString(),
                                             0.15F,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                            EntityAttributeModifier.Operation.MULTIPLY_BASE
                                     )
                             )
                             .toList()
@@ -92,7 +97,7 @@ public class MoreRelicEffects {
                                     new AttributeModifier(
                                             school.id.toString(),
                                             T2_BUFF_MULTIPLIER,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                            EntityAttributeModifier.Operation.MULTIPLY_BASE
                                     )
                             )
                             .toList()
@@ -108,7 +113,7 @@ public class MoreRelicEffects {
                                     new AttributeModifier(
                                             school.id.toString(),
                                             T2_BUFF_MULTIPLIER,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                            EntityAttributeModifier.Operation.MULTIPLY_BASE
                                     )
                             )
                             .toList()
@@ -124,7 +129,7 @@ public class MoreRelicEffects {
                                     new AttributeModifier(
                                             school.id.toString(),
                                             T2_BUFF_MULTIPLIER,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                            EntityAttributeModifier.Operation.MULTIPLY_BASE
                                     )
                             )
                             .toList()
@@ -140,7 +145,7 @@ public class MoreRelicEffects {
                                     new AttributeModifier(
                                             school.id.toString(),
                                             T2_BUFF_MULTIPLIER,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                            EntityAttributeModifier.Operation.MULTIPLY_BASE
                                     )
                             )
                             .toList()
@@ -153,14 +158,14 @@ public class MoreRelicEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    MRPGCEntityAttributes.RAGE_MODIFIER.getIdAsString(),
+                                    AttributeIds.of(MRPGCEntityAttributes.RAGE_MODIFIER),
                                     T2_BUFF_MULTIPLIER,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             ),
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_ATTACK_SPEED.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_ATTACK_SPEED),
                                     0.1F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -172,14 +177,14 @@ public class MoreRelicEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    MRPGCEntityAttributes.LIFESTEAL_MODIFIER.getIdAsString(),
+                                    AttributeIds.of(MRPGCEntityAttributes.LIFESTEAL_MODIFIER),
                                     T2_BUFF_MULTIPLIER,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             ),
                             new AttributeModifier(
-                                    MRPGCEntityAttributes.SPELL_VAMPIRE.getIdAsString(),
+                                    AttributeIds.of(MRPGCEntityAttributes.SPELL_VAMPIRE),
                                     T2_BUFF_MULTIPLIER,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -192,20 +197,20 @@ public class MoreRelicEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    MRPGCEntityAttributes.RAGE_MODIFIER.getIdAsString(),
+                                    AttributeIds.of(MRPGCEntityAttributes.RAGE_MODIFIER),
                                     T3_BUFF_MULTIPLIER,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             ),
                             new AttributeModifier(
                                     SpellEngineAttributes.DAMAGE_TAKEN.id,
                                     -0.65F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                             ,
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_ATTACK_SPEED.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_ATTACK_SPEED),
                                     0.15F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -217,14 +222,14 @@ public class MoreRelicEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_ATTACK_SPEED.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_ATTACK_SPEED),
                                     -0.3F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             ),
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_MOVEMENT_SPEED.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_MOVEMENT_SPEED),
                                     -0.3F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -238,7 +243,7 @@ public class MoreRelicEffects {
                             new AttributeModifier(
                                     SpellEngineAttributes.DAMAGE_TAKEN.id,
                                     0.05F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -250,9 +255,9 @@ public class MoreRelicEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_ATTACK_SPEED.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_ATTACK_SPEED),
                                     0.15F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -268,16 +273,15 @@ public class MoreRelicEffects {
             "Cant move, jump or cast spells but you're invulnerable.",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
             new EffectConfig(
+                    // `GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE` is a 1.20.5 attribute and has no 1.20.1
+                    // counterpart, so only the plain knockback resistance is carried here. Melee/projectile
+                    // knockback is additionally blocked by `KnockbackImmunity.configure` below; explosion
+                    // knockback (applied as raw velocity, not `takeKnockback`) is not.
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE),
                                     10.0F,
-                                    EntityAttributeModifier.Operation.ADD_VALUE
-                            ),
-                            new AttributeModifier(
-                                    EntityAttributes.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE.getIdAsString(),
-                                    10.0F,
-                                    EntityAttributeModifier.Operation.ADD_VALUE
+                                    EntityAttributeModifier.Operation.ADDITION
                             )
                     )
             )
@@ -292,7 +296,7 @@ public class MoreRelicEffects {
                                     new AttributeModifier(
                                             school.id.toString(),
                                             0.2F,
-                                            EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                            EntityAttributeModifier.Operation.MULTIPLY_BASE
                                     )
                             )
                             .toList()
@@ -305,9 +309,9 @@ public class MoreRelicEffects {
             new EffectConfig(
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_MOVEMENT_SPEED.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_MOVEMENT_SPEED),
                                     0.75F,
-                                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                                    EntityAttributeModifier.Operation.MULTIPLY_BASE
                             )
                     )
             )
@@ -322,23 +326,24 @@ public class MoreRelicEffects {
             "Cant move, jump or cast spells but you're invulnerable.",
             new MikaelsBlessingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
             new EffectConfig(
+                    // `GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE` is a 1.20.5 attribute and has no 1.20.1
+                    // counterpart, so only the plain knockback resistance is carried here. Melee/projectile
+                    // knockback is additionally blocked by `KnockbackImmunity.configure` below; explosion
+                    // knockback (applied as raw velocity, not `takeKnockback`) is not.
                     List.of(
                             new AttributeModifier(
-                                    EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE.getIdAsString(),
+                                    AttributeIds.of(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE),
                                     10.0F,
-                                    EntityAttributeModifier.Operation.ADD_VALUE
-                            ),
-                            new AttributeModifier(
-                                    EntityAttributes.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE.getIdAsString(),
-                                    10.0F,
-                                    EntityAttributeModifier.Operation.ADD_VALUE
+                                    EntityAttributeModifier.Operation.ADDITION
                             )
                     )
             )
     ));
 
 
-    public static void register(ConfigFile.Effects config) {
+    /// Behaviour wiring that has to happen before the effects reach the registry. Every call here reads
+    /// the raw `Entry#effect`, which exists from class-init, so it is safe ahead of registration.
+    public static void configureBehaviours() {
         ActionImpairing.configure(GREATER_RAGE_POWER.effect, EntityActionsAllowed.SILENCE);
         ActionImpairing.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, MoreRelicsActionImpairing.ZHONYAS);
         ActionImpairing.configure(SUPERIOR_GUARDIAN_ANGEL.effect, MoreRelicsActionImpairing.REVIVING);
@@ -347,7 +352,27 @@ public class MoreRelicEffects {
         for (var entry: entries) {
             Synchronized.configure(entry.effect, true);
         }
+    }
 
-        Effects.register(entries, config.effects);
+    /// Creation only: wires the behaviours, applies configuration and attribute modifiers, and returns
+    /// the effects still to register keyed by their id. Writes nothing, so a loader that registers
+    /// status effects itself (Forge's `RegisterEvent`, whose helper is the only way past the locked
+    /// vanilla registry on Forge 47.0-47.3) iterates this instead of calling {@link #register}.
+    /// Follow it with {@link #linkEntries()}.
+    public static Map<Identifier, StatusEffect> effectsToRegister(ConfigFile.Effects config) {
+        configureBehaviours();
+        return Effects.effectsToRegister(entries, config.effects);
+    }
+
+    /// Reads `Effects.Entry#entry` back out of the registry - Forge's `RegisterEvent` helper returns
+    /// void where `Registry.registerReference` returns the entry. Throws naming the id if one is missing.
+    public static void linkEntries() {
+        Effects.linkEntries(entries);
+    }
+
+    public static void register(ConfigFile.Effects config) {
+        effectsToRegister(config).forEach((id, effect) ->
+                Registry.register(Registries.STATUS_EFFECT, id, effect));
+        linkEntries();
     }
 }
