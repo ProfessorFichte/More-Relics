@@ -34,10 +34,6 @@ public class MoreRelicSounds {
     public static final Entry MIKAELS_BLESSING_ACTIVATE = add(new Entry("mikaels_blesssing_active"));
     public static final Entry GUARDIAN_ANGEL_ACTIVATE = add(new Entry("guardian_angel_active"));
 
-    /// Creation only: builds every sound event and returns them keyed by the id they register under.
-    /// Writes nothing, so a loader that registers sound events itself (Forge's `RegisterEvent`, whose
-    /// helper is the only way past the locked vanilla registry on Forge 47.0-47.3) iterates this
-    /// instead of calling {@link #register}. Ids already in the registry are skipped.
     public static Map<Identifier, SoundEvent> soundsToRegister() {
         var toRegister = new LinkedHashMap<Identifier, SoundEvent>();
         for (var entry: entries) {

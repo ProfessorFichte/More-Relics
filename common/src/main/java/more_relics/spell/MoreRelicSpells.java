@@ -107,8 +107,6 @@ public class MoreRelicSpells {
         return spell;
     }
 
-    /// 1.20.1 attributes are raw objects with no id accessor (1.21's `getIdAsString()` does not
-    /// exist), so the id is read back out of the registry.
     private static Identifier attributeId(EntityAttribute attribute) {
         return AttributeIds.identifierOf(attribute);
     }

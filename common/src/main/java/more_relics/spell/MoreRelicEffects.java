@@ -273,10 +273,6 @@ public class MoreRelicEffects {
             "Cant move, jump or cast spells but you're invulnerable.",
             new CustomStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
             new EffectConfig(
-                    // `GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE` is a 1.20.5 attribute and has no 1.20.1
-                    // counterpart, so only the plain knockback resistance is carried here. Melee/projectile
-                    // knockback is additionally blocked by `KnockbackImmunity.configure` below; explosion
-                    // knockback (applied as raw velocity, not `takeKnockback`) is not.
                     List.of(
                             new AttributeModifier(
                                     AttributeIds.of(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE),
@@ -326,10 +322,6 @@ public class MoreRelicEffects {
             "Cant move, jump or cast spells but you're invulnerable.",
             new MikaelsBlessingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x888800),
             new EffectConfig(
-                    // `GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE` is a 1.20.5 attribute and has no 1.20.1
-                    // counterpart, so only the plain knockback resistance is carried here. Melee/projectile
-                    // knockback is additionally blocked by `KnockbackImmunity.configure` below; explosion
-                    // knockback (applied as raw velocity, not `takeKnockback`) is not.
                     List.of(
                             new AttributeModifier(
                                     AttributeIds.of(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE),
@@ -341,8 +333,6 @@ public class MoreRelicEffects {
     ));
 
 
-    /// Behaviour wiring that has to happen before the effects reach the registry. Every call here reads
-    /// the raw `Entry#effect`, which exists from class-init, so it is safe ahead of registration.
     public static void configureBehaviours() {
         ActionImpairing.configure(GREATER_RAGE_POWER.effect, EntityActionsAllowed.SILENCE);
         ActionImpairing.configure(SUPERIOR_ZHONYAS_HOURGLASS.effect, MoreRelicsActionImpairing.ZHONYAS);
@@ -354,18 +344,11 @@ public class MoreRelicEffects {
         }
     }
 
-    /// Creation only: wires the behaviours, applies configuration and attribute modifiers, and returns
-    /// the effects still to register keyed by their id. Writes nothing, so a loader that registers
-    /// status effects itself (Forge's `RegisterEvent`, whose helper is the only way past the locked
-    /// vanilla registry on Forge 47.0-47.3) iterates this instead of calling {@link #register}.
-    /// Follow it with {@link #linkEntries()}.
     public static Map<Identifier, StatusEffect> effectsToRegister(ConfigFile.Effects config) {
         configureBehaviours();
         return Effects.effectsToRegister(entries, config.effects);
     }
 
-    /// Reads `Effects.Entry#entry` back out of the registry - Forge's `RegisterEvent` helper returns
-    /// void where `Registry.registerReference` returns the entry. Throws naming the id if one is missing.
     public static void linkEntries() {
         Effects.linkEntries(entries);
     }

@@ -57,9 +57,6 @@ public class MoreRelicsDataGenerator implements DataGeneratorEntrypoint {
 		}
 	}
 
-	/// 1.20.1 / Fabric API 0.92: `FabricLanguageProvider` is registry-independent, so the 1-arg
-	/// `generateTranslations(TranslationBuilder)` is the override. SpellEngine's `NamespacedLangGenerator`
-	/// keeps the 2-arg constructor so `pack.addProvider(LangGenerator::new)` still resolves.
 	public static class LangGenerator extends NamespacedLangGenerator {
 		protected LangGenerator(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
 			super(dataOutput, registryLookup, MOD_ID);

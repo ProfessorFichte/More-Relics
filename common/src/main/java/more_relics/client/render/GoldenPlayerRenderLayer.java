@@ -26,7 +26,6 @@ public class GoldenPlayerRenderLayer extends FeatureRenderer<AbstractClientPlaye
             return;
         }
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(GOLD_BLOCK_TEXTURE));
-        // 1.20.1 `Model#render` has no 4-arg overload: the colour/alpha quadruple is explicit.
         getContextModel().render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

@@ -12,7 +12,6 @@ public class MikaelsBlessingStatusEffect extends StatusEffect {
         super(category, color);
     }
 
-    // 1.20.1 signature carries the entity's `AttributeContainer`.
     @Override
     public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         super.onApplied(entity, attributes, amplifier);

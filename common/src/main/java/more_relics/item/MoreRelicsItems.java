@@ -66,8 +66,6 @@ public class MoreRelicsItems {
                         : null;
                 var spellContainer = spellContainer();
                 if (spellContainer != null) {
-                    // No data components on 1.20.1: item-level defaults go through SpellEngine's
-                    // `SpellItemData` NBT facade, which `ItemDefaultsMixin` stamps onto fresh stacks.
                     SpellItemData.defaults(settings).spellContainer(spellContainer);
                 }
                 if (config().durability > 0) {
@@ -208,14 +206,6 @@ public class MoreRelicsItems {
     public static final Entry SUPERIOR_GUARDIAN_ANGEL = add(new Entry(4, "superior_guardian_angel", "Guardian Angel"))
             .spell(SpellContainers.forRelic(MoreRelicSpells.superior_guardian_angel.id()));
 
-    /// Creation only: merges `config` into every entry, constructs the enabled items and returns them
-    /// keyed by the id they register under. Writes nothing, so a loader that registers items itself
-    /// (Forge's `RegisterEvent`, whose helper is the only way past the locked vanilla registry on
-    /// Forge 47.0-47.3) iterates this instead of calling {@link #register}. Ids already in the registry
-    /// are skipped, so it is idempotent.
-    ///
-    /// `Item`'s constructor takes an intrusive registry holder on 1.20.1, so this must be called from
-    /// inside the `RegisterEvent` sequence - the ITEM window is where Forge calls it.
     public static Map<Identifier, Item> itemsToRegister(Map<String, ItemConfig.Entry> config) {
         for (var entry : entries) {
             var key = entry.id().toString();

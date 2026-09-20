@@ -63,25 +63,16 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
     modImplementation("me.shedaniel.cloth:cloth-config-${platform}:${project.cloth_config_version}")
-    // Ecosystem libraries with a 1.20.1 release: resolved from the Modrinth maven.
     modImplementation("maven.modrinth:tiny-config:${project.tiny_config_version}-${platform}") { transitive = false }
     modImplementation("maven.modrinth:spell-power:${project.spell_power_version}-${platform}") { transitive = false }
     modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}-${platform}") { transitive = false }
     modImplementation("maven.modrinth:relics-rpg:${project.relics_version}-${platform}") { transitive = false }
-    // More RPG Library resolves once its 1.20.1 release is published (Fichte release tier 1).
     modImplementation("maven.modrinth:more-rpg-library:${project.more_rpg_library_version}-${platform}") { transitive = false }
 
-    // Trinkets: a compile dependency (MoreRelicsTrinketItem extends TrinketItem). Must use the very
-    // coordinate Spell Engine's own POM declares, or two copies of every Trinkets class land on the
-    // classpath (~80 `duplicate input class dev/emi/trinkets/...` warnings from Loom).
     modImplementation("maven.modrinth:trinkets:${rootProject.trinkets_version}")
-    // Trinkets JiJs Cardinal Components; Loom does not load nested jars of classpath mods, so the
-    // dev runtime needs them explicitly.
     modLocalRuntime("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${rootProject.cardinal_components_version}")
     modLocalRuntime("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${rootProject.cardinal_components_version}")
-    // Spell Engine hard-depends on the player animation library at runtime.
     modLocalRuntime("dev.kosmx.player-anim:player-animation-lib-fabric:${rootProject.player_anim_version}")
-    // Dev-runtime only, both for More RPG Library's sake (see gradle.properties).
     modLocalRuntime("maven.modrinth:runes:${rootProject.runes_version}-fabric") { transitive = false }
     modLocalRuntime("maven.modrinth:critical-strike:${rootProject.critical_strike_version}-fabric") { transitive = false }
 }
