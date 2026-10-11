@@ -35,6 +35,13 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.more_relics]]
+modId = "mrpg_lib"
+type = "required"
+versionRange = "[${more_rpg_library_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.more_relics]]
 modId = "relics_rpgs"
 type = "required"
 versionRange = "[${relics_version},)"

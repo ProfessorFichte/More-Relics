@@ -31,7 +31,7 @@
     "visuals": {
       "particles": [
         {
-          "id": "more_rpg_classes:small_gust",
+          "id": "mrpg_lib:small_gust",
           "appearance": {},
           "batch": {
             "count": 12.0,
@@ -42,7 +42,7 @@
           }
         },
         {
-          "id": "more_rpg_classes:big_splash",
+          "id": "mrpg_lib:big_splash",
           "appearance": {},
           "batch": {
             "count": 12.0,

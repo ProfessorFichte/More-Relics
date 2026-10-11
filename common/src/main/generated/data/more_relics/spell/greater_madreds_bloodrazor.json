@@ -61,7 +61,7 @@
             }
           },
           {
-            "id": "more_rpg_classes:blood_drop",
+            "id": "mrpg_lib:blood_drop",
             "appearance": {},
             "batch": {
               "count": 20.0,

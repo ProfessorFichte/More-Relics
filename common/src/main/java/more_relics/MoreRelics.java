@@ -13,14 +13,14 @@ public class MoreRelics {
 	public static final String MOD_ID = "more_relics";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static ConfigManager<ItemConfig> itemConfig = new ConfigManager<>
-			("items", new ItemConfig())
+			("items_v1", new ItemConfig())
 			.builder()
 			.setDirectory(MOD_ID)
 			.sanitize(true)
 			.build();
 
 	public static ConfigManager<ConfigFile.Effects> effectConfig = new ConfigManager<>
-			("effects", new ConfigFile.Effects())
+			("effects_v1", new ConfigFile.Effects())
 			.builder()
 			.setDirectory(MOD_ID)
 			.sanitize(true)

@@ -23,11 +23,11 @@ public class MoreRelicsClient {
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_POWER_AIR_WATER.effect,
-				new BuffParticleSpawner(List.of("more_rpg_classes:small_gust", "more_rpg_classes:bubble"), 0.5F, 0.11F, 0.12F)
+				new BuffParticleSpawner(List.of("mrpg_lib:small_gust", "mrpg_lib:bubble"), 0.5F, 0.11F, 0.12F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_POWER_EARTH_NATURE.effect,
-				new BuffParticleSpawner(List.of("more_rpg_classes:stone_particle", "more_rpg_classes:leaf"), 0.25F, 0.11F, 0.12F)
+				new BuffParticleSpawner(List.of("mrpg_lib:stone_particle", "mrpg_lib:leaf"), 0.25F, 0.11F, 0.12F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.LESSER_RAGE_POWER.effect,
@@ -39,19 +39,19 @@ public class MoreRelicsClient {
 
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_AIR_POWER.effect,
-				new BuffParticleSpawner("more_rpg_classes:small_gust", 1.5F)
+				new BuffParticleSpawner("mrpg_lib:small_gust", 1.5F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_EARTH_POWER.effect,
-				new BuffParticleSpawner("more_rpg_classes:stone_particle", 1.5F)
+				new BuffParticleSpawner("mrpg_lib:stone_particle", 1.5F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_WATER_POWER.effect,
-				new BuffParticleSpawner("more_rpg_classes:bubble", 1.5F)
+				new BuffParticleSpawner("mrpg_lib:bubble", 1.5F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_NATURE_POWER.effect,
-				new BuffParticleSpawner("more_rpg_classes:leaf", 0.5F)
+				new BuffParticleSpawner("mrpg_lib:leaf", 0.5F)
 		);
 		CustomParticleStatusEffect.register(
 				MoreRelicEffects.MEDIUM_RAGE_POWER.effect,

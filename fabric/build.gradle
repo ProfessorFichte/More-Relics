@@ -56,7 +56,9 @@ repositories {
         url = 'https://maven.ladysnake.org/releases'
     }
 
-    mavenLocal()
+    mavenLocal {
+        content { excludeModule('maven.modrinth', 'more-rpg-library') }
+    }
 }
 
 dependencies {

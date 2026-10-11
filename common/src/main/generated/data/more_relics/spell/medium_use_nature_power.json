@@ -20,7 +20,7 @@
     "visuals": {
       "particles": [
         {
-          "id": "more_rpg_classes:leaf",
+          "id": "mrpg_lib:leaf",
           "appearance": {},
           "batch": {
             "count": 25.0,

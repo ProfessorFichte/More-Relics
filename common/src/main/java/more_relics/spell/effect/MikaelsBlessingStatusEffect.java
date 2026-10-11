@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 
-import static net.more_rpg_classes.util.CustomMethods.clearNegativeEffects;
+import static com.mrpg_lib.util.CustomMethods.clearNegativeEffects;
 
 public class MikaelsBlessingStatusEffect extends StatusEffect {
     public MikaelsBlessingStatusEffect(StatusEffectCategory category, int color) {

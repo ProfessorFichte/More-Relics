@@ -31,7 +31,7 @@
     "visuals": {
       "particles": [
         {
-          "id": "more_rpg_classes:stone_particle",
+          "id": "mrpg_lib:stone_particle",
           "appearance": {},
           "batch": {
             "count": 12.0,
@@ -42,7 +42,7 @@
           }
         },
         {
-          "id": "more_rpg_classes:leaf",
+          "id": "mrpg_lib:leaf",
           "appearance": {},
           "batch": {
             "count": 12.0,

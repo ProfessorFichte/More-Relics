@@ -5,10 +5,10 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.more_rpg_classes.client.particle.MoreParticles;
-import net.more_rpg_classes.custom.MoreSpellSchools;
-import net.more_rpg_classes.entity.attribute.MRPGCEntityAttributes;
-import net.more_rpg_classes.sounds.MRPGLibSounds;
+import com.mrpg_lib.compat.spell_engine.particle.MoreSpellParticles;
+import com.mrpg_lib.compat.spell_power.MoreSpellSchools;
+import com.mrpg_lib.entity.attribute.MRPGCEntityAttributes;
+import com.mrpg_lib.sounds.MRPGLibSounds;
 import net.relics_rpgs.spell.RelicSounds;
 import net.spell_engine.api.entity.SpellEngineAttributes;
 import net.spell_engine.api.spell.ExternalSpellSchools;
@@ -211,8 +211,8 @@ public class MoreRelicSpells {
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.visuals = Fx.Visuals.of(
-                lesserActivateParticles(MoreParticles.SMALL_GUST, 12),
-                lesserActivateParticles(MoreParticles.BIG_SPLASH, 12));
+                lesserActivateParticles(MoreSpellParticles.SMALL_GUST, 12),
+                lesserActivateParticles(MoreSpellParticles.BIG_SPLASH, 12));
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
         configureCooldown(spell, T1_PROC_EFFECT_COOLDOWN);
@@ -243,8 +243,8 @@ public class MoreRelicSpells {
         spell.release.animation = PlayerAnimation.of("spell_engine:one_handed_healing_release");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.visuals = Fx.Visuals.of(
-                lesserActivateParticles(MoreParticles.STONE_PARTICLE, 12),
-                lesserActivateParticles(MoreParticles.LEAF, 12));
+                lesserActivateParticles(MoreSpellParticles.STONE_PARTICLE, 12),
+                lesserActivateParticles(MoreSpellParticles.LEAF, 12));
 
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T1_PROC_EFFECT_DURATION));
         configureCooldown(spell, T1_PROC_EFFECT_COOLDOWN);
@@ -299,10 +299,10 @@ public class MoreRelicSpells {
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.visuals = Fx.Visuals.of(
-                ParticleGroupBuilder.of(MoreParticles.SMALL_GUST)
+                ParticleGroupBuilder.of(MoreSpellParticles.SMALL_GUST)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.1F, 0.1F)),
-                ParticleGroupBuilder.of(MoreParticles.SMALL_GUST)
+                ParticleGroupBuilder.of(MoreSpellParticles.SMALL_GUST)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.12F, 0.12F)));
 
@@ -327,10 +327,10 @@ public class MoreRelicSpells {
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.visuals = Fx.Visuals.of(
-                ParticleGroupBuilder.of(MoreParticles.STONE_PARTICLE)
+                ParticleGroupBuilder.of(MoreSpellParticles.STONE_PARTICLE)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.1F, 0.1F)),
-                ParticleGroupBuilder.of(MoreParticles.STONE_PARTICLE)
+                ParticleGroupBuilder.of(MoreSpellParticles.STONE_PARTICLE)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.12F, 0.12F)));
 
@@ -355,10 +355,10 @@ public class MoreRelicSpells {
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.visuals = Fx.Visuals.of(
-                ParticleGroupBuilder.of(MoreParticles.BUBBLE)
+                ParticleGroupBuilder.of(MoreSpellParticles.BUBBLE)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.1F, 0.1F)),
-                ParticleGroupBuilder.of(MoreParticles.BIG_SPLASH)
+                ParticleGroupBuilder.of(MoreSpellParticles.BIG_SPLASH)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.12F, 0.12F)));
         spell.impacts = List.of(createEffectImpact(effect.id.toString(), T2_USE_EFFECT_DURATION));
@@ -382,7 +382,7 @@ public class MoreRelicSpells {
         spell.release.animation = PlayerAnimation.of("spell_engine:dual_handed_weapon_charge");
         spell.release.sound = new Sound(RelicSounds.INTELLECT_BUFF.id().toString());
         spell.release.visuals = Fx.Visuals.of(
-                ParticleGroupBuilder.of(MoreParticles.LEAF)
+                ParticleGroupBuilder.of(MoreSpellParticles.LEAF)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(25).speed(0.1F, 0.1F)),
                 sparkDecelerate()
@@ -648,7 +648,7 @@ public class MoreRelicSpells {
                 ParticleGroupBuilder.of(SpellEngineParticles.dripping_blood)
                         .batch(b -> b.shape(ParticleGroup.Shape.SPHERE)
                                 .count(20).speed(0.2F, 0.8F)),
-                ParticleGroupBuilder.of(MoreParticles.BLOOD_DROP)
+                ParticleGroupBuilder.of(MoreSpellParticles.BLOOD_DROP)
                         .batch(b -> b.shape(ParticleGroup.Shape.CIRCLE)
                                 .count(20).speed(0.2F, 0.8F)));
 

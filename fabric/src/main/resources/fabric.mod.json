@@ -34,6 +34,7 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"spell_engine": ">=${spell_engine_version}",
+		"mrpg_lib": ">=${more_rpg_library_version}",
 		"relics_rpgs": ">=${relics_version}"
 	}
 }
